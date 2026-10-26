@@ -1222,9 +1222,15 @@ with tab_recipes:
                     st.markdown("### Koostisosad")
                     recipe_products = all_products()
                     recipe_labels = [f'{product["name"]} · {product["brand"]}' for product in recipe_products]
+                    used_recipe_names = {item.get("name", "").strip().casefold() for item in edited_ingredients_data}
                     st.markdown('<div class="ingredient-header recipe-edit-header"><span>Toode</span><span>Kaal</span><span></span></div>', unsafe_allow_html=True)
                     for ingredient_index, ingredient in enumerate(edited_ingredients_data):
                         ingredient_token = ingredient["_edit_id"]
+                        other_recipe_names = used_recipe_names - {ingredient.get("name", "").strip().casefold()}
+                        current_recipe_name = ingredient.get("name", "").strip().casefold()
+                        ingredient_products = [product for product in recipe_products if product["name"].strip().casefold() == current_recipe_name or product["name"].strip().casefold() not in other_recipe_names]
+                        ingredient_labels = [f'{product["name"]} · {product["brand"]}' for product in ingredient_products]
+                        recipe_labels = ingredient_labels
                         with st.container(key=f"recipe-edit-row-{recipe_token}-{ingredient_token}", horizontal=True, width="stretch", gap="small", vertical_alignment="center"):
                             current_label = next((label for label in recipe_labels if label.startswith(f'{ingredient["name"]} ·')), recipe_labels[0] if recipe_labels else "")
                             selected_label = st.selectbox("Toode", recipe_labels, index=recipe_labels.index(current_label) if current_label in recipe_labels else 0, key=f"recipe_product_{recipe_token}_{ingredient_token}", label_visibility="collapsed") if recipe_labels else ""
@@ -1238,7 +1244,8 @@ with tab_recipes:
                     recipe_add_query = st.text_input("Otsi toodet", placeholder="nt kana, kartul, jogurt…", key=f"recipe_add_query_{recipe_token}")
                     filtered_recipe_products = [
                         product for product in recipe_products
-                        if not recipe_add_query or recipe_add_query.lower() in (product["name"] + " " + product["brand"]).lower()
+                        if product["name"].strip().casefold() not in used_recipe_names
+                        and (not recipe_add_query or recipe_add_query.lower() in (product["name"] + " " + product["brand"]).lower())
                     ]
                     if filtered_recipe_products:
                         filtered_recipe_labels = [f'{product["name"]} · {product["brand"]}' for product in filtered_recipe_products]
