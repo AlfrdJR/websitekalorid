@@ -719,7 +719,7 @@ def css():
             box-shadow:0 5px 16px var(--shadow) !important;
         }
         [class*="st-key-product-actions-"] {
-            margin-top:0 !important;
+            margin-top:-.9rem !important;
             margin-bottom:.9rem !important;
             padding:.1rem 1rem .9rem !important;
             background:var(--surface) !important;
