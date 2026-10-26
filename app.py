@@ -655,6 +655,7 @@ with tab_recipes:
                     with read_weight_col:
                         st.write(f'{ingredient["grams"]} g')
             else:
+                st.write("")
             with st.container(key=f"recipe-actions-{index}", horizontal=True, width="stretch", horizontal_alignment="distribute", gap="small", vertical_alignment="center"):
                 with st.popover("✎", help="Muuda retsepti"):
                     edit_key = f"recipe_edit_data_{index}"
