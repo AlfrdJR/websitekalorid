@@ -416,6 +416,9 @@ def css():
         [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 5.5rem !important; width:5.5rem !important; min-width:5.5rem !important; }
         [class*="st-key-recipe-builder-row-"] [class*="st-key-remove_recipe_ingredient_"] button p { font-size:.72rem !important; color:#b45d5d !important; white-space:nowrap !important; }
         [class*="st-key-recipe-builder-row-"] [class*="st-key-remove_recipe_ingredient_"] button p::after { content:none !important; }
+        [class*="st-key-recipe-edit-row-"] [class*="st-key-remove_recipe_row_"] button { width:2.5rem !important; min-width:2.5rem !important; padding:0 !important; }
+        [class*="st-key-recipe-edit-row-"] [class*="st-key-remove_recipe_row_"] button p { font-size:0 !important; }
+        [class*="st-key-recipe-edit-row-"] [class*="st-key-remove_recipe_row_"] button p::after { content:"×" !important; color:#b45d5d !important; font-size:1.1rem !important; }
         [class*="product-actions"] button:not([kind="primary"]) p, [class*="food-remove"] button p,
         [class*="st-key-remove_today_"] button p, [class*="st-key-delete_product_"] button p,
         [class*="st-key-remove_calendar_"] button p, [class*="st-key-remove_recipe_row_"] button p,
@@ -473,6 +476,7 @@ def css():
             [class*="st-key-recipe-read-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2),
             [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { flex:0 0 4.5rem !important; width:4.5rem !important; min-width:4.5rem !important; }
             [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 5.5rem !important; width:5.5rem !important; min-width:5.5rem !important; }
+            [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 2.2rem !important; width:2.2rem !important; min-width:2.2rem !important; }
             [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; }
             [class*="st-key-recipe-builder-row-"] { width:100% !important; max-width:100% !important; overflow:hidden !important; }
             [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] { width:100% !important; max-width:100% !important; flex-wrap:nowrap !important; gap:.2rem !important; }
@@ -706,7 +710,7 @@ with tab_recipes:
                             with grams_col:
                                 ingredient["grams"] = st.number_input("Kaal (g)", min_value=1, value=int(ingredient.get("grams", 100)), step=5, key=f"recipe_grams_{index}_{ingredient_index}", label_visibility="collapsed")
                             with remove_col:
-                                if st.button("← Eemalda", key=f"remove_recipe_row_{index}_{ingredient_index}", help="Eemalda koostisosa"):
+                                if st.button("×", key=f"remove_recipe_row_{index}_{ingredient_index}", help="Eemalda koostisosa"):
                                     edited_ingredients_data.pop(ingredient_index)
                                     st.rerun()
                     if st.button("＋ Lisa toode", key=f"add_recipe_row_{index}", use_container_width=True):
