@@ -702,14 +702,6 @@ with tab_today:
                     remove_entry_group(item["_indices"], TODAY)
                     st.rerun()
         else:
-            with st.container(key=f"meal-categories-{i}", horizontal=True, width="stretch", gap="small"):
-                for meal_value, meal_label in meal_categories:
-                    if st.button(meal_label, type="primary" if item.get("meal") == meal_value else "secondary", key=f"meal_move_{i}_{meal_value}"):
-                        if item.get("meal") != meal_value:
-                            for index in item["_indices"]:
-                                today_entries[index]["meal"] = meal_value
-                            save_daily_logs()
-                            st.rerun()
             with st.container(key=f"food-actions-{i}", horizontal=True, width="stretch", horizontal_alignment="distribute", gap="small", vertical_alignment="center"):
                 with st.container(key=f"food-adjust-{i}", horizontal=True, width="content", gap="small"):
                     if st.button("+", key=f"add_one_today_{i}", help="Lisa üks sama toit"):
