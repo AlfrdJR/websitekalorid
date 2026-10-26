@@ -707,6 +707,26 @@ def css():
         [class*="st-key-product-actions-"] [data-testid="stNumberInput"] [data-testid="stNumberInput-StepDown"],
         [class*="st-key-product-actions-"] [data-testid="stNumberInput"] [data-testid="stNumberInput-StepUp"] { display:none !important; }
         [class*="st-key-product-actions-"] button { width:100% !important; min-width:0 !important; }
+        /* Give every searched food a single connected card. */
+        div[data-testid="stElementContainer"]:has(span[style*="font-size:.8rem"]) {
+            margin-top:.9rem !important;
+            padding:1rem 1rem .35rem !important;
+            background:var(--surface) !important;
+            border:1px solid var(--line) !important;
+            border-bottom:0 !important;
+            border-radius:18px 18px 0 0 !important;
+            box-shadow:0 5px 16px var(--shadow) !important;
+        }
+        [class*="st-key-product-actions-"] {
+            margin-bottom:.9rem !important;
+            padding:.1rem 1rem .9rem !important;
+            background:var(--surface) !important;
+            border:1px solid var(--line) !important;
+            border-top:0 !important;
+            border-radius:0 0 18px 18px !important;
+            box-shadow:0 5px 16px var(--shadow) !important;
+        }
+        [class*="st-key-product-actions-"] [data-testid="stHorizontalBlock"] { margin:0 !important; }
         </style>
         """,
         unsafe_allow_html=True,
