@@ -915,6 +915,7 @@ st.markdown(
     [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button p::after { font-family:'DM Sans',sans-serif !important; font-weight:500 !important; }
     .ingredient-header { min-height:2.15rem !important; margin-bottom:.45rem !important; align-items:center !important; box-sizing:border-box !important; font-family:'DM Sans',sans-serif !important; font-size:1rem !important; line-height:1.5 !important; font-weight:400 !important; text-transform:none !important; letter-spacing:0 !important; color:var(--muted) !important; }
     .recipe-edit-header { border-bottom:0 !important; margin-bottom:.15rem !important; }
+    .recipe-add-heading { margin-top:1.35rem !important; margin-bottom:.55rem !important; }
     [class*="st-key-recipe-edit-row-"] { margin-top:.35rem !important; }
     [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button p { font-size:0 !important; }
     [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button p::after { content:"×"; font-size:1.25rem !important; line-height:1 !important; }
@@ -1231,7 +1232,7 @@ with tab_recipes:
                             if st.button("×", key=f"remove_recipe_row_{recipe_token}_{ingredient_token}", help="Eemalda koostisosa"):
                                 edited_ingredients_data.pop(ingredient_index)
                                 st.rerun()
-                    st.markdown("### Lisa koostisosa")
+                    st.markdown('<h3 class="recipe-add-heading">Lisa koostisosa</h3>', unsafe_allow_html=True)
                     recipe_add_query = st.text_input("Otsi toodet", placeholder="nt kana, kartul, jogurt…", key=f"recipe_add_query_{recipe_token}")
                     filtered_recipe_products = [
                         product for product in recipe_products
