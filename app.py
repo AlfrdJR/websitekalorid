@@ -66,6 +66,9 @@ CUSTOM_PRODUCTS_FILE = Path(__file__).with_name("custom_products.json")
 HIDDEN_PRODUCTS_FILE = Path(__file__).with_name("hidden_products.json")
 CUSTOM_RECIPES_FILE = Path(__file__).with_name("custom_recipes.json")
 DAILY_LOGS_FILE = Path(__file__).with_name("daily_logs.json")
+GOALS_FILE = Path(__file__).with_name("goals.json")
+
+DEFAULT_GOALS = {"kcal": 2200, "protein": 140, "carbs": 250, "fat": 70}
 
 
 def load_custom_products():
@@ -170,6 +173,22 @@ def save_daily_logs():
         json.dump(st.session_state.daily_logs, file, ensure_ascii=False, indent=2)
 
 
+def load_goals():
+    if not GOALS_FILE.exists():
+        return DEFAULT_GOALS.copy()
+    try:
+        with GOALS_FILE.open("r", encoding="utf-8") as file:
+            data = json.load(file)
+        return {key: max(1, int(data.get(key, DEFAULT_GOALS[key]))) for key in DEFAULT_GOALS}
+    except (OSError, json.JSONDecodeError, TypeError, ValueError):
+        return DEFAULT_GOALS.copy()
+
+
+def save_goals(goals):
+    with GOALS_FILE.open("w", encoding="utf-8") as file:
+        json.dump(goals, file, ensure_ascii=False, indent=2)
+
+
 def product_base_grams(product):
     portion = str(product.get("portion", "100 g"))
     if "portsjon" in portion.lower():
@@ -204,6 +223,8 @@ TODAY_KEY = TODAY.isoformat()
 
 if "daily_logs" not in st.session_state:
     st.session_state.daily_logs = load_daily_logs()
+if "goals" not in st.session_state:
+    st.session_state.goals = load_goals()
 # Remove only the exact meals that the first prototype inserted automatically.
 # User-created meals are left untouched.
 seed_meals = {
@@ -354,6 +375,16 @@ def css():
         [class*="product-actions"], [class*="recipe-actions"] { display:flex; width:100%; }
         [class*="product-actions"] button, [class*="recipe-actions"] button { min-height:2.25rem !important; border-radius:11px !important; }
         [class*="product-actions"] [data-testid="stHorizontalBlock"], [class*="recipe-actions"] [data-testid="stHorizontalBlock"] { width:100% !important; }
+        [class*="st-key-remove_today_"] button, [class*="st-key-remove_one_today_"] button,
+        [class*="st-key-delete_product_"] button, [class*="st-key-remove_calendar_"] button,
+        [class*="st-key-remove_recipe_row_"] button, [class*="st-key-delete_recipe_"] button,
+        [class*="st-key-remove_recipe_ingredient_"] button { font-size:0 !important; }
+        [class*="st-key-remove_today_"] button::after, [class*="st-key-delete_product_"] button::after,
+        [class*="st-key-remove_calendar_"] button::after, [class*="st-key-remove_recipe_row_"] button::after,
+        [class*="st-key-delete_recipe_"] button::after, [class*="st-key-remove_recipe_ingredient_"] button::after { content:"X"; font-size:1rem; }
+        [class*="st-key-remove_one_today_"] button::after { content:"-"; font-size:1rem; }
+        [class*="st-key-add_recipe_row_"] button { font-size:0 !important; }
+        [class*="st-key-add_recipe_row_"] button::after { content:"+ Lisa toode"; font-size:.82rem; }
         @media (prefers-color-scheme: dark), (html[data-theme="dark"]) {
             :root { --ink:#edf5ef; --muted:#aabbb1; --mint:#173d2c; --green:#72d09b; --cream:#111714; --line:#2b3b33; --surface:#1b2520; --surface-soft:#20382a; --input:#202b25; --shadow:#00000035; }
             .stApp, [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] { background:var(--cream); color:var(--ink); }
@@ -444,15 +475,17 @@ with tab_today:
     today_entries = entries_for(TODAY)
     displayed_today_entries = grouped_log_entries(today_entries)
     t = totals(TODAY)
-    goal = 2200
+    goal = st.session_state.goals["kcal"]
     remaining = max(0, goal - int(t["kcal"]))
     percent = min(100, int(t["kcal"] / goal * 100))
     st.markdown(f'<div class="goal-card"><div class="goal-ring" style="--percent:{percent}%"><span>{percent}%</span></div><div class="goal-copy"><div class="metric-label">PÄEVA EESMÄRK</div><div class="metric-value">{int(t["kcal"]):,} <span style="font-size:.85rem;color:#78857d;font-weight:500">/ {goal:,} kcal</span></div><div class="metric-note">{remaining:,} kcal alles · {len(today_entries)} toidukirjet</div></div></div>', unsafe_allow_html=True)
     st.markdown(f'<div class="streak-card">🔥 <b>{streak_count()} päeva järjest</b> · oled oma logimisega heas rütmis</div>', unsafe_allow_html=True)
     st.write("")
     c1, c2, c3 = st.columns(3)
+    macro_goal_values = iter((st.session_state.goals["protein"], st.session_state.goals["carbs"], st.session_state.goals["fat"]))
     for col, label, value, goal_value in [(c1, "Valk", t["protein"], 140), (c2, "Süsivesikud", t["carbs"], 250), (c3, "Rasv", t["fat"], 70)]:
         with col:
+            goal_value = next(macro_goal_values)
             st.markdown(f'<div class="metric-card"><div class="metric-label">{label.upper()}</div><div class="metric-value">{int(value)}g</div><div class="metric-note">/{goal_value}g</div></div>', unsafe_allow_html=True)
     st.markdown(f'<div class="section-title"><h2>Tänane logi</h2><span class="section-hint">{TODAY.strftime("%d. %b")}</span></div>', unsafe_allow_html=True)
     if not today_entries:
@@ -688,6 +721,19 @@ with tab_recipes:
             st.rerun()
 
 with tab_insights:
+    with st.expander("Muuda eesmärke", expanded=False):
+        st.caption("Need eesmärgid kuvatakse tänases vaates ja ülevaate graafikul.")
+        goal_left, goal_right = st.columns(2)
+        with goal_left:
+            goal_kcal = st.number_input("Kalorid päevas", min_value=1, max_value=10000, value=int(st.session_state.goals["kcal"]), step=50, key="goal_kcal")
+            goal_protein = st.number_input("Valk (g)", min_value=1, max_value=1000, value=int(st.session_state.goals["protein"]), step=5, key="goal_protein")
+        with goal_right:
+            goal_carbs = st.number_input("Süsivesikud (g)", min_value=1, max_value=1500, value=int(st.session_state.goals["carbs"]), step=5, key="goal_carbs")
+            goal_fat = st.number_input("Rasv (g)", min_value=1, max_value=500, value=int(st.session_state.goals["fat"]), step=5, key="goal_fat")
+        if st.button("Salvesta eesmärgid", type="primary", use_container_width=True, key="save_goals"):
+            st.session_state.goals = {"kcal": int(goal_kcal), "protein": int(goal_protein), "carbs": int(goal_carbs), "fat": int(goal_fat)}
+            save_goals(st.session_state.goals)
+            st.rerun()
     st.markdown("## Sinu ülevaade")
     st.caption("Päris sinu logi põhjal — ilma oletuste ja näidisandmeteta.")
     last_seven_days = [TODAY - timedelta(days=offset) for offset in range(7)]
@@ -708,7 +754,7 @@ with tab_insights:
     bars = []
     for day in reversed(last_seven_days):
         day_total = int(totals(day)["kcal"]) if st.session_state.daily_logs.get(day_key(day), []) else 0
-        height = min(100, max(4, int(day_total / 2200 * 100))) if day_total else 4
+        height = min(100, max(4, int(day_total / st.session_state.goals["kcal"] * 100))) if day_total else 4
         today_class = " today" if day == TODAY else ""
         bars.append(f'<div class="week-day"><div class="week-track"><div class="week-fill{today_class}" style="height:{height}%"></div></div><span>{day_labels[day.weekday()]}</span></div>')
     st.markdown(f'<div class="overview-card"><div class="week-bars">{"".join(bars)}</div></div>', unsafe_allow_html=True)
