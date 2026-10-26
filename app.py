@@ -841,6 +841,30 @@ def css():
 
 
 css()
+st.markdown(
+    """
+    <style>
+    [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] {
+        display:grid !important;
+        grid-template-columns:minmax(0, 1fr) clamp(5.5rem, 18vw, 8rem) clamp(2.4rem, 7vw, 3rem) !important;
+        gap:clamp(.25rem, 1.5vw, .6rem) !important;
+        width:100% !important;
+        align-items:center !important;
+    }
+    [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"] {
+        width:auto !important;
+        min-width:0 !important;
+        max-width:none !important;
+        flex:none !important;
+        padding:0 !important;
+    }
+    [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"],
+    [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] > div,
+    [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] input { width:100% !important; box-sizing:border-box !important; }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 st.markdown('<div class="brand-card"><span class="brand-mark">N</span><span>NÕU</span></div>', unsafe_allow_html=True)
 tab_today, tab_add, tab_calendar, tab_recipes, tab_insights = st.tabs(["Täna", "Lisa toit", "Kalender", "Retseptid", "Ülevaade"])
 
