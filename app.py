@@ -650,6 +650,9 @@ def css():
         [class*="st-key-meal-box-actions-"] { min-height:0 !important; padding:0 !important; background:transparent !important; border:0 !important; border-radius:0 !important; box-shadow:none !important; }
         [class*="st-key-meal-box-actions-"] button { background:transparent !important; border:1px solid #c8dfcf !important; box-shadow:none !important; }
         [class*="st-key-meal-controls-"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; align-items:center !important; gap:.45rem !important; width:100% !important; min-height:2.6rem !important; }
+        [class*="st-key-meal-controls-"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { align-self:center !important; }
+        [class*="st-key-meal-controls-"] [data-testid="stSelectbox"] { margin-top:0 !important; padding-top:0 !important; align-self:center !important; }
+        [class*="st-key-meal-box-actions-"] [data-testid="stHorizontalBlock"] { align-items:center !important; height:2.6rem !important; }
         [class*="st-key-meal-controls-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:first-child { flex:0 0 7rem !important; width:7rem !important; min-width:7rem !important; }
         [class*="st-key-meal-controls-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:last-child { flex:1 1 auto !important; width:auto !important; min-width:0 !important; }
         [class*="st-key-meal-controls-"] [data-testid="stSelectbox"] { width:100% !important; }
