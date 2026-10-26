@@ -973,6 +973,15 @@ with tab_recipes:
     new_name = st.text_input("Retsepti nimi", placeholder="nt minu õhtusöök", key="new_recipe_name")
     recipe_products = all_products()
     if recipe_products:
+        recipe_product_query = st.text_input("Otsi toodet", placeholder="nt kana, kartul, jogurt...", key="new_recipe_product_query")
+        filtered_recipe_products = [
+            product for product in recipe_products
+            if not recipe_product_query or recipe_product_query.lower() in (product["name"] + " " + product["brand"]).lower()
+        ]
+        if not filtered_recipe_products:
+            st.info("Selle otsinguga toodet ei leitud.")
+            filtered_recipe_products = recipe_products[:1]
+        recipe_products = filtered_recipe_products
         recipe_labels = [f'{p["name"]} · {p["brand"]}' for p in recipe_products]
         ingredient_col, grams_col, add_col = st.columns([4, 2, 1])
         with ingredient_col:
