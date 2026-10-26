@@ -915,7 +915,7 @@ with tab_recipes:
                     if filtered_recipe_products:
                         filtered_recipe_labels = [f'{product["name"]} · {product["brand"]}' for product in filtered_recipe_products]
                         selected_add_label = st.selectbox("Vali toode", filtered_recipe_labels, key=f"recipe_add_product_{index}")
-                        if st.button("Lisa valitud toode", key=f"add_recipe_row_{index}", use_container_width=True):
+                        if st.button("+ Lisa toode", key=f"add_recipe_row_{index}", width="content"):
                             selected_product = filtered_recipe_products[filtered_recipe_labels.index(selected_add_label)]
                             edited_ingredients_data.append({"name": selected_product["name"], "grams": 100})
                             st.rerun()
