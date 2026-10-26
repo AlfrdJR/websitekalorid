@@ -697,6 +697,8 @@ if st.session_state.pop("focus_recipes_after_save", False):
         setTimeout(() => {
             const parentDocument = window.parent.document;
             parentDocument.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}));
+            const openPopoverTrigger = parentDocument.querySelector('button[aria-haspopup="dialog"][aria-expanded="true"]');
+            if (openPopoverTrigger) openPopoverTrigger.click();
             const recipeTab = [...parentDocument.querySelectorAll('[data-baseweb="tab"]')]
                 .find(tab => tab.textContent.includes('Retseptid'));
             if (recipeTab) recipeTab.click();
