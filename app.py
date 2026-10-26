@@ -847,6 +847,25 @@ with tab_today:
         macro_card_class = "calendar-macro-card macro-complete" if macro_percent >= 100 else "calendar-macro-card"
         today_macro_cards.append(f'<div class="{macro_card_class}"><div class="calendar-macro-label">{macro_label}</div><div class="calendar-macro-ring" style="--progress:{macro_percent};--ring-color:{macro_color}"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="ring-track" cx="50" cy="50" r="40"></circle><circle class="ring-progress" cx="50" cy="50" r="40" pathLength="100"></circle></svg><span>{macro_percent}%</span></div><div class="calendar-macro-value">{int(macro_value)}g / {int(macro_goal)}g</div></div>')
     st.markdown(f'<div class="calendar-macro-grid">{"".join(today_macro_cards)}</div>', unsafe_allow_html=True)
+    water_ml = water_total(TODAY)
+    water_percent = min(100, int(water_ml / 3000 * 100))
+    water_over_goal = max(0, water_ml - 3000)
+    water_note = f"{water_over_goal} ml üle eesmärgi" if water_over_goal else f"{3000 - water_ml} ml veel eesmärgini"
+    st.markdown(f'<div class="water-card"><div class="water-glass" style="--water-percent:{water_percent}%"><div class="water-fill"></div></div><div class="water-copy"><h3>Joodik</h3><div class="water-amount">{water_ml} ml <span>/ 3000 ml</span></div><div class="metric-note">{water_note}</div></div></div>', unsafe_allow_html=True)
+    with st.container(key="water-actions", horizontal=True, width="stretch", gap="small", vertical_alignment="center"):
+        water_input = st.number_input("Vee kogus (ml)", min_value=1, value=250, step=50, key="water_input", label_visibility="collapsed")
+        if st.button("+ Lisa", key="water-add", type="primary"):
+            change_water(water_input, TODAY)
+            st.rerun()
+        if st.button("250 ml", key="water-quick-250"):
+            change_water(250, TODAY)
+            st.rerun()
+        if st.button("500 ml", key="water-quick-500"):
+            change_water(500, TODAY)
+            st.rerun()
+        if st.button("−", key="water-remove", help="Eemalda viimane sisestatud kogus"):
+            change_water(-water_input, TODAY)
+            st.rerun()
     st.markdown(f'<div class="section-title"><h2>Tänane logi</h2><span class="section-hint">{TODAY.strftime("%d. %b")}</span></div>', unsafe_allow_html=True)
     if not today_entries:
         st.info("Sinu päev on tühi. Lisa esimene toit allpool.")
@@ -914,26 +933,6 @@ with tab_today:
                     if st.button("×", key=f"remove_today_{i}", help="Eemalda kogu see toidugrupp"):
                         remove_entry_group(item["_indices"], TODAY)
                         st.rerun()
-    water_ml = water_total(TODAY)
-    water_percent = min(100, int(water_ml / 3000 * 100))
-    water_over_goal = max(0, water_ml - 3000)
-    water_note = f"{water_over_goal} ml üle eesmärgi" if water_over_goal else f"{3000 - water_ml} ml veel eesmärgini"
-    st.markdown(f'<div class="water-card"><div class="water-glass" style="--water-percent:{water_percent}%"><div class="water-fill"></div></div><div class="water-copy"><h3>Joodik</h3><div class="water-amount">{water_ml} ml <span>/ 3000 ml</span></div><div class="metric-note">{water_note}</div></div></div>', unsafe_allow_html=True)
-    with st.container(key="water-actions", horizontal=True, width="stretch", gap="small", vertical_alignment="center"):
-        water_input = st.number_input("Vee kogus (ml)", min_value=1, value=250, step=50, key="water_input", label_visibility="collapsed")
-        if st.button("+ Lisa", key="water-add", type="primary"):
-            change_water(water_input, TODAY)
-            st.rerun()
-        if st.button("250 ml", key="water-quick-250"):
-            change_water(250, TODAY)
-            st.rerun()
-        if st.button("500 ml", key="water-quick-500"):
-            change_water(500, TODAY)
-            st.rerun()
-        if st.button("−", key="water-remove", help="Eemalda viimane sisestatud kogus"):
-            change_water(-water_input, TODAY)
-            st.rerun()
-
 with tab_add:
     st.markdown("## Lisa toit")
     add_mode = st.radio("Vali viis", ["Otsi toitu", "Sisesta ise"], horizontal=True, label_visibility="collapsed")
