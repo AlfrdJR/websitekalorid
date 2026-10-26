@@ -550,10 +550,10 @@ def css():
             [class*="food-actions"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; justify-content:flex-start !important; gap:clamp(.2rem, 2vw, .7rem) !important; }
             [class*="food-actions"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:0 0 clamp(2.4rem, 13vw, 3.4rem) !important; width:clamp(2.4rem, 13vw, 3.4rem) !important; min-width:0 !important; padding:0 !important; }
             [class*="food-actions"] button { width:100% !important; min-width:0 !important; padding:.35rem .2rem !important; font-size:clamp(.78rem, 3.5vw, 1rem) !important; }
-            [class*="food-adjust"] { width:5.6rem !important; max-width:5.6rem !important; padding:.3rem !important; border-radius:18px !important; }
-            [class*="food-adjust"] [data-testid="stHorizontalBlock"] { width:5rem !important; max-width:5rem !important; flex-wrap:nowrap !important; justify-content:flex-start !important; gap:0 !important; }
-            [class*="food-adjust"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:0 0 2.5rem !important; width:2.5rem !important; min-width:2.5rem !important; padding:0 !important; }
-            [class*="food-adjust"] button { width:2.5rem !important; min-width:2.5rem !important; height:2.8rem !important; min-height:2.8rem !important; font-size:1.35rem !important; }
+            [class*="food-adjust"] { width:7.2rem !important; max-width:7.2rem !important; padding:.3rem !important; border-radius:18px !important; }
+            [class*="food-adjust"] [data-testid="stHorizontalBlock"] { width:6.6rem !important; max-width:6.6rem !important; flex-wrap:nowrap !important; justify-content:flex-start !important; gap:0 !important; }
+            [class*="food-adjust"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:0 0 3.3rem !important; width:3.3rem !important; min-width:3.3rem !important; padding:0 !important; }
+            [class*="food-adjust"] button { width:3.3rem !important; min-width:3.3rem !important; height:2.8rem !important; min-height:2.8rem !important; font-size:1.35rem !important; }
             [class*="food-adjust"] button p { display:flex !important; align-items:center !important; justify-content:center !important; width:100% !important; height:100% !important; margin:0 !important; font-size:1.35rem !important; }
             .goal-card { border-radius:20px; padding:.8rem; gap:.7rem; }
             .goal-ring { width:72px; height:72px; } .goal-ring:after { width:55px; height:55px; }
