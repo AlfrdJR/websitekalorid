@@ -418,7 +418,7 @@ def css():
         [class*="st-key-remove_one_today_"] button p { font-size:0 !important; color:transparent !important; }
         [class*="st-key-remove_one_today_"] button p::after { content:"−"; color:#287a56 !important; font-size:1.35rem !important; }
         [class*="st-key-add_recipe_row_"] button { font-size:0 !important; color:transparent !important; }
-        [class*="st-key-add_recipe_row_"] button::after { content:"+ Lisa toode"; display:block !important; width:100% !important; color:#287a56; font-size:.82rem; text-align:left !important; }
+        [class*="st-key-add_recipe_row_"] button::after { content:"+ Lisa toode"; position:absolute !important; left:.7rem !important; top:50% !important; transform:translateY(-50%) !important; display:block !important; width:auto !important; color:#287a56; font-size:.82rem; text-align:left !important; }
         [class*="food-remove"] button { font-size:0 !important; color:transparent !important; }
         [class*="food-remove"] button::after { content:"X"; color:#b45d5d !important; font-size:1rem !important; }
         [class*="product-actions"] button:not([kind="primary"]), [class*="product-actions"] [data-testid="stBaseButton-secondary"] { font-size:0 !important; color:transparent !important; text-shadow:none !important; }
@@ -673,7 +673,7 @@ def css():
         [class*="st-key-meal-box-actions-"] button { min-width:2.1rem !important; min-height:2.6rem !important; height:2.6rem !important; padding:.25rem .4rem !important; border-radius:9px !important; }
         [class*="st-key-add_recipe_row_"] { display:flex !important; justify-content:flex-start !important; align-self:flex-start !important; width:100% !important; margin-left:0 !important; margin-right:auto !important; }
         [class*="st-key-add_recipe_row_"] > div { display:flex !important; justify-content:flex-start !important; width:100% !important; margin-left:0 !important; margin-right:auto !important; }
-        [class*="st-key-add_recipe_row_"] button { width:7.5rem !important; min-width:7.5rem !important; height:3rem !important; padding:.45rem .55rem !important; white-space:nowrap !important; text-align:left !important; justify-content:flex-start !important; margin-left:0 !important; margin-right:auto !important; align-self:flex-start !important; }
+        [class*="st-key-add_recipe_row_"] button { position:relative !important; width:7.5rem !important; min-width:7.5rem !important; height:3rem !important; padding:.45rem .55rem !important; white-space:nowrap !important; text-align:left !important; justify-content:flex-start !important; margin-left:0 !important; margin-right:auto !important; align-self:flex-start !important; }
         @media (max-width:600px) {
             [class*="st-key-meal-boxes"] [data-testid="stHorizontalBlock"] { flex-wrap:wrap !important; }
             [class*="st-key-meal-boxes"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 calc(50% - .25rem) !important; width:calc(50% - .25rem) !important; min-width:0 !important; }
