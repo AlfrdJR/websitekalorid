@@ -645,9 +645,12 @@ def css():
         .meal-box-empty { padding:.65rem .1rem; color:#8aa094; font-size:.68rem; line-height:1.25; text-align:center; }
         [class*="st-key-meal-box-"] { min-height:96px !important; padding:.75rem !important; background:linear-gradient(180deg,#f4fbf6,#eef7f1) !important; border:1px solid #d5e9da !important; border-radius:18px !important; box-shadow:0 5px 16px #1c3a270c !important; }
         [class*="st-key-meal-box-"] [data-testid="stSelectbox"] { margin-top:.35rem !important; }
-        [class*="st-key-meal-box-"] [data-baseweb="select"] > div { min-height:2rem !important; border-radius:9px !important; font-size:.7rem !important; }
+        [class*="st-key-meal-box-"] .meal-box-item { margin:.25rem 0 !important; padding:.45rem 0 !important; background:transparent !important; border:0 !important; border-top:1px solid #d5e9da !important; border-radius:0 !important; box-shadow:none !important; }
+        [class*="st-key-meal-box-"] [data-baseweb="select"] > div { min-height:2rem !important; border-radius:9px !important; font-size:.7rem !important; background:transparent !important; border:1px solid #d5e9da !important; box-shadow:none !important; }
         [class*="st-key-meal-box-actions-"] { min-height:0 !important; padding:0 !important; background:transparent !important; border:0 !important; border-radius:0 !important; box-shadow:none !important; }
+        [class*="st-key-meal-box-actions-"] button { background:transparent !important; border:1px solid #c8dfcf !important; box-shadow:none !important; }
         [class*="st-key-calendar-meal-box-"] { min-height:96px !important; padding:.75rem !important; background:linear-gradient(180deg,#f4fbf6,#eef7f1) !important; border:1px solid #d5e9da !important; border-radius:18px !important; box-shadow:0 5px 16px #1c3a270c !important; }
+        [class*="st-key-calendar-meal-box-"] .meal-box-item { margin:.25rem 0 !important; padding:.45rem 0 !important; background:transparent !important; border:0 !important; border-top:1px solid #d5e9da !important; border-radius:0 !important; box-shadow:none !important; }
         [class*="st-key-calendar-meal-boxes"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; gap:.45rem !important; width:100% !important; }
         [class*="st-key-calendar-meal-boxes"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 0% !important; width:0 !important; min-width:0 !important; padding:0 !important; }
         [class*="st-key-meal-box-actions-"] [data-testid="stHorizontalBlock"] { gap:.25rem !important; }
