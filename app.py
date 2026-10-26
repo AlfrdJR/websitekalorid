@@ -1241,8 +1241,8 @@ with tab_insights:
     if protein_days:
         protein_rows = []
         for parsed_day, day_totals in protein_days:
-            protein_rows.append(f'<tr><td>{parsed_day.strftime("%d.%m.%Y")}</td><td class="protein-total">{int(day_totals["protein"])} g</td><td>{int(day_totals["kcal"])} kcal</td><td>{int(day_totals["carbs"])} g</td><td>{int(day_totals["fat"])} g</td></tr>')
-        st.markdown(f'<div class="protein-table-wrap"><table class="protein-table"><thead><tr><th>Päev</th><th>Valk</th><th>Kalorid</th><th>Süsivesikud</th><th>Rasv</th></tr></thead><tbody>{"".join(protein_rows)}</tbody></table></div>', unsafe_allow_html=True)
+            protein_rows.append(f'<tr><td>{parsed_day.strftime("%d.%m.%Y")}</td><td class="protein-total">{int(day_totals["protein"])} g</td></tr>')
+        st.markdown(f'<div class="protein-table-wrap"><table class="protein-table"><thead><tr><th>Kuupäev</th><th>Valgu kogus</th></tr></thead><tbody>{"".join(protein_rows)}</tbody></table></div>', unsafe_allow_html=True)
     else:
         st.info("Päevade andmed ilmuvad siia pärast toitude logimist.")
     st.markdown("### Päevased eesmärgid")
