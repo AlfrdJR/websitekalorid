@@ -576,8 +576,6 @@ def css():
 
 
 css()
-st.markdown(f'<div class="hero"><div class="hero-title">Tere hommikust, Alfred ✦</div></div>', unsafe_allow_html=True)
-
 tab_today, tab_add, tab_calendar, tab_recipes, tab_insights = st.tabs(["Täna", "Lisa toit", "Kalender", "Retseptid", "Ülevaade"])
 
 with tab_today:
