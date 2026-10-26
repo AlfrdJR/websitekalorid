@@ -591,11 +591,7 @@ def css():
             [class*="st-key-macro-cards"] { width:100% !important; max-width:100% !important; overflow:hidden !important; }
             [class*="st-key-macro-cards"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; gap:.35rem !important; width:100% !important; max-width:100% !important; }
             [class*="st-key-macro-cards"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 0% !important; width:0 !important; min-width:0 !important; padding:0 !important; overflow:hidden !important; }
-            [class*="st-key-macro-cards"] .calendar-macro-card { width:100% !important; min-height:150px !important; padding:.65rem .2rem !important; }
-            [class*="st-key-macro-cards"] .calendar-macro-ring { width:52px !important; height:52px !important; }
-            [class*="st-key-macro-cards"] .calendar-macro-ring::after { width:37px !important; height:37px !important; }
-            [class*="st-key-macro-cards"] .calendar-macro-label { font-size:.58rem !important; white-space:nowrap !important; overflow:hidden !important; text-overflow:ellipsis !important; }
-            [class*="st-key-macro-cards"] .calendar-macro-value { font-size:.68rem !important; }
+            [class*="st-key-macro-cards"] .calendar-macro-card { width:100% !important; min-height:0 !important; padding:.8rem .45rem !important; }
             [class*="food-actions"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; justify-content:flex-start !important; gap:clamp(.2rem, 2vw, .7rem) !important; }
             [class*="food-actions"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:0 0 clamp(2.4rem, 13vw, 3.4rem) !important; width:clamp(2.4rem, 13vw, 3.4rem) !important; min-width:0 !important; padding:0 !important; }
             [class*="food-actions"] button { width:100% !important; min-width:0 !important; padding:.35rem .2rem !important; font-size:clamp(.78rem, 3.5vw, 1rem) !important; }
