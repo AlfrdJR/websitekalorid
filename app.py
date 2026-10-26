@@ -531,10 +531,10 @@ def css():
             [class*="st-key-macro-cards"] { width:100% !important; max-width:100% !important; overflow:hidden !important; }
             [class*="st-key-macro-cards"] [data-testid="stHorizontalBlock"] { flex-wrap:wrap !important; gap:.55rem !important; width:100% !important; max-width:100% !important; }
             [class*="st-key-macro-cards"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 100% !important; width:100% !important; min-width:100% !important; padding:0 !important; overflow:hidden !important; }
-            [class*="st-key-macro-cards"] .metric-card { box-sizing:border-box !important; width:100% !important; min-height:78px !important; padding:.6rem clamp(.35rem, 2vw, .5rem) !important; border-radius:15px !important; overflow:hidden !important; }
-            [class*="st-key-macro-cards"] .metric-label { font-size:clamp(.52rem, 2.2vw, .62rem) !important; line-height:1.1 !important; white-space:normal !important; overflow-wrap:anywhere !important; }
-            [class*="st-key-macro-cards"] .metric-value { font-size:clamp(.9rem, 4.5vw, 1.05rem) !important; white-space:nowrap !important; }
-            [class*="st-key-macro-cards"] .metric-note { font-size:clamp(.52rem, 2.2vw, .62rem) !important; white-space:nowrap !important; }
+            [class*="st-key-macro-cards"] .metric-card { box-sizing:border-box !important; width:100% !important; min-height:90px !important; padding:.8rem clamp(.55rem, 2.5vw, .75rem) !important; border-radius:15px !important; overflow:hidden !important; }
+            [class*="st-key-macro-cards"] .metric-label { font-size:clamp(.72rem, 3.2vw, .9rem) !important; line-height:1.1 !important; white-space:normal !important; overflow-wrap:anywhere !important; }
+            [class*="st-key-macro-cards"] .metric-value { font-size:clamp(1.25rem, 6vw, 1.5rem) !important; white-space:nowrap !important; }
+            [class*="st-key-macro-cards"] .macro-goal { font-size:clamp(.82rem, 3.8vw, 1rem) !important; }
             [class*="food-actions"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; justify-content:flex-start !important; gap:clamp(.2rem, 2vw, .7rem) !important; }
             [class*="food-actions"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:0 0 clamp(2.4rem, 13vw, 3.4rem) !important; width:clamp(2.4rem, 13vw, 3.4rem) !important; min-width:0 !important; padding:0 !important; }
             [class*="food-actions"] button { width:100% !important; min-width:0 !important; padding:.35rem .2rem !important; font-size:clamp(.78rem, 3.5vw, 1rem) !important; }
