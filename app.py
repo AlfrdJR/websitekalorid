@@ -274,8 +274,11 @@ def totals(day=None):
     return {key: sum(float(item.get(key, 0)) for item in entries_for(day)) for key in ("kcal", "protein", "carbs", "fat")}
 
 
-def add_entry(item, meal="Vahepala", day=None):
-    entries_for(day).append({**item, "meal": meal, "time": datetime.now().strftime("%H:%M")})
+def add_entry(item, meal="Vahepala", day=None, entry_type=None):
+    entry = {**item, "meal": meal, "time": datetime.now().strftime("%H:%M")}
+    if entry_type:
+        entry["entry_type"] = entry_type
+    entries_for(day).append(entry)
     save_daily_logs()
     st.session_state.highlight_added_food = item["name"]
 
@@ -297,7 +300,7 @@ def grouped_log_entries(entries):
     grouped_by_name = {}
     for index, entry in enumerate(entries):
         # Recipes stay separate; normal foods with the same name are combined.
-        if entry.get("meal") == "Retsept":
+        if entry.get("meal") == "Retsept" or entry.get("entry_type") == "recipe":
             grouped.append({**entry, "count": 1, "_indices": [index], "_prototype": {**entry}})
             continue
         name_key = entry.get("name", "").strip().lower()
@@ -768,7 +771,7 @@ with tab_today:
                             save_daily_logs()
                             st.rerun()
     for i, item in enumerate(displayed_today_entries):
-        is_recipe = item.get("meal") == "Retsept"
+        is_recipe = item.get("meal") == "Retsept" or item.get("entry_type") == "recipe"
         if not is_recipe:
             continue
         quantity_label = f'{item["count"]}× ' if item.get("count", 1) > 1 else ""
@@ -894,6 +897,12 @@ with tab_recipes:
     recipe_query = st.text_input("Otsi retsepti", placeholder="nt kana, hommikusöök…", key="recipe_query")
     visible_recipes = [r for r in all_recipes() if not recipe_query or recipe_query.lower() in (r.get("name", "") + " " + r.get("ingredients", "")).lower()]
     for index, recipe in enumerate(visible_recipes):
+        recipe_meal = st.selectbox(
+            "Toidukord",
+            [value for value, _ in meal_categories],
+            format_func=lambda value: dict(meal_categories)[value],
+            key=f"recipe_meal_{index}",
+        )
         with st.expander(f'{recipe["name"]} · {recipe["kcal"]} kcal', expanded=False):
             st.markdown(f'<div class="recipe-macros"><span class="recipe-macro">{int(recipe["kcal"])} kcal</span><span class="recipe-macro">Valk {int(recipe["protein"])} g</span><span class="recipe-macro">Süsivesikud {int(recipe["carbs"])} g</span><span class="recipe-macro">Rasv {int(recipe["fat"])} g</span></div>', unsafe_allow_html=True)
             recipe_ingredients = recipe.get("ingredients_data", [])
@@ -957,7 +966,7 @@ with tab_recipes:
                     delete_custom_recipe(recipe["name"])
                     st.rerun()
             if st.button("Lisa tänasesse", key=f"recipe_add_{index}", use_container_width=True):
-                add_entry(recipe, "Retsept", TODAY)
+                add_entry(recipe, recipe_meal, TODAY, entry_type="recipe")
                 st.rerun()
 
     st.markdown("### Lisa uus retsept")
