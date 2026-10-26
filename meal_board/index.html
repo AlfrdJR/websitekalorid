@@ -9,7 +9,7 @@
       }) },
       setComponentReady: () => window.parent.postMessage({ isStreamlitMessage: true, type: "streamlit:componentReady", apiVersion: 1 }, "*"),
       setFrameHeight: height => window.parent.postMessage({ isStreamlitMessage: true, type: "streamlit:setFrameHeight", height }, "*"),
-      setComponentValue: value => window.parent.postMessage({ isStreamlitMessage: true, type: "streamlit:setComponentValue", value: { type: "json", value } }, "*")
+      setComponentValue: value => window.parent.postMessage({ isStreamlitMessage: true, type: "streamlit:setComponentValue", value, dataType: "json" }, "*")
     };
   </script>
   <style>
