@@ -537,6 +537,8 @@ def css():
         [class*="food-adjust"] button:focus-visible, [class*="food-remove"] button:focus-visible { outline:2px solid #76b58c !important; outline-offset:-2px; }
         [class*="product-actions"] { display:flex; width:100%; }
         [class*="recipe-actions"] { display:block; width:100%; }
+        [class*="st-key-edit_recipe_"], [class*="st-key-close_recipe_editor_"], [class*="st-key-delete_recipe_"] { display:inline-block !important; width:auto !important; max-width:100% !important; vertical-align:middle !important; margin-right:.35rem !important; }
+        [class*="st-key-edit_recipe_"] button, [class*="st-key-close_recipe_editor_"] button, [class*="st-key-delete_recipe_"] button { width:auto !important; min-width:2.5rem !important; }
         [class*="product-actions"] button, [class*="recipe-actions"] button { min-height:2.25rem !important; border-radius:11px !important; }
         [class*="product-actions"] [data-testid="stHorizontalBlock"], [class*="recipe-actions"] [data-testid="stHorizontalBlock"] { width:100% !important; }
         [class*="st-key-remove_today_"] button, [class*="st-key-remove_one_today_"] button,
