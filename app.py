@@ -567,7 +567,7 @@ def css():
         [class*="food-adjust"] [data-testid="stHorizontalBlock"] { position:relative !important; height:2.8rem !important; }
         [class*="food-adjust"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { position:absolute !important; top:0 !important; }
         [class*="food-adjust"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(1) { left:0 !important; }
-        [class*="food-adjust"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { left:2.5rem !important; transform:none !important; }
+        [class*="food-adjust"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { left:2rem !important; transform:none !important; }
             .goal-card { border-radius:20px; padding:.8rem; gap:.7rem; }
             .goal-ring { width:72px; height:72px; } .goal-ring:after { width:55px; height:55px; }
             .goal-copy .metric-value { font-size:1.2rem; } .metric-note { font-size:.68rem; }
