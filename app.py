@@ -123,7 +123,15 @@ def hide_product(name):
 
 def all_products():
     hidden_products = load_hidden_products()
-    return [product for product in load_custom_products() + PRODUCTS if product.get("name") and product["name"].lower() not in hidden_products]
+    custom_products = load_custom_products()
+    custom_names = {product.get("name", "").strip().lower() for product in custom_products}
+    catalog_products = [
+        product for product in PRODUCTS
+        if product.get("name")
+        and product["name"].strip().lower() not in hidden_products
+        and product["name"].strip().lower() not in custom_names
+    ]
+    return [product for product in custom_products if product.get("name")] + catalog_products
 
 
 def load_custom_recipes():
