@@ -389,6 +389,20 @@ def css():
         [class*="food-remove"] button::after { content:"X"; color:#b45d5d !important; font-size:1rem !important; }
         [class*="product-actions"] button:not([kind="primary"]), [class*="product-actions"] [data-testid="stBaseButton-secondary"] { font-size:0 !important; color:transparent !important; text-shadow:none !important; }
         [class*="product-actions"] button:not([kind="primary"])::after, [class*="product-actions"] [data-testid="stBaseButton-secondary"]::after { content:"X"; color:#b45d5d !important; font-size:1rem !important; }
+        /* Streamlit places button text inside a nested paragraph. Hide the original
+           mojibake icon and draw one stable icon there instead of on the button. */
+        [class*="product-actions"] button::after, [class*="food-remove"] button::after,
+        [class*="st-key-remove_today_"] button::after, [class*="st-key-delete_product_"] button::after,
+        [class*="st-key-remove_calendar_"] button::after, [class*="st-key-remove_recipe_row_"] button::after,
+        [class*="st-key-delete_recipe_"] button::after, [class*="st-key-remove_recipe_ingredient_"] button::after { content:none !important; }
+        [class*="product-actions"] button:not([kind="primary"]) p, [class*="food-remove"] button p,
+        [class*="st-key-remove_today_"] button p, [class*="st-key-delete_product_"] button p,
+        [class*="st-key-remove_calendar_"] button p, [class*="st-key-remove_recipe_row_"] button p,
+        [class*="st-key-delete_recipe_"] button p, [class*="st-key-remove_recipe_ingredient_"] button p { font-size:0 !important; color:transparent !important; }
+        [class*="product-actions"] button:not([kind="primary"]) p::after, [class*="food-remove"] button p::after,
+        [class*="st-key-remove_today_"] button p::after, [class*="st-key-delete_product_"] button p::after,
+        [class*="st-key-remove_calendar_"] button p::after, [class*="st-key-remove_recipe_row_"] button p::after,
+        [class*="st-key-delete_recipe_"] button p::after, [class*="st-key-remove_recipe_ingredient_"] button p::after { content:"X"; color:#b45d5d !important; font-size:1rem !important; }
         @media (prefers-color-scheme: dark), (html[data-theme="dark"]) {
             :root { --ink:#edf5ef; --muted:#aabbb1; --mint:#173d2c; --green:#72d09b; --cream:#111714; --line:#2b3b33; --surface:#1b2520; --surface-soft:#20382a; --input:#202b25; --shadow:#00000035; }
             .stApp, [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] { background:var(--cream); color:var(--ink); }
