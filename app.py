@@ -326,7 +326,8 @@ def css():
         .eyebrow { color:var(--green); text-transform:uppercase; font-size:.7rem; font-weight:700; letter-spacing:.16em; }
         .hero { background:linear-gradient(135deg,#173f2d,#286d4d); color:white; border-radius:26px; padding:1.15rem 1.25rem 1.25rem; margin:.65rem 0 1rem; box-shadow:0 10px 28px #2a765026; }
         .hero-title { font-family:'Space Grotesk'; font-weight:700; font-size:1.85rem; letter-spacing:-.06em; }
-        .brand-card { display:inline-flex; align-items:center; padding:.55rem .85rem; margin:.15rem 0 1rem; background:var(--surface); border:1px solid var(--line); border-radius:14px; color:var(--green); font:700 1rem 'Space Grotesk',sans-serif; letter-spacing:-.03em; box-shadow:0 3px 12px var(--shadow); }
+        .brand-card { display:inline-flex; align-items:center; gap:.55rem; padding:.42rem .85rem .42rem .45rem; margin:.15rem 0 1rem; background:linear-gradient(135deg,#e9f8ef,#d7f0e2); border:1px solid #c8e6d3; border-radius:16px; color:#1f704b; font:700 1rem 'Space Grotesk',sans-serif; letter-spacing:-.03em; box-shadow:0 6px 18px #287a561c; }
+        .brand-mark { display:grid; place-items:center; width:1.85rem; height:1.85rem; border-radius:11px; background:linear-gradient(145deg,#287a56,#165338); color:white; font:700 1rem 'Space Grotesk',sans-serif; box-shadow:0 3px 8px #173f2d38; }
         .hero-sub { color:#c4e4d1; margin-top:.3rem; font-size:.88rem; }
         .metric-card { background:white; border:1px solid var(--line); border-radius:20px; padding:1rem; min-height:98px; box-shadow:0 3px 12px #1c3a2710; }
         .metric-label { color:var(--muted); font-size:.76rem; font-weight:600; } .metric-value { font:700 1.5rem 'Space Grotesk'; margin-top:.35rem; }
@@ -449,6 +450,8 @@ def css():
             .streak-card { background:#3b301d; border-color:#665027; color:#f1ca77; }
             .recipe-macro { background:#1d3a29; border-color:#2c5a3e; color:#8ee0ac; }
             .builder-product, .builder-weight { background:var(--input) !important; color:var(--ink) !important; }
+            .brand-card { background:linear-gradient(135deg,#1d3d2c,#173025); border-color:#315b43; color:#9ae6b7; box-shadow:0 6px 18px #00000035; }
+            .brand-mark { background:linear-gradient(145deg,#72d09b,#287a56); color:#102219; }
             .progress, .week-track { background:#2a3931; }
             .goal-ring { background:conic-gradient(#72d09b var(--percent), #2a3931 0); }
             .goal-ring:after { background:var(--surface); }
@@ -577,7 +580,7 @@ def css():
 
 
 css()
-st.markdown('<div class="brand-card">NÕU</div>', unsafe_allow_html=True)
+st.markdown('<div class="brand-card"><span class="brand-mark">N</span><span>NÕU</span></div>', unsafe_allow_html=True)
 tab_today, tab_add, tab_calendar, tab_recipes, tab_insights = st.tabs(["Täna", "Lisa toit", "Kalender", "Retseptid", "Ülevaade"])
 
 with tab_today:
