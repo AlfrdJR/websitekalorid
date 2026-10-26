@@ -385,6 +385,7 @@ def css():
         [class*="food-adjust"] [data-testid="stHorizontalBlock"] { display:flex !important; flex:0 0 auto !important; width:5rem !important; max-width:5rem !important; flex-wrap:nowrap !important; justify-content:flex-start !important; gap:0 !important; }
         [class*="food-adjust"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:0 0 2.5rem !important; width:2.5rem !important; min-width:2.5rem !important; padding:0 !important; }
         [class*="food-adjust"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { transform:none !important; }
+        [class*="food-adjust"] [data-testid="stHorizontalBlock"], [class*="food-adjust"] [data-testid="column"], [class*="food-adjust"] [data-testid="stElementContainer"] { outline:none !important; border:none !important; box-shadow:none !important; }
         [class*="food-adjust"] button { box-sizing:border-box !important; width:2.5rem !important; min-width:2.5rem !important; height:2.8rem !important; min-height:2.8rem !important; padding:0 !important; font-size:1.35rem !important; }
         [class*="food-adjust"] button { background:#eaf6ed !important; }
         [class*="food-adjust"] button:focus, [class*="food-adjust"] button:focus-visible, [class*="food-adjust"] button:active { background:#eaf6ed !important; border-radius:11px !important; outline:none !important; }
