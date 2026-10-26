@@ -25,10 +25,10 @@
     .card-name { font-size: 13px; font-weight: 700; line-height: 1.2; }
     .card-meta { margin-top: 4px; color: #668072; font-size: 11px; line-height: 1.25; }
     .card-actions { display: flex; gap: 5px; margin-top: 8px; }
-    .action { min-width: 28px; height: 26px; padding: 0 7px; border: 1px solid #dfe8e1; border-radius: 8px; background: #fff; color: #287a56; cursor: pointer; font-weight: 700; }
+    .action { min-width: 28px; height: 26px; padding: 0 7px; border: 1px solid #dfe8e1; border-radius: 8px; background: #fff; color: #287a56; cursor: pointer; font-weight: 700; touch-action: manipulation; position: relative; z-index: 2; }
     .action.remove { color: #b45d5d; border-color: #f0d9d9; }
     .move-actions { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
-    .move-action { min-height: 24px; padding: 3px 6px; border: 1px solid #dfe8e1; border-radius: 7px; background: #f4f8f5; color: #287a56; cursor: pointer; font-size: 10px; }
+    .move-action { min-height: 24px; padding: 3px 6px; border: 1px solid #dfe8e1; border-radius: 7px; background: #f4f8f5; color: #287a56; cursor: pointer; font-size: 10px; touch-action: manipulation; position: relative; z-index: 2; }
     .move-action.current { background: #e5f4eb; border-color: #8fd0a8; font-weight: 700; }
     .empty { color: #8aa094; font-size: 11px; text-align: center; padding: 14px 2px; }
     @media (max-width: 600px) {
@@ -84,22 +84,23 @@
             moveButton.className = `move-action${entry.meal === target.key ? " current" : ""}`;
             moveButton.textContent = target.key === "Hommikusöök" ? "Hommik" : target.key === "Õhtusöök" ? "Õhtu" : target.label;
             moveButton.onclick = event => { event.stopPropagation(); if (entry.meal !== target.key) send("move", { ...entry, meal: target.key }); };
+            moveButton.addEventListener("touchend", event => { event.preventDefault(); event.stopPropagation(); if (entry.meal !== target.key) send("move", { ...entry, meal: target.key }); }, { passive: false });
             card.querySelector(".move-actions").appendChild(moveButton);
           });
-          card.addEventListener("dragstart", event => { if (event.target.closest(".action")) { event.preventDefault(); return; } dragged = entry; card.classList.add("dragging"); });
+          card.addEventListener("dragstart", event => { if (event.target.closest(".action, .move-action")) { event.preventDefault(); return; } dragged = entry; card.classList.add("dragging"); });
           card.addEventListener("dragend", () => { dragged = null; card.classList.remove("dragging"); });
           card.addEventListener("pointerdown", event => {
-            if (event.target.closest(".action") || event.pointerType === "touch") return;
+            if (event.target.closest(".action, .move-action") || event.pointerType === "touch") return;
             card.setPointerCapture(event.pointerId); dragged = entry; card.classList.add("dragging");
           });
           card.addEventListener("pointerup", event => {
-            if (event.target.closest(".action") || event.pointerType === "touch") return;
+            if (event.target.closest(".action, .move-action") || event.pointerType === "touch") return;
             const target = document.elementFromPoint(event.clientX, event.clientY)?.closest(".column");
             if (target && target.dataset.meal !== entry.meal) send("move", { ...entry, meal: target.dataset.meal });
             dragged = null; card.classList.remove("dragging");
           });
           card.addEventListener("touchstart", event => {
-            if (event.target.closest(".action")) return;
+            if (event.target.closest(".action, .move-action")) return;
             event.preventDefault(); dragged = entry; card.classList.add("dragging");
           }, { passive: false });
           card.addEventListener("touchmove", event => {
@@ -118,9 +119,15 @@
             document.querySelectorAll(".column").forEach(column => column.classList.remove("over"));
             dragged = null; card.classList.remove("dragging");
           }, { passive: false });
-          card.querySelector(".add").onclick = event => { event.stopPropagation(); send("add", entry); };
-          card.querySelector(".subtract").onclick = event => { event.stopPropagation(); send("subtract", entry); };
-          card.querySelector(".remove").onclick = event => { event.stopPropagation(); send("remove", entry); };
+          const bindAction = (selector, action) => {
+            const button = card.querySelector(selector);
+            const fire = event => { event.preventDefault(); event.stopPropagation(); send(action, entry); };
+            button.onclick = fire;
+            button.addEventListener("touchend", fire, { passive: false });
+          };
+          bindAction(".add", "add");
+          bindAction(".subtract", "subtract");
+          bindAction(".remove", "remove");
           column.appendChild(card);
         });
         column.addEventListener("dragover", event => { event.preventDefault(); column.classList.add("over"); });
