@@ -353,6 +353,7 @@ def css():
         .ingredient-header { display:grid; grid-template-columns:4fr 1.5fr .8fr; gap:.5rem; padding:.35rem .6rem; color:var(--muted); text-transform:uppercase; font-size:.68rem; font-weight:700; letter-spacing:.08em; border-bottom:1px solid var(--line); }
         .recipe-read-row { display:grid; grid-template-columns:minmax(0, 1fr) auto; align-items:center; gap:.75rem; padding:.7rem .6rem; border-bottom:1px solid var(--line); color:var(--ink); }
         .recipe-read-row strong { color:var(--muted); white-space:nowrap; font-weight:600; }
+        .recipe-edit-row input { border-radius:12px !important; }
         .table-note { color:var(--muted); font-size:.78rem; margin:.2rem 0 .6rem; }
         .recipe-macros { display:flex; flex-wrap:wrap; gap:.4rem; margin:.65rem 0 .8rem; }
         .recipe-macro { background:#f1f7f2; border:1px solid #e1eee3; border-radius:10px; padding:.35rem .55rem; color:#287a56; font-size:.75rem; font-weight:700; }
@@ -416,8 +417,8 @@ def css():
         [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 5.5rem !important; width:5.5rem !important; min-width:5.5rem !important; }
         [class*="st-key-recipe-builder-row-"] [class*="st-key-remove_recipe_ingredient_"] button p { font-size:.72rem !important; color:#b45d5d !important; white-space:nowrap !important; }
         [class*="st-key-recipe-builder-row-"] [class*="st-key-remove_recipe_ingredient_"] button p::after { content:none !important; }
-        [class*="st-key-recipe-builder-row-"] .builder-product { flex:1 1 auto; min-width:0; overflow-wrap:anywhere; }
-        [class*="st-key-recipe-builder-row-"] .builder-weight { flex:0 1 7rem; min-width:0; white-space:nowrap; color:var(--muted); font-size:.82rem; }
+        [class*="st-key-recipe-builder-row-"] .builder-product { flex:1 1 auto; min-width:0; overflow-wrap:anywhere; background:#f1f3f7; border-radius:12px; padding:.85rem .7rem; }
+        [class*="st-key-recipe-builder-row-"] .builder-weight { flex:0 1 7rem; min-width:0; white-space:nowrap; color:var(--ink); font-size:.82rem; background:#f1f3f7; border-radius:12px; padding:.85rem .7rem; }
         [class*="st-key-recipe-builder-row-"] [data-testid="stElementContainer"] { min-width:0 !important; }
         [class*="st-key-recipe-builder-row-"] [data-testid="stElementContainer"]:has(.builder-product) { flex:1 1 auto !important; min-width:0 !important; }
         [class*="st-key-recipe-builder-row-"] [data-testid="stElementContainer"]:has(.builder-weight) { flex:0 1 7rem !important; min-width:0 !important; }
@@ -446,6 +447,7 @@ def css():
             .add-card-sub, .table-note, .section-hint, .metric-label, .metric-note, .food-meta, .week-day { color:var(--muted); }
             .streak-card { background:#3b301d; border-color:#665027; color:#f1ca77; }
             .recipe-macro { background:#1d3a29; border-color:#2c5a3e; color:#8ee0ac; }
+            .builder-product, .builder-weight { background:var(--input) !important; color:var(--ink) !important; }
             .progress, .week-track { background:#2a3931; }
             .goal-ring { background:conic-gradient(#72d09b var(--percent), #2a3931 0); }
             .goal-ring:after { background:var(--surface); }
@@ -507,6 +509,7 @@ def css():
             [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { flex:0 1 clamp(4rem, 24vw, 6rem) !important; width:clamp(4rem, 24vw, 6rem) !important; min-width:4rem !important; }
             [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 2.5rem !important; width:2.5rem !important; min-width:2.5rem !important; }
             [class*="st-key-recipe-builder-row-"] [data-testid="stMarkdownContainer"] { font-size:.78rem !important; line-height:1.2 !important; overflow-wrap:anywhere !important; }
+            [class*="st-key-recipe-builder-row-"] .builder-product, [class*="st-key-recipe-builder-row-"] .builder-weight { padding:.75rem .65rem !important; }
             [class*="st-key-recipe-builder-row-"] .builder-weight { flex:0 1 clamp(4rem, 24vw, 5rem) !important; font-size:.74rem !important; white-space:normal !important; overflow-wrap:anywhere !important; }
             [class*="st-key-recipe-builder-row-"] [data-testid="stElementContainer"]:has(.builder-weight) { flex:0 1 clamp(4rem, 24vw, 5rem) !important; }
             [class*="st-key-recipe-builder-row-"] [data-testid="stElementContainer"]:has(button) { flex:0 0 2.3rem !important; width:2.3rem !important; min-width:2.3rem !important; }
@@ -529,6 +532,13 @@ def css():
             .add-card { margin-top:.8rem; padding:.85rem; border-radius:17px; }
             .streak-card { font-size:.76rem; padding:.65rem .75rem; }
             .ingredient-header { grid-template-columns:3fr 1.3fr .5fr; font-size:.6rem; padding:.3rem .25rem; }
+            .ingredient-header { grid-template-columns:minmax(0, 1fr) 6.5rem 2.5rem; gap:.35rem; }
+            [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] { width:100% !important; max-width:100% !important; display:flex !important; flex-wrap:nowrap !important; gap:.35rem !important; overflow:hidden !important; }
+            [class*="st-key-recipe-edit-row-"] [data-testid="stElementContainer"]:has([data-testid="stSelectbox"]) { flex:1 1 0% !important; width:auto !important; min-width:0 !important; overflow:hidden !important; }
+            [class*="st-key-recipe-edit-row-"] [data-testid="stElementContainer"]:has([data-testid="stNumberInput"]) { flex:0 0 6.5rem !important; width:6.5rem !important; min-width:6.5rem !important; }
+            [class*="st-key-recipe-edit-row-"] [class*="st-key-remove_recipe_row_"] { flex:0 0 2.5rem !important; width:2.5rem !important; min-width:2.5rem !important; }
+            [class*="st-key-recipe-edit-row-"] [data-testid="stSelectbox"] [data-baseweb="select"] > div,
+            [class*="st-key-recipe-edit-row-"] [data-testid="stNumberInput"] input { min-height:50px !important; border-radius:12px !important; }
             .recipe-read-row { grid-template-columns:minmax(0, 1fr) 4.5rem; gap:.35rem; padding:.65rem .25rem; font-size:.88rem; }
             .recipe-read-row strong { text-align:right; font-size:.82rem; }
             .food-row { min-height:64px; }
@@ -718,7 +728,7 @@ with tab_recipes:
                     edit_data = st.session_state[edit_key]
                     edited_ingredients_data = edit_data.setdefault("ingredients_data", [])
                     edit_name = st.text_input("Retsepti nimi", value=edit_data["name"], key=f"recipe_name_{index}")
-                    st.markdown("**Koostisosad**")
+                    st.markdown("### Koostisosad")
                     recipe_products = all_products()
                     recipe_labels = [f'{product["name"]} · {product["brand"]}' for product in recipe_products]
                     st.markdown('<div class="ingredient-header"><span>Toode</span><span>Kaal</span><span></span></div>', unsafe_allow_html=True)
@@ -776,7 +786,7 @@ with tab_recipes:
                 st.rerun()
 
     if st.session_state.recipe_builder:
-        st.markdown("**Retsepti koostisosad**")
+        st.markdown("### Koostisosad")
         st.markdown('<div class="ingredient-header"><span>Toode</span><span>Kaal</span><span></span></div>', unsafe_allow_html=True)
         for ingredient_index, ingredient in enumerate(st.session_state.recipe_builder):
             ingredient_product = next((p for p in recipe_products if p["name"] == ingredient["name"]), None)
