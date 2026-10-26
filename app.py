@@ -914,6 +914,7 @@ st.markdown(
     [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button { width:100% !important; min-height:32px !important; height:32px !important; border-radius:8px !important; border:0 !important; background:transparent !important; color:#b45d5d !important; font-size:0 !important; }
     [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button p::after { font-family:'DM Sans',sans-serif !important; font-weight:500 !important; }
     .ingredient-header { min-height:2.15rem !important; margin-bottom:.45rem !important; align-items:center !important; box-sizing:border-box !important; font-family:'DM Sans',sans-serif !important; font-size:1rem !important; font-weight:400 !important; text-transform:none !important; letter-spacing:0 !important; color:var(--ink) !important; }
+    .recipe-edit-header { border-bottom:0 !important; margin-bottom:.15rem !important; }
     [class*="st-key-recipe-edit-row-"] { margin-top:.35rem !important; }
     [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button p { font-size:0 !important; }
     [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button p::after { content:"×"; font-size:1.25rem !important; line-height:1 !important; }
@@ -1218,7 +1219,7 @@ with tab_recipes:
                     st.markdown("### Koostisosad")
                     recipe_products = all_products()
                     recipe_labels = [f'{product["name"]} · {product["brand"]}' for product in recipe_products]
-                    st.markdown('<div class="ingredient-header"><span>Toode</span><span>Kaal</span><span></span></div>', unsafe_allow_html=True)
+                    st.markdown('<div class="ingredient-header recipe-edit-header"><span>Toode</span><span>Kaal</span><span></span></div>', unsafe_allow_html=True)
                     for ingredient_index, ingredient in enumerate(edited_ingredients_data):
                         ingredient_token = ingredient["_edit_id"]
                         with st.container(key=f"recipe-edit-row-{recipe_token}-{ingredient_token}", horizontal=True, width="stretch", gap="small", vertical_alignment="center"):
