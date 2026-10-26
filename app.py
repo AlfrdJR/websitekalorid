@@ -408,7 +408,7 @@ def css():
         [class*="st-key-remove_one_today_"] button::after { content:"-"; color:#287a56; font-size:1rem; }
         [class*="st-key-remove_one_today_"] button::after { content:none !important; }
         [class*="st-key-remove_one_today_"] button p { font-size:0 !important; color:transparent !important; }
-        [class*="st-key-remove_one_today_"] button p::after { content:"−1"; color:#287a56 !important; font-size:1.1rem !important; }
+        [class*="st-key-remove_one_today_"] button p::after { content:"−"; color:#287a56 !important; font-size:1.35rem !important; }
         [class*="st-key-add_recipe_row_"] button { font-size:0 !important; color:transparent !important; }
         [class*="st-key-add_recipe_row_"] button::after { content:"+ Lisa toode"; color:#287a56; font-size:.82rem; }
         [class*="food-remove"] button { font-size:0 !important; color:transparent !important; }
@@ -623,7 +623,7 @@ def css():
         [class*="food-adjust"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { position:static !important; flex:0 0 2.5rem !important; width:2.5rem !important; min-width:2.5rem !important; height:2.8rem !important; padding:0 !important; transform:none !important; }
         [class*="food-adjust"] button { display:flex !important; align-items:center !important; justify-content:center !important; box-sizing:border-box !important; width:2.5rem !important; min-width:2.5rem !important; height:2.8rem !important; min-height:2.8rem !important; margin:0 !important; padding:0 !important; border:0 !important; border-radius:11px !important; background:transparent !important; color:#287a56 !important; outline:none !important; }
         [class*="food-adjust"] button p { display:block !important; width:auto !important; height:auto !important; margin:0 !important; font-size:1.35rem !important; line-height:1 !important; }
-        [class*="food-adjust"] button:focus, [class*="food-adjust"] button:focus-visible, [class*="food-adjust"] button:active { outline:none !important; box-shadow:none !important; background:transparent !important; }
+        [class*="food-adjust"] button:focus, [class*="food-adjust"] button:focus-visible, [class*="food-adjust"] button:active { outline:none !important; box-shadow:none !important; background:#eaf6ed !important; }
         </style>
         """,
         unsafe_allow_html=True,
@@ -674,10 +674,10 @@ with tab_today:
         else:
             with st.container(key=f"food-actions-{i}", horizontal=True, width="stretch", horizontal_alignment="distribute", gap="small", vertical_alignment="center"):
                 with st.container(key=f"food-adjust-{i}", horizontal=True, width="content", gap="small"):
-                    if st.button("+1", key=f"add_one_today_{i}", help="Lisa üks sama toit"):
+                    if st.button("+", key=f"add_one_today_{i}", help="Lisa üks sama toit"):
                         add_entry(item["_prototype"], item["_prototype"].get("meal", "Vahepala"), TODAY)
                         st.rerun()
-                    if st.button("−1", key=f"remove_one_today_{i}", help="Eemalda üks kogus"):
+                    if st.button("−", key=f"remove_one_today_{i}", help="Eemalda üks kogus"):
                         remove_entry_group([item["_indices"][-1]], TODAY)
                         st.rerun()
                 with st.container(key=f"food-remove-{i}", horizontal=True, width="content"):
