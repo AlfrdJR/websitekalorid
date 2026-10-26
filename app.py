@@ -917,9 +917,10 @@ with tab_recipes:
                     if filtered_recipe_products:
                         filtered_recipe_labels = [f'{product["name"]} · {product["brand"]}' for product in filtered_recipe_products]
                         selected_add_label = st.selectbox("Vali toode", filtered_recipe_labels, key=f"recipe_add_product_{index}")
+                        recipe_add_grams = st.number_input("Kaal (g)", min_value=1, value=100, step=5, key=f"recipe_add_grams_{index}")
                         if st.button("+ Lisa toode", key=f"add_recipe_row_{index}", width="content"):
                             selected_product = filtered_recipe_products[filtered_recipe_labels.index(selected_add_label)]
-                            edited_ingredients_data.append({"name": selected_product["name"], "grams": 100})
+                            edited_ingredients_data.append({"name": selected_product["name"], "grams": int(recipe_add_grams)})
                             st.rerun()
                     else:
                         st.info("Selle otsinguga toodet ei leitud.")
