@@ -296,7 +296,7 @@ def css():
     st.markdown(
         """
         <style>
-        :root { --ink:#18231e; --muted:#78857d; --mint:#dff3e8; --green:#287a56; --cream:#f5f6f1; --line:#e8ece6; }
+        :root { --ink:#18231e; --muted:#78857d; --mint:#dff3e8; --green:#287a56; --cream:#f5f6f1; --line:#e8ece6; --surface:#ffffff; --surface-soft:#edf5ef; --input:#ffffff; --shadow:#1c3a2710; }
         .stApp { background:var(--cream); color:var(--ink); font-family:'DM Sans',sans-serif; }
         [data-testid="stHeader"] { background:transparent; }
         .block-container { max-width:720px; padding:1.5rem 1rem 5rem; }
@@ -354,6 +354,39 @@ def css():
         [class*="product-actions"], [class*="recipe-actions"] { display:flex; width:100%; }
         [class*="product-actions"] button, [class*="recipe-actions"] button { min-height:2.25rem !important; border-radius:11px !important; }
         [class*="product-actions"] [data-testid="stHorizontalBlock"], [class*="recipe-actions"] [data-testid="stHorizontalBlock"] { width:100% !important; }
+        @media (prefers-color-scheme: dark), (html[data-theme="dark"]) {
+            :root { --ink:#edf5ef; --muted:#aabbb1; --mint:#173d2c; --green:#72d09b; --cream:#111714; --line:#2b3b33; --surface:#1b2520; --surface-soft:#20382a; --input:#202b25; --shadow:#00000035; }
+            .stApp, [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] { background:var(--cream); color:var(--ink); }
+            [data-testid="stHeader"] { background:transparent; }
+            h1, h2, h3, p, label, .stMarkdown, [data-testid="stWidgetLabel"] { color:var(--ink); }
+            .metric-card, .food-row, .goal-card, .overview-card, div[data-testid="stMetric"], div[data-testid="stExpander"],
+            [data-testid="stRadio"] label, [class*="food-adjust"], [class*="food-remove"] { background:var(--surface) !important; color:var(--ink); border-color:var(--line) !important; }
+            .food-row { border-bottom-color:var(--line); }
+            .pill { background:#214b35; color:#9ae6b7; }
+            .add-card { background:#173d2c; }
+            .add-card-sub, .table-note, .section-hint, .metric-label, .metric-note, .food-meta, .week-day { color:var(--muted); }
+            .streak-card { background:#3b301d; border-color:#665027; color:#f1ca77; }
+            .recipe-macro { background:#1d3a29; border-color:#2c5a3e; color:#8ee0ac; }
+            .progress, .week-track { background:#2a3931; }
+            .goal-ring { background:conic-gradient(#72d09b var(--percent), #2a3931 0); }
+            .goal-ring:after { background:var(--surface); }
+            .goal-ring span { color:#72d09b; }
+            .mobile-footer { background:#111714e8; border-top-color:var(--line); color:var(--muted); }
+            div.stButton > button, [data-testid="stDownloadButton"] button { background:var(--surface); color:var(--ink); border-color:var(--line); }
+            div.stButton > button[kind="primary"] { background:#287a56; color:white; border-color:#287a56; }
+            [class*="food-adjust"] button { color:#72d09b !important; }
+            [class*="food-remove"] button { color:#f08b8b !important; }
+            [class*="food-adjust"] button:hover { background:#214b35 !important; color:#b7f3ca !important; }
+            [class*="food-remove"] button:hover { background:#4a2929 !important; color:#ffb1b1 !important; }
+            input, textarea, [data-baseweb="select"] > div, [data-testid="stNumberInput"] button { background:var(--input) !important; color:var(--ink) !important; border-color:var(--line) !important; }
+            input::placeholder, textarea::placeholder { color:#8da097 !important; }
+            [data-baseweb="popover"] [role="listbox"], [data-baseweb="menu"] { background:var(--surface) !important; color:var(--ink) !important; }
+            [data-baseweb="popover"] [role="option"]:hover, [data-baseweb="menu"] [role="option"]:hover { background:#294333 !important; }
+            .stTabs [data-baseweb="tab-list"] { border-bottom-color:var(--line); }
+            .stTabs [data-baseweb="tab"] { color:var(--muted); }
+            .stTabs [aria-selected="true"] { color:#72d09b; }
+            [data-testid="stAlert"] { background:#1d3328; color:var(--ink); }
+        }
         @media (max-width:600px) {
             .block-container { width:100%; max-width:100%; padding:.8rem .7rem 5.3rem; }
             h1 { font-size:1.65rem; } h2 { font-size:1.25rem; } h3 { font-size:1rem; }
