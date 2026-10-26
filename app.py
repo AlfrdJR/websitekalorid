@@ -477,7 +477,7 @@ def css():
         .protein-top-note { color:var(--muted); font-size:.75rem; }
         .protein-best-card { display:grid; grid-template-columns:1fr 1fr; align-items:center; padding:1.1rem 1.25rem; }
         .protein-best-date { color:var(--ink); font:700 1.05rem 'Space Grotesk'; }
-        .protein-best-amount { padding-left:1.25rem; border-left:4px solid #c8c8c8; color:var(--ink); font:700 1.45rem 'Space Grotesk'; }
+        .protein-best-amount { padding-left:1.25rem; color:var(--ink); font:700 1.45rem 'Space Grotesk'; }
         .protein-top-grid.single { grid-template-columns:minmax(0,1fr); }
         @media (max-width:600px) { .protein-top-grid { grid-template-columns:1fr; gap:.5rem; } .protein-top-card { padding:.75rem .85rem; } .protein-top-value { font-size:1.15rem; } .protein-best-card { padding:1rem; } .protein-best-date { font-size:.95rem; } .protein-best-amount { padding-left:1rem; font-size:1.3rem; } }
         .week-bars { display:flex; align-items:end; justify-content:space-between; gap:.45rem; height:145px; padding:.8rem .35rem .2rem; }
