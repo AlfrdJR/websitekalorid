@@ -378,13 +378,13 @@ def css():
         [class*="st-key-remove_today_"] button, [class*="st-key-remove_one_today_"] button,
         [class*="st-key-delete_product_"] button, [class*="st-key-remove_calendar_"] button,
         [class*="st-key-remove_recipe_row_"] button, [class*="st-key-delete_recipe_"] button,
-        [class*="st-key-remove_recipe_ingredient_"] button { font-size:0 !important; }
+        [class*="st-key-remove_recipe_ingredient_"] button { font-size:0 !important; color:transparent !important; text-shadow:none !important; }
         [class*="st-key-remove_today_"] button::after, [class*="st-key-delete_product_"] button::after,
         [class*="st-key-remove_calendar_"] button::after, [class*="st-key-remove_recipe_row_"] button::after,
-        [class*="st-key-delete_recipe_"] button::after, [class*="st-key-remove_recipe_ingredient_"] button::after { content:"X"; font-size:1rem; }
-        [class*="st-key-remove_one_today_"] button::after { content:"-"; font-size:1rem; }
-        [class*="st-key-add_recipe_row_"] button { font-size:0 !important; }
-        [class*="st-key-add_recipe_row_"] button::after { content:"+ Lisa toode"; font-size:.82rem; }
+        [class*="st-key-delete_recipe_"] button::after, [class*="st-key-remove_recipe_ingredient_"] button::after { content:"X"; color:#b45d5d; font-size:1rem; }
+        [class*="st-key-remove_one_today_"] button::after { content:"-"; color:#287a56; font-size:1rem; }
+        [class*="st-key-add_recipe_row_"] button { font-size:0 !important; color:transparent !important; }
+        [class*="st-key-add_recipe_row_"] button::after { content:"+ Lisa toode"; color:#287a56; font-size:.82rem; }
         @media (prefers-color-scheme: dark), (html[data-theme="dark"]) {
             :root { --ink:#edf5ef; --muted:#aabbb1; --mint:#173d2c; --green:#72d09b; --cream:#111714; --line:#2b3b33; --surface:#1b2520; --surface-soft:#20382a; --input:#202b25; --shadow:#00000035; }
             .stApp, [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] { background:var(--cream); color:var(--ink); }
