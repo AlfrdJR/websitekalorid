@@ -1,4 +1,6 @@
 import json
+import hashlib
+import uuid
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
@@ -147,9 +149,15 @@ def load_custom_recipes():
         return []
 
 
-def save_custom_recipe(recipe):
+def save_custom_recipe(recipe, replace_name=None):
     recipes = load_custom_recipes()
-    recipes = [r for r in recipes if r.get("name", "").lower() != recipe["name"].lower()]
+    names_to_replace = {recipe["name"].strip().casefold()}
+    if replace_name:
+        names_to_replace.add(str(replace_name).strip().casefold())
+    recipes = [
+        r for r in recipes
+        if r.get("name", "").strip().casefold() not in names_to_replace
+    ]
     recipes.insert(0, recipe)
     with CUSTOM_RECIPES_FILE.open("w", encoding="utf-8") as file:
         json.dump(recipes, file, ensure_ascii=False, indent=2)
@@ -265,6 +273,19 @@ def calculate_recipe_ingredients(ingredients):
         for key in totals:
             totals[key] += float(product.get(key, 0)) * factor
     return totals
+
+
+def ensure_unique_edit_ids(items, namespace):
+    """Give every editable ingredient a stable, unique ID for this draft."""
+    used_ids = set()
+    for item in items:
+        item_id = str(item.get("_edit_id", "")).strip()
+        if not item_id or item_id in used_ids:
+            item_id = f"{namespace}-{uuid.uuid4().hex[:12]}"
+            while item_id in used_ids:
+                item_id = f"{namespace}-{uuid.uuid4().hex[:12]}"
+            item["_edit_id"] = item_id
+        used_ids.add(item_id)
 
 TODAY = date.today()
 TODAY_KEY = TODAY.isoformat()
@@ -1164,6 +1185,7 @@ with tab_recipes:
     recipe_query = st.text_input("Otsi retsepti", placeholder="nt kana, hommikusöök…", key="recipe_query")
     visible_recipes = [r for r in all_recipes() if not recipe_query or recipe_query.lower() in (r.get("name", "") + " " + r.get("ingredients", "")).lower()]
     for index, recipe in enumerate(visible_recipes):
+        recipe_token = hashlib.sha1(recipe.get("name", "").strip().casefold().encode("utf-8")).hexdigest()[:12]
         with st.expander(f'{recipe["name"]} · {recipe["kcal"]} kcal', expanded=False):
             st.markdown(f'<div class="recipe-macros"><span class="recipe-macro">{int(recipe["kcal"])} kcal</span><span class="recipe-macro">Valk {int(recipe["protein"])} g</span><span class="recipe-macro">Süsivesikud {int(recipe["carbs"])} g</span><span class="recipe-macro">Rasv {int(recipe["fat"])} g</span></div>', unsafe_allow_html=True)
             recipe_ingredients = recipe.get("ingredients_data", [])
@@ -1173,60 +1195,75 @@ with tab_recipes:
                     st.markdown(f'<div class="recipe-read-row"><span>{ingredient["name"]}</span><strong>{ingredient["grams"]} g</strong></div>', unsafe_allow_html=True)
             else:
                 st.write("")
-            with st.container(key=f"recipe-actions-{index}", horizontal=True, width="stretch", horizontal_alignment="distribute", gap="small", vertical_alignment="center"):
-                with st.popover("✎", help="Muuda retsepti"):
-                    edit_key = f"recipe_edit_data_{index}"
+            with st.container(key=f"recipe-actions-{recipe_token}", horizontal=True, width="stretch", horizontal_alignment="distribute", gap="small", vertical_alignment="center"):
+                if st.button("✎", key=f"edit_recipe_{recipe_token}", help="Muuda retsepti"):
+                    st.session_state.active_recipe_editor = recipe_token
+                    st.rerun()
+                if st.session_state.get("active_recipe_editor") == recipe_token:
+                    edit_key = f"recipe_edit_data_{recipe_token}"
                     if edit_key not in st.session_state:
                         st.session_state[edit_key] = json.loads(json.dumps(recipe))
                     edit_data = st.session_state[edit_key]
                     edited_ingredients_data = edit_data.setdefault("ingredients_data", [])
-                    edit_name = st.text_input("Retsepti nimi", value=edit_data["name"], key=f"recipe_name_{index}")
+                    ensure_unique_edit_ids(edited_ingredients_data, f"recipe-{recipe_token}")
+                    if st.button("Sulge muutmine", key=f"close_recipe_editor_{recipe_token}"):
+                        st.session_state.pop("active_recipe_editor", None)
+                        st.session_state.pop(edit_key, None)
+                        st.rerun()
+                    edit_name = st.text_input("Retsepti nimi", value=edit_data["name"], key=f"recipe_name_{recipe_token}")
                     st.markdown("### Koostisosad")
                     recipe_products = all_products()
                     recipe_labels = [f'{product["name"]} · {product["brand"]}' for product in recipe_products]
                     st.markdown('<div class="ingredient-header"><span>Toode</span><span>Kaal</span><span></span></div>', unsafe_allow_html=True)
                     for ingredient_index, ingredient in enumerate(edited_ingredients_data):
-                        with st.container(key=f"recipe-edit-row-{index}-{ingredient_index}", horizontal=True, width="stretch", gap="small", vertical_alignment="center"):
+                        ingredient_token = ingredient["_edit_id"]
+                        with st.container(key=f"recipe-edit-row-{recipe_token}-{ingredient_token}", horizontal=True, width="stretch", gap="small", vertical_alignment="center"):
                             current_label = next((label for label in recipe_labels if label.startswith(f'{ingredient["name"]} ·')), recipe_labels[0] if recipe_labels else "")
-                            selected_label = st.selectbox("Toode", recipe_labels, index=recipe_labels.index(current_label) if current_label in recipe_labels else 0, key=f"recipe_product_{index}_{ingredient_index}", label_visibility="collapsed") if recipe_labels else ""
+                            selected_label = st.selectbox("Toode", recipe_labels, index=recipe_labels.index(current_label) if current_label in recipe_labels else 0, key=f"recipe_product_{recipe_token}_{ingredient_token}", label_visibility="collapsed") if recipe_labels else ""
                             if selected_label:
                                 ingredient["name"] = selected_label.rsplit(" · ", 1)[0]
-                            ingredient["grams"] = st.number_input("Kaal (g)", min_value=1, value=int(ingredient.get("grams", 100)), step=5, key=f"recipe_grams_{index}_{ingredient_index}", label_visibility="collapsed")
-                            if st.button("×", key=f"remove_recipe_row_{index}_{ingredient_index}", help="Eemalda koostisosa"):
+                            ingredient["grams"] = st.number_input("Kaal (g)", min_value=1, value=int(ingredient.get("grams", 100)), step=5, key=f"recipe_grams_{recipe_token}_{ingredient_token}", label_visibility="collapsed")
+                            if st.button("×", key=f"remove_recipe_row_{recipe_token}_{ingredient_token}", help="Eemalda koostisosa"):
                                 edited_ingredients_data.pop(ingredient_index)
                                 st.rerun()
                     st.markdown("### Lisa koostisosa")
-                    recipe_add_query = st.text_input("Otsi toodet", placeholder="nt kana, kartul, jogurt…", key=f"recipe_add_query_{index}")
+                    recipe_add_query = st.text_input("Otsi toodet", placeholder="nt kana, kartul, jogurt…", key=f"recipe_add_query_{recipe_token}")
                     filtered_recipe_products = [
                         product for product in recipe_products
                         if not recipe_add_query or recipe_add_query.lower() in (product["name"] + " " + product["brand"]).lower()
                     ]
                     if filtered_recipe_products:
                         filtered_recipe_labels = [f'{product["name"]} · {product["brand"]}' for product in filtered_recipe_products]
-                        selected_add_label = st.selectbox("Vali toode", filtered_recipe_labels, key=f"recipe_add_product_{index}")
-                        recipe_add_grams = st.number_input("Kaal (g)", min_value=1, value=100, step=5, key=f"recipe_add_grams_{index}")
-                        if st.button("+ Lisa toode", key=f"add_recipe_row_{index}", width="content"):
+                        add_product_key = f"recipe_add_product_{recipe_token}"
+                        if st.session_state.get(add_product_key) not in filtered_recipe_labels:
+                            st.session_state[add_product_key] = filtered_recipe_labels[0]
+                        selected_add_label = st.selectbox("Vali toode", filtered_recipe_labels, key=add_product_key)
+                        recipe_add_grams = st.number_input("Kaal (g)", min_value=1, value=100, step=5, key=f"recipe_add_grams_{recipe_token}")
+                        if st.button("+ Lisa toode", key=f"add_recipe_row_{recipe_token}", width="content"):
                             selected_product = filtered_recipe_products[filtered_recipe_labels.index(selected_add_label)]
-                            edited_ingredients_data.append({"name": selected_product["name"], "grams": int(recipe_add_grams)})
+                            edited_ingredients_data.append({"name": selected_product["name"], "grams": int(recipe_add_grams), "_edit_id": f"recipe-{recipe_token}-{uuid.uuid4().hex[:12]}"})
                             st.rerun()
                     else:
                         st.info("Selle otsinguga toodet ei leitud.")
                     auto_totals = calculate_recipe_ingredients(edited_ingredients_data)
                     st.info(f'Kokku: {int(auto_totals["kcal"])} kcal · {int(auto_totals["protein"])}g valku · {int(auto_totals["carbs"])}g süsivesikuid · {int(auto_totals["fat"])}g rasva')
                     edit_ingredients = " · ".join(f'{item["name"]} ({item["grams"]} g)' for item in edited_ingredients_data)
-                    if st.button("Salvesta retsept", type="primary", use_container_width=True, key=f"save_recipe_{index}"):
-                        if not edited_ingredients_data:
+                    if st.button("Salvesta retsept", type="primary", use_container_width=True, key=f"save_recipe_{recipe_token}"):
+                        if not edit_name.strip():
+                            st.warning("Retseptil peab olema nimi.")
+                        elif not edited_ingredients_data:
                             st.warning("Retseptil peab olema vähemalt üks toode.")
                         else:
-                            normalized_ingredients = [{"name": item["name"], "grams": item["grams"]} for item in edited_ingredients_data]
-                            save_custom_recipe({"name": edit_name.strip(), "tag": "", "kcal": int(auto_totals["kcal"]), "protein": int(auto_totals["protein"]), "carbs": int(auto_totals["carbs"]), "fat": int(auto_totals["fat"]), "time": "", "ingredients": edit_ingredients, "ingredients_data": normalized_ingredients})
+                            normalized_ingredients = [{"name": item["name"], "grams": int(item["grams"])} for item in edited_ingredients_data]
+                            save_custom_recipe({"name": edit_name.strip(), "tag": "", "kcal": int(auto_totals["kcal"]), "protein": int(auto_totals["protein"]), "carbs": int(auto_totals["carbs"]), "fat": int(auto_totals["fat"]), "time": "", "ingredients": edit_ingredients, "ingredients_data": normalized_ingredients}, replace_name=recipe["name"])
                             del st.session_state[edit_key]
+                            st.session_state.pop("active_recipe_editor", None)
                             st.session_state.focus_recipes_after_save = True
                             st.rerun()
-                if st.button("🗑", key=f"delete_recipe_{index}", help="Kustuta retsept"):
+                if st.button("🗑", key=f"delete_recipe_{recipe_token}", help="Kustuta retsept"):
                     delete_custom_recipe(recipe["name"])
                     st.rerun()
-            if st.button("Lisa tänasesse", key=f"recipe_add_{index}", use_container_width=True):
+            if st.button("Lisa tänasesse", key=f"recipe_add_{recipe_token}", use_container_width=True):
                 add_entry(recipe, "Vahepala", TODAY, entry_type="recipe")
                 st.rerun()
 
@@ -1244,6 +1281,8 @@ with tab_recipes:
             filtered_recipe_products = recipe_products[:1]
         recipe_products = filtered_recipe_products
         recipe_labels = [f'{p["name"]} · {p["brand"]}' for p in recipe_products]
+        if st.session_state.get("recipe_ingredient_product") not in recipe_labels:
+            st.session_state.recipe_ingredient_product = recipe_labels[0]
         ingredient_col, grams_col, add_col = st.columns([4, 2, 1])
         with ingredient_col:
             selected_ingredient_label = st.selectbox("Toode", recipe_labels, key="recipe_ingredient_product")
@@ -1257,15 +1296,18 @@ with tab_recipes:
                 if existing_ingredient:
                     existing_ingredient["grams"] += ingredient_grams
                 else:
-                    st.session_state.recipe_builder.append({"name": selected_product["name"], "grams": ingredient_grams})
+                    builder_id = f"builder-{uuid.uuid4().hex[:12]}"
+                    st.session_state.recipe_builder.append({"name": selected_product["name"], "grams": ingredient_grams, "_edit_id": builder_id})
                 st.rerun()
 
     if st.session_state.recipe_builder:
         st.markdown("### Koostisosad")
         st.markdown('<div class="ingredient-header"><span>Toode</span><span>Kaal</span><span></span></div>', unsafe_allow_html=True)
+        ensure_unique_edit_ids(st.session_state.recipe_builder, "builder")
         for ingredient_index, ingredient in enumerate(st.session_state.recipe_builder):
+            ingredient_token = ingredient["_edit_id"]
             ingredient_product = next((p for p in recipe_products if p["name"] == ingredient["name"]), None)
-            with st.container(key=f"recipe-builder-row-{ingredient_index}", width="stretch"):
+            with st.container(key=f"recipe-builder-row-{ingredient_token}", width="stretch"):
                 product_col, weight_col, remove_col = st.columns([6, 2, 1], gap="small")
                 with product_col:
                     st.markdown(f'<div class="builder-product">{ingredient["name"]}</div>', unsafe_allow_html=True)
@@ -1275,11 +1317,11 @@ with tab_recipes:
                         min_value=1,
                         value=int(ingredient["grams"]),
                         step=1,
-                        key=f"recipe_builder_grams_{ingredient_index}",
+                        key=f"recipe_builder_grams_{ingredient_token}",
                         label_visibility="collapsed",
                     )
                 with remove_col:
-                    if st.button("×", key=f"remove_recipe_ingredient_{ingredient_index}"):
+                    if st.button("×", key=f"remove_recipe_ingredient_{ingredient_token}"):
                         st.session_state.recipe_builder.pop(ingredient_index)
                         st.rerun()
         builder_totals = calculate_recipe_ingredients(st.session_state.recipe_builder)
@@ -1293,7 +1335,7 @@ with tab_recipes:
         else:
             builder_totals = calculate_recipe_ingredients(st.session_state.recipe_builder)
             ingredients_text = " · ".join(f'{item["name"]} ({item["grams"]} g)' for item in st.session_state.recipe_builder)
-            normalized_ingredients = [{"name": item["name"], "grams": item["grams"]} for item in st.session_state.recipe_builder]
+            normalized_ingredients = [{"name": item["name"], "grams": int(item["grams"])} for item in st.session_state.recipe_builder]
             save_custom_recipe({"name": new_name.strip(), "tag": "", "kcal": int(builder_totals["kcal"]), "protein": int(builder_totals["protein"]), "carbs": int(builder_totals["carbs"]), "fat": int(builder_totals["fat"]), "time": "", "ingredients": ingredients_text, "ingredients_data": normalized_ingredients})
             st.session_state.recipe_builder = []
             st.session_state.recipe_saved_message = True
