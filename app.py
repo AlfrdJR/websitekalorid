@@ -330,6 +330,8 @@ def css():
         .brand-mark { display:grid; place-items:center; width:1.85rem; height:1.85rem; border-radius:11px; background:linear-gradient(145deg,#287a56,#165338); color:white; font:700 1rem 'Space Grotesk',sans-serif; box-shadow:0 3px 8px #173f2d38; }
         .hero-sub { color:#c4e4d1; margin-top:.3rem; font-size:.88rem; }
         .metric-card { background:white; border:1px solid var(--line); border-radius:20px; padding:1rem; min-height:98px; box-shadow:0 3px 12px #1c3a2710; }
+        .metric-card.macro-complete { background:#dff3e8; border-color:#8fd0a8; }
+        .metric-card.macro-complete .metric-label, .metric-card.macro-complete .metric-value { color:#217a52; }
         .metric-label { color:var(--muted); font-size:.76rem; font-weight:600; } .metric-value { font:700 1.5rem 'Space Grotesk'; margin-top:.35rem; }
         .macro-value { display:flex; align-items:baseline; gap:.25rem; white-space:nowrap; } .macro-goal { color:var(--muted); font-size:.72em; font-weight:500; }
         .metric-note { color:var(--muted); font-size:.72rem; margin-top:.15rem; }
@@ -450,6 +452,8 @@ def css():
             h1, h2, h3, p, label, .stMarkdown, [data-testid="stWidgetLabel"] { color:var(--ink); }
             .metric-card, .food-row, .goal-card, .overview-card, div[data-testid="stMetric"], div[data-testid="stExpander"],
             [data-testid="stRadio"] label, [class*="food-adjust"], [class*="food-remove"] { background:var(--surface) !important; color:var(--ink); border-color:var(--line) !important; }
+            .metric-card.macro-complete { background:#173d2c !important; border-color:#3d815a !important; }
+            .metric-card.macro-complete .metric-label, .metric-card.macro-complete .metric-value { color:#72d09b !important; }
             .food-row { border-bottom-color:var(--line); }
             .pill { background:#214b35; color:#9ae6b7; }
             .add-card { background:#173d2c; }
@@ -625,7 +629,8 @@ with tab_today:
         for col, label, value, goal_value in [(c1, "Valk", t["protein"], 140), (c2, "Süsivesikud", t["carbs"], 250), (c3, "Rasv", t["fat"], 70)]:
             with col:
                 goal_value = next(macro_goal_values)
-                st.markdown(f'<div class="metric-card"><div class="metric-label">{label.upper()}</div><div class="metric-value macro-value"><span>{int(value)}g</span><span class="macro-goal">/{goal_value}g</span></div></div>', unsafe_allow_html=True)
+                macro_class = "metric-card macro-complete" if value >= goal_value else "metric-card"
+                st.markdown(f'<div class="{macro_class}"><div class="metric-label">{label.upper()}</div><div class="metric-value macro-value"><span>{int(value)}g</span><span class="macro-goal">/{goal_value}g</span></div></div>', unsafe_allow_html=True)
     st.markdown(f'<div class="section-title"><h2>Tänane logi</h2><span class="section-hint">{TODAY.strftime("%d. %b")}</span></div>', unsafe_allow_html=True)
     if not today_entries:
         st.info("Sinu päev on tühi. Lisa esimene toit allpool.")
