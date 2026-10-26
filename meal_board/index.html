@@ -50,6 +50,7 @@
     ];
     let args = { entries: [] };
     let dragged = null;
+    let readyTimer = null;
 
     function send(action, entry) {
       Streamlit.setComponentValue({ action, indices: entry.indices, meal: entry.meal || null });
@@ -141,9 +142,12 @@
     Streamlit.events.addEventListener(Streamlit.RENDER_EVENT, event => {
       args = event.detail.args || { entries: [] };
       render();
+      if (readyTimer) clearInterval(readyTimer);
       Streamlit.setComponentReady();
     });
     Streamlit.setComponentReady();
+    readyTimer = setInterval(() => Streamlit.setComponentReady(), 150);
+    setTimeout(() => { if (readyTimer) clearInterval(readyTimer); }, 5000);
     Streamlit.setFrameHeight(160);
   </script>
 </body>
