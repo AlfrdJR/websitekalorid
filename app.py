@@ -561,6 +561,12 @@ def css():
         [class*="st-key-recipe-builder-row-"] [class*="st-key-remove_recipe_ingredient_"] button p::after { content:none !important; }
         [class*="st-key-recipe-builder-row-"] .builder-product { flex:1 1 auto; min-width:0; overflow-wrap:anywhere; background:#f1f3f7; border-radius:12px; padding:.85rem .7rem; }
         [class*="st-key-recipe-builder-row-"] .builder-weight { flex:0 1 7rem; min-width:0; white-space:nowrap; color:var(--ink); font-size:.82rem; background:#f1f3f7; border-radius:12px; padding:.85rem .7rem; }
+        [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] > div { min-height:46px !important; height:46px !important; border-radius:14px !important; background:#f1f3f7 !important; }
+        [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] input { height:46px !important; min-height:46px !important; border:0 !important; border-radius:14px !important; background:#f1f3f7 !important; color:var(--ink) !important; font-size:16px !important; }
+        [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] button { display:none !important; }
+        [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] input[type="number"] { -moz-appearance:textfield !important; appearance:textfield !important; }
+        [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] input[type="number"]::-webkit-inner-spin-button,
+        [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] input[type="number"]::-webkit-outer-spin-button { -webkit-appearance:none !important; appearance:none !important; margin:0 !important; }
         [class*="st-key-recipe-builder-row-"] [data-testid="stElementContainer"] { min-width:0 !important; }
         [class*="st-key-recipe-builder-row-"] [data-testid="stElementContainer"]:has(.builder-product) { flex:1 1 auto !important; min-width:0 !important; }
         [class*="st-key-recipe-builder-row-"] [data-testid="stElementContainer"]:has(.builder-weight) { flex:0 1 7rem !important; min-width:0 !important; }
@@ -649,6 +655,8 @@ def css():
             [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(1) { flex:1 1 auto !important; width:auto !important; min-width:0 !important; overflow:hidden !important; }
             [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { flex:0 0 5rem !important; width:5rem !important; min-width:5rem !important; }
             [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 2.2rem !important; width:2.2rem !important; min-width:2.2rem !important; }
+            [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { flex:0 0 6.5rem !important; width:6.5rem !important; min-width:6.5rem !important; }
+            [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 2.5rem !important; width:2.5rem !important; min-width:2.5rem !important; }
             [class*="st-key-recipe-builder-row-"] [data-testid="column"] [data-testid="stMarkdownContainer"] { overflow-wrap:anywhere !important; word-break:break-word !important; white-space:normal !important; }
             [class*="st-key-recipe-builder-row-"] [class*="st-key-remove_recipe_ingredient_"] button { width:2.5rem !important; min-width:2.5rem !important; padding:0 !important; }
             [class*="st-key-recipe-builder-row-"] [class*="st-key-remove_recipe_ingredient_"] button p { font-size:0 !important; }
@@ -1196,12 +1204,23 @@ with tab_recipes:
         st.markdown('<div class="ingredient-header"><span>Toode</span><span>Kaal</span><span></span></div>', unsafe_allow_html=True)
         for ingredient_index, ingredient in enumerate(st.session_state.recipe_builder):
             ingredient_product = next((p for p in recipe_products if p["name"] == ingredient["name"]), None)
-            with st.container(key=f"recipe-builder-row-{ingredient_index}", horizontal=True, width="stretch", gap="small", vertical_alignment="center"):
-                st.markdown(f'<div class="builder-product">{ingredient["name"]}</div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="builder-weight">{ingredient["grams"]} g</div>', unsafe_allow_html=True)
-                if st.button("×", key=f"remove_recipe_ingredient_{ingredient_index}"):
-                    st.session_state.recipe_builder.pop(ingredient_index)
-                    st.rerun()
+            with st.container(key=f"recipe-builder-row-{ingredient_index}", width="stretch"):
+                product_col, weight_col, remove_col = st.columns([6, 2, 1], gap="small")
+                with product_col:
+                    st.markdown(f'<div class="builder-product">{ingredient["name"]}</div>', unsafe_allow_html=True)
+                with weight_col:
+                    ingredient["grams"] = st.number_input(
+                        "Kaal (g)",
+                        min_value=1,
+                        value=int(ingredient["grams"]),
+                        step=1,
+                        key=f"recipe_builder_grams_{ingredient_index}",
+                        label_visibility="collapsed",
+                    )
+                with remove_col:
+                    if st.button("×", key=f"remove_recipe_ingredient_{ingredient_index}"):
+                        st.session_state.recipe_builder.pop(ingredient_index)
+                        st.rerun()
         builder_totals = calculate_recipe_ingredients(st.session_state.recipe_builder)
         st.info(f'Kokku: {int(builder_totals["kcal"])} kcal · {int(builder_totals["protein"])}g valku · {int(builder_totals["carbs"])}g süsivesikuid · {int(builder_totals["fat"])}g rasva')
 
