@@ -715,6 +715,7 @@ def css():
         [class*="st-key-product-actions-"] input[type="number"] { -moz-appearance:textfield !important; appearance:textfield !important; }
         [class*="st-key-product-actions-"] input[type="number"]::-webkit-inner-spin-button,
         [class*="st-key-product-actions-"] input[type="number"]::-webkit-outer-spin-button { -webkit-appearance:none !important; appearance:none !important; margin:0 !important; }
+        [class*="st-key-product-actions-"] [data-testid="stNumberInput"] button { display:none !important; }
         [class*="st-key-product-actions-"] [data-testid="stNumberInput"] [data-testid="stNumberInput-StepDown"],
         [class*="st-key-product-actions-"] [data-testid="stNumberInput"] [data-testid="stNumberInput-StepUp"] { display:none !important; }
         [class*="st-key-product-actions-"] button { width:100% !important; min-width:0 !important; }
