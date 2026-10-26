@@ -475,8 +475,11 @@ def css():
         .protein-top-label { color:var(--muted); font-size:.62rem; font-weight:800; text-transform:uppercase; letter-spacing:.06em; }
         .protein-top-value { margin:.35rem 0 .15rem; color:var(--ink); font:700 1.35rem 'Space Grotesk'; }
         .protein-top-note { color:var(--muted); font-size:.75rem; }
+        .protein-best-card { display:grid; grid-template-columns:1fr 1fr; align-items:center; padding:1.1rem 1.25rem; }
+        .protein-best-date { color:var(--ink); font:700 1.05rem 'Space Grotesk'; }
+        .protein-best-amount { padding-left:1.25rem; border-left:4px solid #c8c8c8; color:var(--ink); font:700 1.45rem 'Space Grotesk'; }
         .protein-top-grid.single { grid-template-columns:minmax(0,1fr); }
-        @media (max-width:600px) { .protein-top-grid { grid-template-columns:1fr; gap:.5rem; } .protein-top-card { padding:.75rem .85rem; } .protein-top-value { font-size:1.15rem; } }
+        @media (max-width:600px) { .protein-top-grid { grid-template-columns:1fr; gap:.5rem; } .protein-top-card { padding:.75rem .85rem; } .protein-top-value { font-size:1.15rem; } .protein-best-card { padding:1rem; } .protein-best-date { font-size:.95rem; } .protein-best-amount { padding-left:1rem; font-size:1.3rem; } }
         .week-bars { display:flex; align-items:end; justify-content:space-between; gap:.45rem; height:145px; padding:.8rem .35rem .2rem; }
         .week-day { display:flex; flex-direction:column; align-items:center; gap:.35rem; flex:1; height:100%; justify-content:end; color:var(--muted); font-size:.68rem; }
         .week-track { height:105px; width:100%; max-width:28px; background:#edf3ee; border-radius:9px; display:flex; align-items:end; overflow:hidden; }
@@ -1253,7 +1256,7 @@ with tab_insights:
     if top_protein_days:
         protein_cards = []
         for place, (parsed_day, day_totals) in enumerate(top_protein_days, start=1):
-            protein_cards.append(f'<div class="protein-top-card"><div class="protein-top-label">{place}. KOHT · VALK</div><div class="protein-top-value">{int(day_totals["protein"])} g</div><div class="protein-top-note">{parsed_day.strftime("%d.%m.%Y")} · logitud päeval</div></div>')
+            protein_cards.append(f'<div class="protein-top-card protein-best-card"><div class="protein-best-date">{parsed_day.strftime("%d.%m.%Y")}</div><div class="protein-best-amount">{int(day_totals["protein"])} g</div></div>')
         grid_class = "protein-top-grid single" if len(protein_cards) == 1 else "protein-top-grid"
         st.markdown(f'<div class="{grid_class}">{"".join(protein_cards)}</div>', unsafe_allow_html=True)
     else:
