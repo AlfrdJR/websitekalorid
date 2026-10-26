@@ -589,6 +589,7 @@ def css():
             [class*="st-key-food_actions_"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:0 1 clamp(2.4rem, 13vw, 3.4rem) !important; width:clamp(2.4rem, 13vw, 3.4rem) !important; min-width:0 !important; padding:0 !important; }
             [class*="st-key-food_actions_"] button { width:100% !important; min-width:0 !important; padding:.35rem .2rem !important; font-size:clamp(.78rem, 3.5vw, 1rem) !important; }
             [class*="st-key-macro-cards"] { width:100% !important; max-width:100% !important; overflow:hidden !important; }
+        [class*="st-key-macro-cards"] { display:none !important; }
             [class*="st-key-macro-cards"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; gap:.35rem !important; width:100% !important; max-width:100% !important; }
             [class*="st-key-macro-cards"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 0% !important; width:0 !important; min-width:0 !important; padding:0 !important; overflow:hidden !important; }
             [class*="st-key-macro-cards"] .calendar-macro-card { width:100% !important; min-height:0 !important; padding:.8rem .45rem !important; }
@@ -791,6 +792,12 @@ with tab_today:
                 goal_value = next(macro_goal_values)
                 macro_percent = min(100, int(float(value) / goal_value * 100)) if goal_value else 0
                 st.markdown(f'<div class="calendar-macro-card"><div class="calendar-macro-label">{label}</div><div class="calendar-macro-ring" style="--percent:{macro_percent}%;--ring-color:#287a56"><span>{macro_percent}%</span></div><div class="calendar-macro-value">{int(value)}g / {int(goal_value)}g</div></div>', unsafe_allow_html=True)
+    today_macro_data = [("Valk", t["protein"], st.session_state.goals["protein"], "#287a56"), ("Süsivesikud", t["carbs"], st.session_state.goals["carbs"], "#d28a32"), ("Rasv", t["fat"], st.session_state.goals["fat"], "#bd6262")]
+    today_macro_cards = []
+    for macro_label, macro_value, macro_goal, macro_color in today_macro_data:
+        macro_percent = min(100, int(float(macro_value) / macro_goal * 100)) if macro_goal else 0
+        today_macro_cards.append(f'<div class="calendar-macro-card"><div class="calendar-macro-label">{macro_label}</div><div class="calendar-macro-ring" style="--percent:{macro_percent}%;--ring-color:{macro_color}"><span>{macro_percent}%</span></div><div class="calendar-macro-value">{int(macro_value)}g / {int(macro_goal)}g</div></div>')
+    st.markdown(f'<div class="calendar-macro-grid">{"".join(today_macro_cards)}</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="section-title"><h2>Tänane logi</h2><span class="section-hint">{TODAY.strftime("%d. %b")}</span></div>', unsafe_allow_html=True)
     if not today_entries:
         st.info("Sinu päev on tühi. Lisa esimene toit allpool.")
