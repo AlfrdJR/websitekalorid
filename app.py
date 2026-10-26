@@ -443,7 +443,10 @@ def css():
         .goal-copy { flex:1; } .goal-copy .metric-value { margin:0; font-size:1.35rem; }
         .add-card { background:#e5f4eb; border-radius:20px; padding:1rem; margin-top:1rem; }
         .add-card-title { font-weight:700; font-size:1rem; } .add-card-sub { font-size:.8rem; color:#547063; margin:.2rem 0 .8rem; }
-        .streak-card { background:#fff3db; border:1px solid #f1dfb9; color:#805c1d; border-radius:18px; padding:.7rem .9rem; font-size:.83rem; margin:.8rem 0; }
+        .streak-card { display:flex; align-items:center; gap:.8rem; background:var(--surface); border:1px solid var(--line); color:var(--ink); border-radius:20px; padding:1rem 1.1rem; margin:.8rem 0 1rem; box-shadow:0 3px 12px #1c3a2709; }
+        .streak-card .streak-fire { font-size:1.7rem; line-height:1; }
+        .streak-card .streak-label { color:var(--muted); font-size:.65rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+        .streak-card .streak-value { margin-top:.15rem; font:700 1.35rem 'Space Grotesk'; }
         .ingredient-header { display:grid; grid-template-columns:4fr 1.5fr .8fr; gap:.5rem; padding:.35rem .6rem; color:var(--muted); text-transform:uppercase; font-size:.68rem; font-weight:700; letter-spacing:.08em; border-bottom:1px solid var(--line); }
         .recipe-read-row { display:grid; grid-template-columns:minmax(0, 1fr) auto; align-items:center; gap:.75rem; padding:.7rem .6rem; border-bottom:1px solid var(--line); color:var(--ink); }
         .recipe-read-row strong { color:var(--muted); white-space:nowrap; font-weight:600; }
@@ -583,7 +586,7 @@ def css():
             .add-card-sub, .table-note, .section-hint, .metric-label, .metric-note, .food-meta, .week-day { color:var(--muted); }
             .metric-label, .metric-note, .food-meta, .section-hint, .table-note, .add-card-sub, .week-day, .builder-weight, .recipe-read-row strong,
             .stCaption, [data-testid="stCaptionContainer"], .stMarkdown span[style*="718078"], .stMarkdown span[style*="78857d"] { color:var(--muted) !important; }
-            .streak-card { background:#3b301d; border-color:#665027; color:#f1ca77; }
+            .streak-card { background:var(--surface); border-color:var(--line); color:var(--ink); }
             .recipe-macro { background:#1d3a29; border-color:#2c5a3e; color:#8ee0ac; }
             .builder-product, .builder-weight { background:var(--input) !important; color:var(--ink) !important; }
             .brand-card { background:linear-gradient(135deg,#1d3d2c,#173025); border-color:#315b43; color:#9ae6b7; box-shadow:0 6px 18px #00000035; }
@@ -687,7 +690,7 @@ def css():
             .food-name { font-size:.9rem; } .food-meta { font-size:.68rem; }
             .food-kcal { font-size:.82rem; }
             .add-card { margin-top:.8rem; padding:.85rem; border-radius:17px; }
-            .streak-card { font-size:.76rem; padding:.65rem .75rem; }
+            .streak-card { padding:.8rem .85rem; } .streak-card .streak-value { font-size:1.15rem; }
             .ingredient-header { grid-template-columns:3fr 1.3fr .5fr; font-size:.6rem; padding:.3rem .25rem; }
             .ingredient-header { grid-template-columns:minmax(0, 1fr) 6.5rem 2.5rem; gap:.35rem; }
             [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] { width:100% !important; max-width:100% !important; display:flex !important; flex-wrap:nowrap !important; gap:.35rem !important; overflow:hidden !important; }
@@ -852,7 +855,7 @@ with tab_today:
     percent = min(100, int(t["kcal"] / goal * 100))
     goal_class = "goal-card goal-complete" if t["kcal"] >= goal else "goal-card"
     st.markdown(f'<div class="{goal_class}"><div class="goal-ring" style="--percent:{percent}%"><span>{percent}%</span></div><div class="goal-copy"><div class="metric-label">PÄEVA EESMÄRK</div><div class="metric-value">{int(t["kcal"]):,} <span style="font-size:.85rem;color:#000000;font-weight:500">/ {goal:,} kcal</span></div><div class="metric-note">{remaining:,} kcal alles · {len(today_entries)} toidukirjet</div></div></div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="streak-card">🔥 <b>{streak_count()} päeva järjest</b> · oled oma logimisega heas rütmis</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="streak-card"><span class="streak-fire">🔥</span><div><div class="streak-label">Streak</div><div class="streak-value">{streak_count()} päeva</div></div></div>', unsafe_allow_html=True)
     st.write("")
     # Keep the wrapper as a normal full-width container. A horizontal wrapper
     # around st.columns makes the first card keep its desktop width on phones.
