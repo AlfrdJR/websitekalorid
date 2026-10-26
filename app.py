@@ -393,6 +393,10 @@ def css():
         .calendar-macro-ring .ring-track, .calendar-macro-ring .ring-progress { fill:none; stroke-width:10; }
         .calendar-macro-ring .ring-track { stroke:var(--line); }
         .calendar-macro-ring .ring-progress { stroke:var(--ring-color); stroke-linecap:round; stroke-dasharray:100; stroke-dashoffset:calc(100 - var(--progress)); animation:ring-progress-fill .9s cubic-bezier(.22,.8,.28,1) both; }
+        .calendar-macro-card.macro-complete { background:#e5f4eb; border-color:#b9dfc5; }
+        .calendar-macro-card.macro-complete .ring-track { stroke:#bfe5ca; }
+        html[data-theme="dark"] .calendar-macro-card.macro-complete { background:#173d2c; border-color:#315b43; }
+        html[data-theme="dark"] .calendar-macro-card.macro-complete .ring-track { stroke:#2d6548; }
         @keyframes ring-progress-fill { from { stroke-dashoffset:100; } to { stroke-dashoffset:calc(100 - var(--progress)); } }
         .calendar-macro-ring span { z-index:1; color:var(--ring-color); font:700 .72rem 'Space Grotesk'; }
         .calendar-macro-label { color:var(--muted); font-size:.66rem; font-weight:800; text-transform:uppercase; letter-spacing:.04em; }
@@ -796,12 +800,14 @@ with tab_today:
             with col:
                 goal_value = next(macro_goal_values)
                 macro_percent = min(100, int(float(value) / goal_value * 100)) if goal_value else 0
-                st.markdown(f'<div class="calendar-macro-card"><div class="calendar-macro-label">{label}</div><div class="calendar-macro-ring" style="--progress:{macro_percent};--ring-color:#287a56"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="ring-track" cx="50" cy="50" r="40"></circle><circle class="ring-progress" cx="50" cy="50" r="40" pathLength="100"></circle></svg><span>{macro_percent}%</span></div><div class="calendar-macro-value">{int(value)}g / {int(goal_value)}g</div></div>', unsafe_allow_html=True)
+                macro_card_class = "calendar-macro-card macro-complete" if macro_percent >= 100 else "calendar-macro-card"
+                st.markdown(f'<div class="{macro_card_class}"><div class="calendar-macro-label">{label}</div><div class="calendar-macro-ring" style="--progress:{macro_percent};--ring-color:#287a56"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="ring-track" cx="50" cy="50" r="40"></circle><circle class="ring-progress" cx="50" cy="50" r="40" pathLength="100"></circle></svg><span>{macro_percent}%</span></div><div class="calendar-macro-value">{int(value)}g / {int(goal_value)}g</div></div>', unsafe_allow_html=True)
     today_macro_data = [("Valk", t["protein"], st.session_state.goals["protein"], "#287a56"), ("Süsivesikud", t["carbs"], st.session_state.goals["carbs"], "#d28a32"), ("Rasv", t["fat"], st.session_state.goals["fat"], "#bd6262")]
     today_macro_cards = []
     for macro_label, macro_value, macro_goal, macro_color in today_macro_data:
         macro_percent = min(100, int(float(macro_value) / macro_goal * 100)) if macro_goal else 0
-        today_macro_cards.append(f'<div class="calendar-macro-card"><div class="calendar-macro-label">{macro_label}</div><div class="calendar-macro-ring" style="--progress:{macro_percent};--ring-color:{macro_color}"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="ring-track" cx="50" cy="50" r="40"></circle><circle class="ring-progress" cx="50" cy="50" r="40" pathLength="100"></circle></svg><span>{macro_percent}%</span></div><div class="calendar-macro-value">{int(macro_value)}g / {int(macro_goal)}g</div></div>')
+        macro_card_class = "calendar-macro-card macro-complete" if macro_percent >= 100 else "calendar-macro-card"
+        today_macro_cards.append(f'<div class="{macro_card_class}"><div class="calendar-macro-label">{macro_label}</div><div class="calendar-macro-ring" style="--progress:{macro_percent};--ring-color:{macro_color}"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="ring-track" cx="50" cy="50" r="40"></circle><circle class="ring-progress" cx="50" cy="50" r="40" pathLength="100"></circle></svg><span>{macro_percent}%</span></div><div class="calendar-macro-value">{int(macro_value)}g / {int(macro_goal)}g</div></div>')
     st.markdown(f'<div class="calendar-macro-grid">{"".join(today_macro_cards)}</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="section-title"><h2>Tänane logi</h2><span class="section-hint">{TODAY.strftime("%d. %b")}</span></div>', unsafe_allow_html=True)
     if not today_entries:
@@ -957,7 +963,8 @@ with tab_calendar:
     calendar_macro_cards = []
     for macro_label, macro_value, macro_goal, macro_color in calendar_macro_data:
         macro_percent = min(100, int(float(macro_value) / macro_goal * 100)) if macro_goal else 0
-        calendar_macro_cards.append(f'<div class="calendar-macro-card"><div class="calendar-macro-label">{macro_label}</div><div class="calendar-macro-ring" style="--progress:{macro_percent};--ring-color:{macro_color}"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="ring-track" cx="50" cy="50" r="40"></circle><circle class="ring-progress" cx="50" cy="50" r="40" pathLength="100"></circle></svg><span>{macro_percent}%</span></div><div class="calendar-macro-value">{int(macro_value)}g / {int(macro_goal)}g</div></div>')
+        macro_card_class = "calendar-macro-card macro-complete" if macro_percent >= 100 else "calendar-macro-card"
+        calendar_macro_cards.append(f'<div class="{macro_card_class}"><div class="calendar-macro-label">{macro_label}</div><div class="calendar-macro-ring" style="--progress:{macro_percent};--ring-color:{macro_color}"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="ring-track" cx="50" cy="50" r="40"></circle><circle class="ring-progress" cx="50" cy="50" r="40" pathLength="100"></circle></svg><span>{macro_percent}%</span></div><div class="calendar-macro-value">{int(macro_value)}g / {int(macro_goal)}g</div></div>')
     st.markdown(f'<div class="calendar-macro-grid">{"".join(calendar_macro_cards)}</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="goal-card"><div class="goal-copy"><div class="metric-label">{selected_day.strftime("%d. %B %Y").upper()}</div><div class="metric-value">{int(selected_totals["kcal"]):,} kcal</div><div class="metric-note">{len(selected_entries)} toidukirjet · {int(selected_totals["protein"])}g valku</div></div></div>', unsafe_allow_html=True)
     st.markdown("### Selle päeva toit")
