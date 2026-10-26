@@ -68,6 +68,7 @@ HIDDEN_PRODUCTS_FILE = Path(__file__).with_name("hidden_products.json")
 CUSTOM_RECIPES_FILE = Path(__file__).with_name("custom_recipes.json")
 DAILY_LOGS_FILE = Path(__file__).with_name("daily_logs.json")
 GOALS_FILE = Path(__file__).with_name("goals.json")
+WATER_LOGS_FILE = Path(__file__).with_name("water_logs.json")
 
 DEFAULT_GOALS = {"kcal": 2200, "protein": 140, "carbs": 250, "fat": 70}
 
@@ -198,6 +199,32 @@ def save_goals(goals):
         json.dump(goals, file, ensure_ascii=False, indent=2)
 
 
+def load_water_logs():
+    if not WATER_LOGS_FILE.exists():
+        return {}
+    try:
+        with WATER_LOGS_FILE.open("r", encoding="utf-8") as file:
+            data = json.load(file)
+        return data if isinstance(data, dict) else {}
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def save_water_logs():
+    with WATER_LOGS_FILE.open("w", encoding="utf-8") as file:
+        json.dump(st.session_state.water_logs, file, ensure_ascii=False, indent=2)
+
+
+def water_total(day=None):
+    return int(st.session_state.water_logs.get((day or TODAY).isoformat(), 0))
+
+
+def change_water(amount, day=None):
+    key = (day or TODAY).isoformat()
+    st.session_state.water_logs[key] = max(0, int(st.session_state.water_logs.get(key, 0)) + int(amount))
+    save_water_logs()
+
+
 def product_base_grams(product):
     portion = str(product.get("portion", "100 g"))
     if "portsjon" in portion.lower():
@@ -244,6 +271,8 @@ TODAY_KEY = TODAY.isoformat()
 
 if "daily_logs" not in st.session_state:
     st.session_state.daily_logs = load_daily_logs()
+if "water_logs" not in st.session_state:
+    st.session_state.water_logs = load_water_logs()
 if "goals" not in st.session_state:
     st.session_state.goals = load_goals()
 # Remove only the exact meals that the first prototype inserted automatically.
@@ -400,6 +429,17 @@ def css():
         .calendar-macro-ring span { z-index:1; color:var(--ring-color); font:700 .72rem 'Space Grotesk'; }
         .calendar-macro-label { color:var(--muted); font-size:.66rem; font-weight:800; text-transform:uppercase; letter-spacing:.04em; }
         .calendar-macro-value { margin-top:.15rem; color:var(--ink); font:700 .8rem 'Space Grotesk'; white-space:nowrap; }
+        .water-card { display:grid; grid-template-columns:92px 1fr; gap:1rem; align-items:center; margin:1rem 0 1.1rem; padding:1rem; background:var(--surface); border:1px solid var(--line); border-radius:20px; }
+        .water-glass { position:relative; width:72px; height:112px; margin:auto; overflow:hidden; border:3px solid #8fc9e8; border-top:0; border-radius:0 0 22px 22px; background:#eef8fd; }
+        .water-fill { position:absolute; right:0; bottom:0; left:0; height:var(--water-percent); background:linear-gradient(180deg,#8fd8f4,#43a9d7); }
+        .water-glass::before { content:''; position:absolute; z-index:1; top:0; right:0; left:0; height:3px; background:#8fc9e8; }
+        .water-copy h3 { margin:0; color:var(--ink); font:700 1.05rem 'Space Grotesk'; }
+        .water-amount { margin:.25rem 0 .65rem; color:#2584ad; font:700 1.35rem 'Space Grotesk'; }
+        .water-amount span { color:var(--muted); font:500 .78rem 'DM Sans'; }
+        [class*="st-key-water-actions"] [data-testid="stHorizontalBlock"] { flex-wrap:wrap !important; gap:.35rem !important; }
+        [class*="st-key-water-actions"] button { min-height:2.3rem !important; padding:.35rem .55rem !important; font-size:.75rem !important; }
+        [class*="st-key-water-actions"] [data-testid="stNumberInput"] input { min-height:2.3rem !important; font-size:16px !important; }
+        @media (max-width:600px) { .water-card { grid-template-columns:76px 1fr; gap:.7rem; padding:.8rem; } .water-glass { width:62px; height:102px; } .water-copy h3 { font-size:.95rem; } .water-amount { font-size:1.15rem; } }
         .goal-copy { flex:1; } .goal-copy .metric-value { margin:0; font-size:1.35rem; }
         .add-card { background:#e5f4eb; border-radius:20px; padding:1rem; margin-top:1rem; }
         .add-card-title { font-weight:700; font-size:1rem; } .add-card-sub { font-size:.8rem; color:#547063; margin:.2rem 0 .8rem; }
@@ -807,6 +847,25 @@ with tab_today:
         macro_card_class = "calendar-macro-card macro-complete" if macro_percent >= 100 else "calendar-macro-card"
         today_macro_cards.append(f'<div class="{macro_card_class}"><div class="calendar-macro-label">{macro_label}</div><div class="calendar-macro-ring" style="--progress:{macro_percent};--ring-color:{macro_color}"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="ring-track" cx="50" cy="50" r="40"></circle><circle class="ring-progress" cx="50" cy="50" r="40" pathLength="100"></circle></svg><span>{macro_percent}%</span></div><div class="calendar-macro-value">{int(macro_value)}g / {int(macro_goal)}g</div></div>')
     st.markdown(f'<div class="calendar-macro-grid">{"".join(today_macro_cards)}</div>', unsafe_allow_html=True)
+    water_ml = water_total(TODAY)
+    water_percent = min(100, int(water_ml / 3000 * 100))
+    water_over_goal = max(0, water_ml - 3000)
+    water_note = f"{water_over_goal} ml üle eesmärgi" if water_over_goal else f"{3000 - water_ml} ml veel eesmärgini"
+    st.markdown(f'<div class="water-card"><div class="water-glass" style="--water-percent:{water_percent}%"><div class="water-fill"></div></div><div class="water-copy"><h3>Vee tracker</h3><div class="water-amount">{water_ml} ml <span>/ 3000 ml</span></div><div class="metric-note">{water_note}</div></div></div>', unsafe_allow_html=True)
+    with st.container(key="water-actions", horizontal=True, width="stretch", gap="small", vertical_alignment="center"):
+        water_input = st.number_input("Vee kogus (ml)", min_value=1, value=250, step=50, key="water_input", label_visibility="collapsed")
+        if st.button("+ Lisa", key="water-add", type="primary"):
+            change_water(water_input, TODAY)
+            st.rerun()
+        if st.button("250 ml", key="water-quick-250"):
+            change_water(250, TODAY)
+            st.rerun()
+        if st.button("500 ml", key="water-quick-500"):
+            change_water(500, TODAY)
+            st.rerun()
+        if st.button("−", key="water-remove", help="Eemalda viimane sisestatud kogus"):
+            change_water(-water_input, TODAY)
+            st.rerun()
     st.markdown(f'<div class="section-title"><h2>Tänane logi</h2><span class="section-hint">{TODAY.strftime("%d. %b")}</span></div>', unsafe_allow_html=True)
     if not today_entries:
         st.info("Sinu päev on tühi. Lisa esimene toit allpool.")
