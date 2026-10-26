@@ -1221,7 +1221,6 @@ with tab_insights:
     for col, label, value in [(m1, "Valk", average_protein), (m2, "Süsivesikud", average_carbs), (m3, "Rasv", average_fat)]:
         with col:
             st.markdown(f'<div class="metric-card"><div class="metric-label">KESKMINE {label.upper()}</div><div class="metric-value">{value}g</div><div class="metric-note">logitud päevadel</div></div>', unsafe_allow_html=True)
-    st.markdown("### Päevased eesmärgid")
     protein_days = []
     for log_day, entries in st.session_state.daily_logs.items():
         if not entries:
@@ -1241,6 +1240,7 @@ with tab_insights:
         st.markdown(f'<div class="protein-table-wrap"><table class="protein-table"><thead><tr><th>Päev</th><th>Valk</th><th>Kalorid</th><th>Süsivesikud</th><th>Rasv</th></tr></thead><tbody>{"".join(protein_rows)}</tbody></table></div>', unsafe_allow_html=True)
     else:
         st.info("Päevade andmed ilmuvad siia pärast toitude logimist.")
+    st.markdown("### Päevased eesmärgid")
     goal_left, goal_right = st.columns(2)
     with goal_left:
         goal_kcal = st.number_input("Kalorid päevas", min_value=1, max_value=10000, value=int(st.session_state.goals["kcal"]), step=50, key="goal_kcal")
