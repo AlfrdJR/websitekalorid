@@ -642,11 +642,16 @@ def css():
         [class*="st-key-meal-box-"] { min-height:96px !important; padding:.65rem !important; background:#f4f8f5 !important; border:1px solid #dfe8e1 !important; border-radius:15px !important; }
         [class*="st-key-meal-box-"] [data-testid="stSelectbox"] { margin-top:.35rem !important; }
         [class*="st-key-meal-box-"] [data-baseweb="select"] > div { min-height:2rem !important; border-radius:9px !important; font-size:.7rem !important; }
+        [class*="st-key-calendar-meal-box-"] { min-height:96px !important; padding:.65rem !important; background:#f4f8f5 !important; border:1px solid #dfe8e1 !important; border-radius:15px !important; }
+        [class*="st-key-calendar-meal-boxes"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; gap:.45rem !important; width:100% !important; }
+        [class*="st-key-calendar-meal-boxes"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 0% !important; width:0 !important; min-width:0 !important; padding:0 !important; }
         [class*="st-key-meal-box-actions-"] [data-testid="stHorizontalBlock"] { gap:.25rem !important; }
         [class*="st-key-meal-box-actions-"] button { min-width:2.1rem !important; min-height:2.1rem !important; padding:.25rem .4rem !important; border-radius:9px !important; }
         @media (max-width:600px) {
             [class*="st-key-meal-boxes"] [data-testid="stHorizontalBlock"] { flex-wrap:wrap !important; }
             [class*="st-key-meal-boxes"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 calc(50% - .25rem) !important; width:calc(50% - .25rem) !important; min-width:0 !important; }
+            [class*="st-key-calendar-meal-boxes"] [data-testid="stHorizontalBlock"] { flex-wrap:wrap !important; }
+            [class*="st-key-calendar-meal-boxes"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 calc(50% - .25rem) !important; width:calc(50% - .25rem) !important; min-width:0 !important; }
         }
         </style>
         """,
@@ -814,14 +819,22 @@ with tab_calendar:
     st.markdown("### Selle päeva toit")
     if not selected_entries:
         st.info("Sellel päeval pole veel toite logitud.")
-    for index, item in enumerate(selected_entries):
-        left, right = st.columns([6, 1])
-        with left:
-            st.markdown(f'<div class="food-row"><div><div class="pill">{item.get("meal", "Toit")}</div><div class="food-name">{item["name"]}</div><div class="food-meta">{item.get("time", "")}</div></div><div class="food-kcal">{int(item["kcal"])} kcal</div></div>', unsafe_allow_html=True)
-        with right:
-            if st.button("×", key=f"remove_calendar_{selected_day}_{index}", help="Eemalda see toit"):
-                remove_entry(index, selected_day)
-                st.rerun()
+    calendar_items = grouped_log_entries(selected_entries)
+    calendar_categories = [("Hommikusöök", "Hommik"), ("Lõuna", "Lõuna"), ("Õhtusöök", "Õhtu"), ("Vahepala", "Snäkk")]
+    with st.container(key=f"calendar-meal-boxes-{selected_day}", horizontal=True, width="stretch", gap="small"):
+        calendar_columns = st.columns(4)
+        for box_column, (meal_value, meal_label) in zip(calendar_columns, calendar_categories):
+            with box_column:
+                with st.container(key=f"calendar-meal-box-{selected_day}-{meal_value}", width="stretch"):
+                    box_items = [item for item in calendar_items if item.get("meal") == meal_value]
+                    st.markdown(f'<div class="meal-box-title"><span>{meal_label}</span><span>{len(box_items)}</span></div>', unsafe_allow_html=True)
+                    if not box_items:
+                        st.markdown('<div class="meal-box-empty">Tühi</div>', unsafe_allow_html=True)
+                    for box_index, item in enumerate(box_items):
+                        st.markdown(f'<div class="meal-box-item"><span>{item.get("count", 1)}× {item["name"]}</span><strong>{int(item.get("kcal", 0))} kcal</strong></div>', unsafe_allow_html=True)
+                        if st.button("×", key=f"calendar-remove-{selected_day}-{meal_value}-{box_index}", help="Eemalda see toit"):
+                            remove_entry_group(item["_indices"], selected_day)
+                            st.rerun()
     logged_days = sorted(st.session_state.daily_logs.keys(), reverse=True)
 
 with tab_recipes:
