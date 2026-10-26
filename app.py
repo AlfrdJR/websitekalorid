@@ -785,12 +785,6 @@ with tab_insights:
     for col, label, value in [(m1, "Valk", average_protein), (m2, "Süsivesikud", average_carbs), (m3, "Rasv", average_fat)]:
         with col:
             st.markdown(f'<div class="metric-card"><div class="metric-label">KESKMINE {label.upper()}</div><div class="metric-value">{value}g</div><div class="metric-note">logitud päevadel</div></div>', unsafe_allow_html=True)
-    st.markdown("### Järgmine hea samm")
-    if logged_last_7:
-        st.info("Jätka iga söögikorra logimist — sul on nüüd päris andmed, mille põhjal oma mustreid märgata.")
-    else:
-        st.info("Alusta ühe päris toidukirjega. Kui logid, hakkavad ka graafikud ja streak sinu järgi täituma.")
-
     st.markdown("### Päevased eesmärgid")
     goal_left, goal_right = st.columns(2)
     with goal_left:
