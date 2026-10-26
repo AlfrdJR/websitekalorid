@@ -416,9 +416,9 @@ def css():
         .goal-ring:after { content:''; width:66px; height:66px; border-radius:50%; background:white; position:absolute; }
         .goal-ring span { z-index:1; font:700 1rem 'Space Grotesk'; color:#287a56; }
         .calendar-macro-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.55rem; margin:0; }
-        .today-macro-grid { margin-bottom:2.5rem; }
-        .calendar-page-macro-grid { margin-bottom:2.5rem; }
-        .calendar-summary-card { margin-top:2.5rem; }
+        .today-macro-grid { margin-bottom:1rem; }
+        .calendar-page-macro-grid { margin-bottom:1rem; }
+        .calendar-summary-card { margin-top:1rem; }
         .calendar-macro-card { min-width:0; padding:.8rem .45rem; text-align:center; background:var(--surface); border:1px solid var(--line); border-radius:18px; }
         .calendar-macro-ring { width:58px; height:58px; margin:.35rem auto .5rem; display:grid; place-items:center; position:relative; }
         .calendar-macro-ring svg { position:absolute; inset:0; width:100%; height:100%; transform:rotate(-90deg); overflow:visible; }
