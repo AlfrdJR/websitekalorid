@@ -318,7 +318,7 @@ def css():
         """
         <style>
         :root { --ink:#17231d; --muted:#000000; --mint:#dff3e8; --green:#217a52; --cream:#ffffff; --line:#dfe8e1; --surface:#ffffff; --surface-soft:#eef7f1; --input:#ffffff; --shadow:#1c3a2714; }
-        .stApp { background:var(--cream); color:var(--ink); font-family:'DM Sans',sans-serif; }
+        .stApp { background:#f7fbf8; color:var(--ink); font-family:'DM Sans',sans-serif; }
         [data-testid="stHeader"] { background:transparent; }
         .block-container { max-width:720px; padding:1.5rem 1rem 5rem; }
         h1,h2,h3 { font-family:'Space Grotesk',sans-serif; letter-spacing:-.04em; color:var(--ink); }
@@ -633,16 +633,20 @@ def css():
         [class*="st-key-meal-boxes"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; gap:.45rem !important; width:100% !important; }
         [class*="st-key-meal-boxes"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 0% !important; width:0 !important; min-width:0 !important; padding:0 !important; }
         .meal-box { min-height:96px; padding:.65rem; background:#f4f8f5; border:1px solid #dfe8e1; border-radius:15px; }
-        .meal-box-title { display:flex; justify-content:space-between; gap:.35rem; margin-bottom:.45rem; color:#287a56; font-size:.78rem; font-weight:700; }
-        .meal-box-title span:last-child { color:#668072; font-weight:500; }
-        .meal-box-item { display:flex; justify-content:space-between; gap:.35rem; padding:.35rem 0; border-top:1px solid #e3ece5; color:#17231d; font-size:.7rem; }
-        .meal-box-item span { min-width:0; overflow-wrap:anywhere; }
-        .meal-box-item strong { flex:0 0 auto; white-space:nowrap; font-weight:600; }
-        .meal-box-empty { color:#8aa094; font-size:.68rem; line-height:1.25; }
-        [class*="st-key-meal-box-"] { min-height:96px !important; padding:.65rem !important; background:#f4f8f5 !important; border:1px solid #dfe8e1 !important; border-radius:15px !important; }
+        .meal-box-title { display:flex; align-items:center; justify-content:space-between; gap:.35rem; margin-bottom:.6rem; padding-bottom:.5rem; border-bottom:2px solid #d9eee0; color:#17633f; font-size:.82rem; font-weight:800; letter-spacing:-.02em; }
+        .meal-box-title span:first-child::before { content:' '; display:inline-block; width:.5rem; height:.5rem; margin-right:.35rem; border-radius:50%; background:#72b98d; vertical-align:middle; }
+        .meal-box-title span:last-child { min-width:1.35rem; padding:.12rem .35rem; border-radius:99px; background:#e5f4eb; color:#287a56; font-size:.65rem; text-align:center; font-weight:700; }
+        .meal-box-item { margin:.35rem 0; padding:.55rem .6rem; background:#fff; border:1px solid #e4eee7; border-radius:11px; color:#17231d; font-size:.72rem; box-shadow:0 2px 7px #1c3a2709; }
+        .meal-box-item-top { display:flex; justify-content:space-between; align-items:flex-start; gap:.35rem; }
+        .meal-box-item-top span { min-width:0; overflow-wrap:anywhere; font-weight:650; }
+        .meal-box-item-top strong { flex:0 0 auto; white-space:nowrap; color:#287a56; font-size:.68rem; font-weight:800; }
+        .meal-box-macros { display:flex; flex-wrap:wrap; gap:.25rem .4rem; margin-top:.35rem; color:#668072; font-size:.6rem; line-height:1.2; }
+        .meal-box-macros span { white-space:nowrap; }
+        .meal-box-empty { padding:.65rem .1rem; color:#8aa094; font-size:.68rem; line-height:1.25; text-align:center; }
+        [class*="st-key-meal-box-"] { min-height:96px !important; padding:.75rem !important; background:linear-gradient(180deg,#f4fbf6,#eef7f1) !important; border:1px solid #d5e9da !important; border-radius:18px !important; box-shadow:0 5px 16px #1c3a270c !important; }
         [class*="st-key-meal-box-"] [data-testid="stSelectbox"] { margin-top:.35rem !important; }
         [class*="st-key-meal-box-"] [data-baseweb="select"] > div { min-height:2rem !important; border-radius:9px !important; font-size:.7rem !important; }
-        [class*="st-key-calendar-meal-box-"] { min-height:96px !important; padding:.65rem !important; background:#f4f8f5 !important; border:1px solid #dfe8e1 !important; border-radius:15px !important; }
+        [class*="st-key-calendar-meal-box-"] { min-height:96px !important; padding:.75rem !important; background:linear-gradient(180deg,#f4fbf6,#eef7f1) !important; border:1px solid #d5e9da !important; border-radius:18px !important; box-shadow:0 5px 16px #1c3a270c !important; }
         [class*="st-key-calendar-meal-boxes"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; gap:.45rem !important; width:100% !important; }
         [class*="st-key-calendar-meal-boxes"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 0% !important; width:0 !important; min-width:0 !important; padding:0 !important; }
         [class*="st-key-meal-box-actions-"] [data-testid="stHorizontalBlock"] { gap:.25rem !important; }
@@ -698,7 +702,8 @@ with tab_today:
                     if not box_items:
                         st.markdown('<div class="meal-box-empty">Lisa toit siia</div>', unsafe_allow_html=True)
                     for box_index, item in enumerate(box_items):
-                        st.markdown(f'<div class="meal-box-item"><span>{item.get("count", 1)}× {item["name"]}</span><strong>{int(item.get("kcal", 0))} kcal</strong></div>', unsafe_allow_html=True)
+                        item_macros = f'<div class="meal-box-macros"><span>Valk {int(item.get("protein", 0))}g</span><span>Süsivesikud {int(item.get("carbs", 0))}g</span><span>Rasv {int(item.get("fat", 0))}g</span></div>'
+                        st.markdown(f'<div class="meal-box-item"><div class="meal-box-item-top"><span>{item.get("count", 1)}× {item["name"]}</span><strong>{int(item.get("kcal", 0))} kcal</strong></div>{item_macros}</div>', unsafe_allow_html=True)
                         selected_meal = st.selectbox(
                             "Liiguta kasti",
                             [value for value, _ in meal_categories],
@@ -831,7 +836,8 @@ with tab_calendar:
                     if not box_items:
                         st.markdown('<div class="meal-box-empty">Tühi</div>', unsafe_allow_html=True)
                     for box_index, item in enumerate(box_items):
-                        st.markdown(f'<div class="meal-box-item"><span>{item.get("count", 1)}× {item["name"]}</span><strong>{int(item.get("kcal", 0))} kcal</strong></div>', unsafe_allow_html=True)
+                        item_macros = f'<div class="meal-box-macros"><span>Valk {int(item.get("protein", 0))}g</span><span>Süsivesikud {int(item.get("carbs", 0))}g</span><span>Rasv {int(item.get("fat", 0))}g</span></div>'
+                        st.markdown(f'<div class="meal-box-item"><div class="meal-box-item-top"><span>{item.get("count", 1)}× {item["name"]}</span><strong>{int(item.get("kcal", 0))} kcal</strong></div>{item_macros}</div>', unsafe_allow_html=True)
                         if st.button("×", key=f"calendar-remove-{selected_day}-{meal_value}-{box_index}", help="Eemalda see toit"):
                             remove_entry_group(item["_indices"], selected_day)
                             st.rerun()
