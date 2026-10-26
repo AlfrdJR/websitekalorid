@@ -474,11 +474,15 @@ def css():
             [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { flex:0 0 4.5rem !important; width:4.5rem !important; min-width:4.5rem !important; }
             [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 5.5rem !important; width:5.5rem !important; min-width:5.5rem !important; }
             [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; }
-            [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { flex:0 0 5.5rem !important; width:5.5rem !important; min-width:5.5rem !important; }
-            [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 2.5rem !important; width:2.5rem !important; min-width:2.5rem !important; }
+            [class*="st-key-recipe-builder-row-"] { width:100% !important; max-width:100% !important; overflow:hidden !important; }
+            [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] { width:100% !important; max-width:100% !important; flex-wrap:nowrap !important; gap:.2rem !important; }
+            [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(1) { flex:1 1 auto !important; width:auto !important; min-width:0 !important; overflow:hidden !important; }
+            [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { flex:0 0 5rem !important; width:5rem !important; min-width:5rem !important; }
+            [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 2.2rem !important; width:2.2rem !important; min-width:2.2rem !important; }
+            [class*="st-key-recipe-builder-row-"] [data-testid="column"] [data-testid="stMarkdownContainer"] { overflow-wrap:anywhere !important; word-break:break-word !important; white-space:normal !important; }
             [class*="st-key-recipe-builder-row-"] [class*="st-key-remove_recipe_ingredient_"] button { width:2.5rem !important; min-width:2.5rem !important; padding:0 !important; }
             [class*="st-key-recipe-builder-row-"] [class*="st-key-remove_recipe_ingredient_"] button p { font-size:0 !important; }
-            [class*="st-key-recipe-builder-row-"] [class*="st-key-remove_recipe_ingredient_"] button p::after { content:"←" !important; color:#b45d5d !important; font-size:1.1rem !important; }
+            [class*="st-key-recipe-builder-row-"] [class*="st-key-remove_recipe_ingredient_"] button p::after { content:"×" !important; color:#b45d5d !important; font-size:1.1rem !important; }
             [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] [data-testid="stButton"] button { width:2.5rem !important; min-width:2.5rem !important; padding:0 !important; }
             [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] { max-width:100% !important; overflow-x:hidden !important; }
             [class*="st-key-food_actions_"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; justify-content:flex-start !important; gap:clamp(.2rem, 2vw, .7rem) !important; }
@@ -761,7 +765,7 @@ with tab_recipes:
                 with row_weight:
                     st.write(f'{ingredient["grams"]} g · {int(ingredient_kcal)} kcal')
                 with row_remove:
-                    if st.button("← Eemalda", key=f"remove_recipe_ingredient_{ingredient_index}"):
+                    if st.button("×", key=f"remove_recipe_ingredient_{ingredient_index}"):
                         st.session_state.recipe_builder.pop(ingredient_index)
                         st.rerun()
         builder_totals = calculate_recipe_ingredients(st.session_state.recipe_builder)
