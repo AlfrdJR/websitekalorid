@@ -649,6 +649,11 @@ def css():
         [class*="st-key-meal-box-"] [data-baseweb="select"] > div { min-height:2rem !important; border-radius:9px !important; font-size:.7rem !important; background:transparent !important; border:1px solid #d5e9da !important; box-shadow:none !important; }
         [class*="st-key-meal-box-actions-"] { min-height:0 !important; padding:0 !important; background:transparent !important; border:0 !important; border-radius:0 !important; box-shadow:none !important; }
         [class*="st-key-meal-box-actions-"] button { background:transparent !important; border:1px solid #c8dfcf !important; box-shadow:none !important; }
+        [class*="st-key-meal-controls-"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; align-items:center !important; gap:.45rem !important; width:100% !important; }
+        [class*="st-key-meal-controls-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:first-child { flex:0 0 7rem !important; width:7rem !important; min-width:7rem !important; }
+        [class*="st-key-meal-controls-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:last-child { flex:1 1 auto !important; width:auto !important; min-width:0 !important; }
+        [class*="st-key-meal-controls-"] [data-testid="stSelectbox"] { width:100% !important; }
+        [class*="st-key-meal-controls-"] [data-baseweb="select"] > div { min-height:2.6rem !important; background:transparent !important; border:1px solid #d5e9da !important; border-radius:10px !important; }
         [class*="st-key-calendar-meal-box-"] { min-height:96px !important; padding:.75rem !important; background:linear-gradient(180deg,#f4fbf6,#eef7f1) !important; border:1px solid #d5e9da !important; border-radius:18px !important; box-shadow:0 5px 16px #1c3a270c !important; }
         [class*="st-key-calendar-meal-box-"] .meal-box-item { margin:.25rem 0 !important; padding:.45rem 0 !important; background:transparent !important; border:0 !important; border-top:1px solid #d5e9da !important; border-radius:0 !important; box-shadow:none !important; }
         [class*="st-key-calendar-meal-boxes"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; gap:.45rem !important; width:100% !important; }
@@ -708,29 +713,30 @@ with tab_today:
                     for box_index, item in enumerate(box_items):
                         item_macros = f'<div class="meal-box-macros"><span>Valk {int(item.get("protein", 0))}g</span><span>Süsivesikud {int(item.get("carbs", 0))}g</span><span>Rasv {int(item.get("fat", 0))}g</span></div>'
                         st.markdown(f'<div class="meal-box-item"><div class="meal-box-item-top"><span>{item.get("count", 1)}× {item["name"]}</span><strong>{int(item.get("kcal", 0))} kcal</strong></div>{item_macros}</div>', unsafe_allow_html=True)
-                        selected_meal = st.selectbox(
-                            "Liiguta kasti",
-                            [value for value, _ in meal_categories],
-                            index=[value for value, _ in meal_categories].index(meal_value),
-                            format_func=lambda value: dict(meal_categories)[value],
-                            key=f"move-meal-{meal_value}-{box_index}-{item['_indices'][0]}",
-                            label_visibility="collapsed",
-                        )
+                        with st.container(key=f"meal-controls-{meal_value}-{box_index}-{item['_indices'][0]}", horizontal=True, width="stretch", gap="small"):
+                            with st.container(key=f"meal-box-actions-{meal_value}-{box_index}-{item['_indices'][0]}", horizontal=True, width="content", gap="small"):
+                                if st.button("+", key=f"box-add-{meal_value}-{box_index}-{item['_indices'][0]}", help="Lisa üks sama toit"):
+                                    add_entry(item["_prototype"], meal_value, TODAY)
+                                    st.rerun()
+                                if st.button("−", key=f"box-subtract-{meal_value}-{box_index}-{item['_indices'][0]}", help="Eemalda üks kogus"):
+                                    remove_entry_group([item["_indices"][-1]], TODAY)
+                                    st.rerun()
+                                if st.button("×", key=f"box-remove-{meal_value}-{box_index}-{item['_indices'][0]}", help="Eemalda kogu toit"):
+                                    remove_entry_group(item["_indices"], TODAY)
+                                    st.rerun()
+                            selected_meal = st.selectbox(
+                                "Liiguta kasti",
+                                [value for value, _ in meal_categories],
+                                index=[value for value, _ in meal_categories].index(meal_value),
+                                format_func=lambda value: dict(meal_categories)[value],
+                                key=f"move-meal-{meal_value}-{box_index}-{item['_indices'][0]}",
+                                label_visibility="collapsed",
+                            )
                         if selected_meal != meal_value:
                             for index in item["_indices"]:
                                 today_entries[index]["meal"] = selected_meal
                             save_daily_logs()
                             st.rerun()
-                        with st.container(key=f"meal-box-actions-{meal_value}-{box_index}-{item['_indices'][0]}", horizontal=True, width="content", gap="small"):
-                            if st.button("+", key=f"box-add-{meal_value}-{box_index}-{item['_indices'][0]}", help="Lisa üks sama toit"):
-                                add_entry(item["_prototype"], meal_value, TODAY)
-                                st.rerun()
-                            if st.button("−", key=f"box-subtract-{meal_value}-{box_index}-{item['_indices'][0]}", help="Eemalda üks kogus"):
-                                remove_entry_group([item["_indices"][-1]], TODAY)
-                                st.rerun()
-                            if st.button("×", key=f"box-remove-{meal_value}-{box_index}-{item['_indices'][0]}", help="Eemalda kogu toit"):
-                                remove_entry_group(item["_indices"], TODAY)
-                                st.rerun()
     for i, item in enumerate(displayed_today_entries):
         is_recipe = item.get("meal") == "Retsept"
         if not is_recipe:
