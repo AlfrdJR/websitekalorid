@@ -351,6 +351,8 @@ def css():
         .add-card-title { font-weight:700; font-size:1rem; } .add-card-sub { font-size:.8rem; color:#547063; margin:.2rem 0 .8rem; }
         .streak-card { background:#fff3db; border:1px solid #f1dfb9; color:#805c1d; border-radius:18px; padding:.7rem .9rem; font-size:.83rem; margin:.8rem 0; }
         .ingredient-header { display:grid; grid-template-columns:4fr 1.5fr .8fr; gap:.5rem; padding:.35rem .6rem; color:var(--muted); text-transform:uppercase; font-size:.68rem; font-weight:700; letter-spacing:.08em; border-bottom:1px solid var(--line); }
+        .recipe-read-row { display:grid; grid-template-columns:minmax(0, 1fr) auto; align-items:center; gap:.75rem; padding:.7rem .6rem; border-bottom:1px solid var(--line); color:var(--ink); }
+        .recipe-read-row strong { color:var(--muted); white-space:nowrap; font-weight:600; }
         .table-note { color:var(--muted); font-size:.78rem; margin:.2rem 0 .6rem; }
         .recipe-macros { display:flex; flex-wrap:wrap; gap:.4rem; margin:.65rem 0 .8rem; }
         .recipe-macro { background:#f1f7f2; border:1px solid #e1eee3; border-radius:10px; padding:.35rem .55rem; color:#287a56; font-size:.75rem; font-weight:700; }
@@ -405,6 +407,9 @@ def css():
         [class*="st-key-remove_today_"] button p::after, [class*="st-key-delete_product_"] button p::after,
         [class*="st-key-remove_calendar_"] button p::after, [class*="st-key-remove_recipe_row_"] button p::after,
         [class*="st-key-delete_recipe_"] button p::after, [class*="st-key-remove_recipe_ingredient_"] button p::after { content:"X"; color:#b45d5d !important; font-size:1rem !important; }
+        [class*="st-key-remove_recipe_row_"] button p { font-size:.72rem !important; color:#b45d5d !important; white-space:nowrap !important; }
+        [class*="st-key-remove_recipe_row_"] button p::after { content:none !important; }
+        [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 5.5rem !important; width:5.5rem !important; min-width:5.5rem !important; }
         [class*="product-actions"] button:not([kind="primary"]) p, [class*="food-remove"] button p,
         [class*="st-key-remove_today_"] button p, [class*="st-key-delete_product_"] button p,
         [class*="st-key-remove_calendar_"] button p, [class*="st-key-remove_recipe_row_"] button p,
@@ -461,7 +466,7 @@ def css():
             [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(1) { flex:1 1 auto !important; width:auto !important; min-width:0 !important; }
             [class*="st-key-recipe-read-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2),
             [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { flex:0 0 4.5rem !important; width:4.5rem !important; min-width:4.5rem !important; }
-            [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 2.5rem !important; width:2.5rem !important; min-width:2.5rem !important; }
+            [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 5.5rem !important; width:5.5rem !important; min-width:5.5rem !important; }
             [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] [data-testid="stButton"] button { width:2.5rem !important; min-width:2.5rem !important; padding:0 !important; }
             [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] { max-width:100% !important; overflow-x:hidden !important; }
             [class*="st-key-food_actions_"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; justify-content:flex-start !important; gap:clamp(.2rem, 2vw, .7rem) !important; }
@@ -481,6 +486,8 @@ def css():
             .add-card { margin-top:.8rem; padding:.85rem; border-radius:17px; }
             .streak-card { font-size:.76rem; padding:.65rem .75rem; }
             .ingredient-header { grid-template-columns:3fr 1.3fr .5fr; font-size:.6rem; padding:.3rem .25rem; }
+            .recipe-read-row { grid-template-columns:minmax(0, 1fr) 4.5rem; gap:.35rem; padding:.65rem .25rem; font-size:.88rem; }
+            .recipe-read-row strong { text-align:right; font-size:.82rem; }
             .food-row { min-height:64px; }
             .food-row + div { min-width:116px !important; }
             .food-row + div button { min-width:32px; padding-left:.15rem; padding-right:.15rem; }
@@ -656,13 +663,8 @@ with tab_recipes:
             recipe_ingredients = recipe.get("ingredients_data", [])
             if recipe_ingredients:
                 st.markdown('<div class="ingredient-header"><span>Toode</span><span>Kaal</span><span></span></div>', unsafe_allow_html=True)
-                for ingredient_index, ingredient in enumerate(recipe_ingredients):
-                    with st.container(key=f"recipe-read-row-{index}-{ingredient_index}", horizontal=True, width="stretch", gap="small", vertical_alignment="center"):
-                        read_product_col, read_weight_col, _ = st.columns([4, 1.5, .8])
-                        with read_product_col:
-                            st.write(ingredient["name"])
-                        with read_weight_col:
-                            st.write(f'{ingredient["grams"]} g')
+                for ingredient in recipe_ingredients:
+                    st.markdown(f'<div class="recipe-read-row"><span>{ingredient["name"]}</span><strong>{ingredient["grams"]} g</strong></div>', unsafe_allow_html=True)
             else:
                 st.write("")
             with st.container(key=f"recipe-actions-{index}", horizontal=True, width="stretch", horizontal_alignment="distribute", gap="small", vertical_alignment="center"):
@@ -688,7 +690,7 @@ with tab_recipes:
                             with grams_col:
                                 ingredient["grams"] = st.number_input("Kaal (g)", min_value=1, value=int(ingredient.get("grams", 100)), step=5, key=f"recipe_grams_{index}_{ingredient_index}", label_visibility="collapsed")
                             with remove_col:
-                                if st.button("×", key=f"remove_recipe_row_{index}_{ingredient_index}", help="Eemalda rida"):
+                                if st.button("← Eemalda", key=f"remove_recipe_row_{index}_{ingredient_index}", help="Eemalda koostisosa"):
                                     edited_ingredients_data.pop(ingredient_index)
                                     st.rerun()
                     if st.button("＋ Lisa toode", key=f"add_recipe_row_{index}", use_container_width=True):
