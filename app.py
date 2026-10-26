@@ -386,6 +386,13 @@ def css():
         .goal-ring { width:86px; height:86px; border-radius:50%; display:grid; place-items:center; flex:0 0 auto; background:conic-gradient(#287a56 var(--percent), #e7eee9 0); position:relative; }
         .goal-ring:after { content:''; width:66px; height:66px; border-radius:50%; background:white; position:absolute; }
         .goal-ring span { z-index:1; font:700 1rem 'Space Grotesk'; color:#287a56; }
+        .calendar-macro-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.55rem; margin:.7rem 0 1.1rem; }
+        .calendar-macro-card { min-width:0; padding:.8rem .45rem; text-align:center; background:var(--surface); border:1px solid var(--line); border-radius:18px; }
+        .calendar-macro-ring { width:58px; height:58px; margin:.35rem auto .5rem; border-radius:50%; display:grid; place-items:center; position:relative; background:conic-gradient(var(--ring-color) var(--percent), var(--line) 0); }
+        .calendar-macro-ring::after { content:''; position:absolute; width:42px; height:42px; border-radius:50%; background:var(--surface); }
+        .calendar-macro-ring span { z-index:1; color:var(--ring-color); font:700 .72rem 'Space Grotesk'; }
+        .calendar-macro-label { color:var(--muted); font-size:.66rem; font-weight:800; text-transform:uppercase; letter-spacing:.04em; }
+        .calendar-macro-value { margin-top:.15rem; color:var(--ink); font:700 .8rem 'Space Grotesk'; white-space:nowrap; }
         .goal-copy { flex:1; } .goal-copy .metric-value { margin:0; font-size:1.35rem; }
         .add-card { background:#e5f4eb; border-radius:20px; padding:1rem; margin-top:1rem; }
         .add-card-title { font-weight:700; font-size:1rem; } .add-card-sub { font-size:.8rem; color:#547063; margin:.2rem 0 .8rem; }
@@ -937,6 +944,12 @@ with tab_calendar:
     st.session_state.active_date = selected_day
     selected_entries = entries_for(selected_day)
     selected_totals = totals(selected_day)
+    calendar_macro_data = [("Valk", selected_totals["protein"], st.session_state.goals["protein"], "#287a56"), ("Süsivesikud", selected_totals["carbs"], st.session_state.goals["carbs"], "#d28a32"), ("Rasv", selected_totals["fat"], st.session_state.goals["fat"], "#bd6262")]
+    calendar_macro_cards = []
+    for macro_label, macro_value, macro_goal, macro_color in calendar_macro_data:
+        macro_percent = min(100, int(float(macro_value) / macro_goal * 100)) if macro_goal else 0
+        calendar_macro_cards.append(f'<div class="calendar-macro-card"><div class="calendar-macro-label">{macro_label}</div><div class="calendar-macro-ring" style="--percent:{macro_percent}%;--ring-color:{macro_color}"><span>{macro_percent}%</span></div><div class="calendar-macro-value">{int(macro_value)}g / {int(macro_goal)}g</div></div>')
+    st.markdown(f'<div class="calendar-macro-grid">{"".join(calendar_macro_cards)}</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="goal-card"><div class="goal-copy"><div class="metric-label">{selected_day.strftime("%d. %B %Y").upper()}</div><div class="metric-value">{int(selected_totals["kcal"]):,} kcal</div><div class="metric-note">{len(selected_entries)} toidukirjet · {int(selected_totals["protein"])}g valku</div></div></div>', unsafe_allow_html=True)
     st.markdown("### Selle päeva toit")
     if not selected_entries:
