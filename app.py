@@ -415,7 +415,7 @@ def css():
         .goal-ring { width:86px; height:86px; border-radius:50%; display:grid; place-items:center; flex:0 0 auto; background:conic-gradient(#287a56 var(--percent), #e7eee9 0); position:relative; }
         .goal-ring:after { content:''; width:66px; height:66px; border-radius:50%; background:white; position:absolute; }
         .goal-ring span { z-index:1; font:700 1rem 'Space Grotesk'; color:#287a56; }
-        .calendar-macro-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.55rem; margin:0 0 1.5rem; }
+        .calendar-macro-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.55rem; margin:0; }
         .calendar-macro-card { min-width:0; padding:.8rem .45rem; text-align:center; background:var(--surface); border:1px solid var(--line); border-radius:18px; }
         .calendar-macro-ring { width:58px; height:58px; margin:.35rem auto .5rem; display:grid; place-items:center; position:relative; }
         .calendar-macro-ring svg { position:absolute; inset:0; width:100%; height:100%; transform:rotate(-90deg); overflow:visible; }
@@ -429,7 +429,7 @@ def css():
         .calendar-macro-ring span { z-index:1; color:var(--ring-color); font:700 .72rem 'Space Grotesk'; }
         .calendar-macro-label { color:var(--muted); font-size:.66rem; font-weight:800; text-transform:uppercase; letter-spacing:.04em; }
         .calendar-macro-value { margin-top:.15rem; color:var(--ink); font:700 .8rem 'Space Grotesk'; white-space:nowrap; }
-        .water-card { display:grid; grid-template-columns:92px 1fr; gap:1rem; align-items:center; margin:0 0 1.1rem; padding:1rem; background:var(--surface); border:1px solid var(--line); border-radius:20px; }
+        .water-card { display:grid; grid-template-columns:92px 1fr; gap:1rem; align-items:center; margin:0; padding:1rem; background:var(--surface); border:1px solid var(--line); border-radius:20px; }
         .water-glass { position:relative; width:72px; height:112px; margin:auto; overflow:hidden; border:3px solid #8fc9e8; border-top:0; border-radius:0 0 22px 22px; background:#eef8fd; }
         .water-fill { position:absolute; right:0; bottom:0; left:0; height:var(--water-percent); background:linear-gradient(180deg,#8fd8f4,#43a9d7); }
         .water-glass::before { content:''; position:absolute; z-index:1; top:0; right:0; left:0; height:3px; background:#8fc9e8; }
@@ -443,7 +443,7 @@ def css():
         .goal-copy { flex:1; } .goal-copy .metric-value { margin:0; font-size:1.35rem; }
         .add-card { background:#e5f4eb; border-radius:20px; padding:1rem; margin-top:1rem; }
         .add-card-title { font-weight:700; font-size:1rem; } .add-card-sub { font-size:.8rem; color:#547063; margin:.2rem 0 .8rem; }
-        .streak-card { display:flex; align-items:center; gap:.8rem; background:var(--surface); border:1px solid var(--line); color:var(--ink); border-radius:20px; padding:1rem 1.1rem; margin:.8rem 0 1.5rem; box-shadow:0 3px 12px #1c3a2709; }
+        .streak-card { display:flex; align-items:center; gap:.8rem; background:var(--surface); border:1px solid var(--line); color:var(--ink); border-radius:20px; padding:1rem 1.1rem; margin:.8rem 0 0; box-shadow:0 3px 12px #1c3a2709; }
         .streak-card .streak-fire { font-size:1.7rem; line-height:1; }
         .streak-card .streak-label { color:var(--muted); font-size:.65rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
         .streak-card .streak-value { margin-top:.15rem; font:700 1.35rem 'Space Grotesk'; }
