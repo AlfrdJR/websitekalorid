@@ -1,0 +1,6 @@
+/.venv/
+openai_api_key.json
+custom_products.json
+custom_recipes.json
+daily_logs.json
+hidden_products.json
