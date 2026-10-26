@@ -508,8 +508,7 @@ def css():
 
 
 css()
-st.markdown('<div class="eyebrow">NÕU · sinu päev taldrikul</div>', unsafe_allow_html=True)
-st.markdown(f'<div class="hero"><div class="hero-title">Tere hommikust, Alfred ✦</div><div class="hero-sub">{TODAY.strftime("%d. %B %Y")} · üks hea valik korraga.</div></div>', unsafe_allow_html=True)
+st.markdown(f'<div class="hero"><div class="hero-title">Tere hommikust, Alfred ✦</div></div>', unsafe_allow_html=True)
 
 tab_today, tab_add, tab_calendar, tab_recipes, tab_insights = st.tabs(["Täna", "Lisa toit", "Kalender", "Retseptid", "Ülevaade"])
 
@@ -560,8 +559,6 @@ with tab_today:
                         st.rerun()
 with tab_add:
     st.markdown("## Lisa toit")
-    st.caption("Kõige kiirem viis on otsida toodet. Pildi puhul saad kõik hinnangud enne salvestamist üle kirjutada.")
-    st.caption(f"Tootekataloogis on praegu {len(all_products())} toodet, sh sinu salvestatud toidud, Rimi e-poe nimed ja Eesti lemmikud. Toitumisväärtused on prototüübi hinnangud — kontrolli pakendilt.")
     add_mode = st.radio("Vali viis", ["Otsi toitu", "Sisesta ise"], horizontal=True, label_visibility="collapsed")
     if add_mode == "Otsi toitu":
         query = st.text_input("Otsi toodet", placeholder="nt kohuke, rukkileib, skyr…", key="food_search_query")
@@ -582,7 +579,6 @@ with tab_add:
                 st.rerun()
         if st.session_state.inline_create_food:
             st.markdown("### Lisa uus toit")
-            st.caption("Sisesta pakendilt toiteväärtused ja salvesta see toode otsingusse.")
             with st.form("inline_create_food_form"):
                 inline_name = st.text_input("Toidu nimi", value=st.session_state.inline_create_food)
                 inline_basis = st.selectbox("Toiteväärtus käib", ["100 g", "100 ml", "1 tk", "1 portsjon"])
@@ -622,7 +618,6 @@ with tab_add:
 
 with tab_calendar:
     st.markdown("## Kalender")
-    st.caption("Vali kuupäev, et näha selle päeva toite ja kokkuvõtet.")
     selected_day = st.date_input("Vali päev", value=TODAY, min_value=TODAY - timedelta(days=365), max_value=TODAY, format="DD.MM.YYYY", key="calendar_day")
     st.session_state.active_date = selected_day
     selected_entries = entries_for(selected_day)
@@ -640,11 +635,9 @@ with tab_calendar:
                 remove_entry(index, selected_day)
                 st.rerun()
     logged_days = sorted(st.session_state.daily_logs.keys(), reverse=True)
-    st.caption(f"Logitud päevi: {len(logged_days)} · streak: {streak_count()} päeva")
 
 with tab_recipes:
     st.markdown("## Retseptid")
-    st.caption("Ava retsept, vaata koostisosi ja muuda koguseid või toitaineid. Muudatused jäävad järgmiseks korraks alles.")
     if st.session_state.pop("recipe_saved_message", None):
         st.success("Uus retsept on kohe nimekirjas.")
     recipe_query = st.text_input("Otsi retsepti", placeholder="nt kana, hommikusöök…", key="recipe_query")
@@ -662,7 +655,6 @@ with tab_recipes:
                     with read_weight_col:
                         st.write(f'{ingredient["grams"]} g')
             else:
-                st.caption("Sellel retseptil pole veel tooteid ja kaale lisatud.")
             with st.container(key=f"recipe-actions-{index}", horizontal=True, width="stretch", horizontal_alignment="distribute", gap="small", vertical_alignment="center"):
                 with st.popover("✎", help="Muuda retsepti"):
                     edit_key = f"recipe_edit_data_{index}"
@@ -711,7 +703,6 @@ with tab_recipes:
                 st.rerun()
 
     st.markdown("### Lisa uus retsept")
-    st.caption("Pane nimi esimesena, lisa tooted ja kaalud — NÕU arvutab kalorid ning makrod ise.")
     new_name = st.text_input("Retsepti nimi", placeholder="nt minu õhtusöök", key="new_recipe_name")
     recipe_products = all_products()
     if recipe_products:
@@ -766,7 +757,6 @@ with tab_recipes:
 
 with tab_insights:
     st.markdown("## Sinu ülevaade")
-    st.caption("Päris sinu logi põhjal — ilma oletuste ja näidisandmeteta.")
     last_seven_days = [TODAY - timedelta(days=offset) for offset in range(7)]
     logged_last_7 = [day for day in last_seven_days if st.session_state.daily_logs.get(day_key(day), [])]
     weekly_average = int(sum(totals(day)["kcal"] for day in logged_last_7) / len(logged_last_7)) if logged_last_7 else 0
@@ -813,4 +803,3 @@ with tab_insights:
         save_goals(st.session_state.goals)
         st.rerun()
 
-st.markdown('<div class="mobile-footer">NÕU · lihtsamalt söödud, paremini märgatud</div>', unsafe_allow_html=True)
