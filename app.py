@@ -554,6 +554,8 @@ def css():
         [class*="st-key-remove_one_today_"] button p::after { content:"−"; color:#287a56 !important; font-size:1.35rem !important; }
         [class*="st-key-add_recipe_row_"] button { font-size:0 !important; color:transparent !important; }
         [class*="st-key-add_recipe_row_"] button::after { content:"+ Lisa toode"; position:absolute !important; left:.7rem !important; top:50% !important; transform:translateY(-50%) !important; display:block !important; width:auto !important; color:#287a56; font-size:.82rem; text-align:left !important; }
+        [class*="st-key-add_recipe_row_"] { margin-top:.65rem !important; margin-bottom:.55rem !important; padding:.15rem 0 !important; }
+        [class*="st-key-add_recipe_row_"] button { min-height:3rem !important; height:3rem !important; padding:.55rem .9rem !important; border:1px solid #d8e7dc !important; border-radius:14px !important; background:var(--surface) !important; box-shadow:0 2px 8px #1c3a270d !important; }
         [class*="food-remove"] button { font-size:0 !important; color:transparent !important; }
         [class*="food-remove"] button::after { content:"X"; color:#b45d5d !important; font-size:1rem !important; }
         [class*="product-actions"] button:not([kind="primary"]), [class*="product-actions"] [data-testid="stBaseButton-secondary"] { font-size:0 !important; color:transparent !important; text-shadow:none !important; }
