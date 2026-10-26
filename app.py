@@ -457,10 +457,15 @@ def css():
         .overview-card { background:#fff; border:1px solid var(--line); border-radius:20px; padding:1rem; box-shadow:0 3px 12px #1c3a2710; }
         .protein-table-wrap { overflow-x:auto; background:var(--surface); border:1px solid var(--line); border-radius:18px; }
         .protein-table { width:100%; border-collapse:collapse; font-size:.8rem; }
-        .protein-table th { padding:.7rem .75rem; background:var(--surface-soft); color:var(--muted); font-size:.65rem; text-align:left; text-transform:uppercase; letter-spacing:.05em; }
+        .protein-table th { padding:.75rem .8rem; background:#e5f4eb; color:#287a56; font-size:.65rem; text-align:left; text-transform:uppercase; letter-spacing:.05em; white-space:nowrap; }
         .protein-table td { padding:.75rem; border-top:1px solid var(--line); color:var(--ink); }
-        .protein-table tr:first-child td { font-weight:700; }
+        .protein-table tr:first-child td { font-weight:700; background:#f0faf3; }
+        .protein-table tr:hover td { background:var(--surface-soft); }
         .protein-table .protein-total { color:var(--green); font:700 .95rem 'Space Grotesk'; }
+        .protein-table td:first-child { white-space:nowrap; font-weight:650; }
+        html[data-theme="dark"] .protein-table th { background:#173d2c; color:#72d09b; }
+        html[data-theme="dark"] .protein-table tr:first-child td { background:#1b3326; }
+        @media (max-width:600px) { .protein-table { font-size:.72rem; } .protein-table th, .protein-table td { padding:.65rem .55rem; } }
         .week-bars { display:flex; align-items:end; justify-content:space-between; gap:.45rem; height:145px; padding:.8rem .35rem .2rem; }
         .week-day { display:flex; flex-direction:column; align-items:center; gap:.35rem; flex:1; height:100%; justify-content:end; color:var(--muted); font-size:.68rem; }
         .week-track { height:105px; width:100%; max-width:28px; background:#edf3ee; border-radius:9px; display:flex; align-items:end; overflow:hidden; }
@@ -1232,7 +1237,7 @@ with tab_insights:
         day_totals = totals(parsed_day)
         protein_days.append((parsed_day, day_totals))
     protein_days.sort(key=lambda item: item[1]["protein"], reverse=True)
-    st.markdown("### Kõige rohkem valku")
+    st.markdown("### Laksud sisse")
     if protein_days:
         protein_rows = []
         for parsed_day, day_totals in protein_days:
