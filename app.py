@@ -712,6 +712,9 @@ def css():
         [class*="st-key-product-actions-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 2.5rem !important; width:2.5rem !important; }
         [class*="st-key-product-actions-"] [data-testid="stNumberInput"] { width:100% !important; }
         [class*="st-key-product-actions-"] [data-testid="stNumberInput"] input { min-height:46px !important; padding-left:.7rem !important; padding-right:.35rem !important; font-size:16px !important; }
+        [class*="st-key-product-actions-"] input[type="number"] { -moz-appearance:textfield !important; appearance:textfield !important; }
+        [class*="st-key-product-actions-"] input[type="number"]::-webkit-inner-spin-button,
+        [class*="st-key-product-actions-"] input[type="number"]::-webkit-outer-spin-button { -webkit-appearance:none !important; appearance:none !important; margin:0 !important; }
         [class*="st-key-product-actions-"] [data-testid="stNumberInput"] [data-testid="stNumberInput-StepDown"],
         [class*="st-key-product-actions-"] [data-testid="stNumberInput"] [data-testid="stNumberInput-StepUp"] { display:none !important; }
         [class*="st-key-product-actions-"] button { width:100% !important; min-width:0 !important; }
