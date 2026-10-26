@@ -528,8 +528,8 @@ def css():
             [class*="st-key-food_actions_"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:0 1 clamp(2.4rem, 13vw, 3.4rem) !important; width:clamp(2.4rem, 13vw, 3.4rem) !important; min-width:0 !important; padding:0 !important; }
             [class*="st-key-food_actions_"] button { width:100% !important; min-width:0 !important; padding:.35rem .2rem !important; font-size:clamp(.78rem, 3.5vw, 1rem) !important; }
             [class*="st-key-macro-cards"] { width:100% !important; max-width:100% !important; overflow:hidden !important; }
-            [class*="st-key-macro-cards"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; gap:clamp(.2rem, 1.5vw, .45rem) !important; width:100% !important; max-width:100% !important; }
-            [class*="st-key-macro-cards"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 0% !important; width:0 !important; min-width:0 !important; padding:0 !important; overflow:hidden !important; }
+            [class*="st-key-macro-cards"] [data-testid="stHorizontalBlock"] { flex-wrap:wrap !important; gap:.55rem !important; width:100% !important; max-width:100% !important; }
+            [class*="st-key-macro-cards"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 100% !important; width:100% !important; min-width:100% !important; padding:0 !important; overflow:hidden !important; }
             [class*="st-key-macro-cards"] .metric-card { box-sizing:border-box !important; width:100% !important; min-height:78px !important; padding:.6rem clamp(.35rem, 2vw, .5rem) !important; border-radius:15px !important; overflow:hidden !important; }
             [class*="st-key-macro-cards"] .metric-label { font-size:clamp(.52rem, 2.2vw, .62rem) !important; line-height:1.1 !important; white-space:normal !important; overflow-wrap:anywhere !important; }
             [class*="st-key-macro-cards"] .metric-value { font-size:clamp(.9rem, 4.5vw, 1.05rem) !important; white-space:nowrap !important; }
