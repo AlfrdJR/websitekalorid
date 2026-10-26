@@ -390,6 +390,7 @@ def css():
         [class*="product-actions"] button:not([kind="primary"]), [class*="product-actions"] [data-testid="stBaseButton-secondary"] { font-size:0 !important; color:transparent !important; text-shadow:none !important; }
         [class*="product-actions"] button:not([kind="primary"])::after, [class*="product-actions"] [data-testid="stBaseButton-secondary"]::after { content:"X"; color:#b45d5d !important; font-size:1rem !important; }
         [class*="product-actions"] button:not([kind="primary"]), [class*="product-actions"] [data-testid="stBaseButton-secondary"] { width:2.5rem !important; min-width:2.5rem !important; height:2.5rem !important; min-height:2.5rem !important; padding:0 !important; border-radius:12px !important; }
+        [class*="food-remove"] button { width:2.5rem !important; min-width:2.5rem !important; height:2.5rem !important; min-height:2.5rem !important; padding:0 !important; border-radius:12px !important; }
         /* Streamlit places button text inside a nested paragraph. Hide the original
            mojibake icon and draw one stable icon there instead of on the button. */
         [class*="product-actions"] button::after, [class*="food-remove"] button::after,
