@@ -409,7 +409,7 @@ def css():
         [class*="st-key-remove_today_"] button p, [class*="st-key-delete_product_"] button p,
         [class*="st-key-remove_calendar_"] button p, [class*="st-key-remove_recipe_row_"] button p,
         [class*="st-key-delete_recipe_"] button p, [class*="st-key-remove_recipe_ingredient_"] button p { display:flex !important; align-items:center !important; justify-content:center !important; width:100% !important; height:100% !important; margin:0 !important; }
-        @media (prefers-color-scheme: dark), (html[data-theme="dark"]) {
+        html[data-theme="dark"] {
             :root { --ink:#edf5ef; --muted:#aabbb1; --mint:#173d2c; --green:#72d09b; --cream:#111714; --line:#2b3b33; --surface:#1b2520; --surface-soft:#20382a; --input:#202b25; --shadow:#00000035; }
             .stApp, [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] { background:var(--cream); color:var(--ink); }
             [data-testid="stHeader"] { background:transparent; }
