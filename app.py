@@ -407,6 +407,7 @@ def css():
         .stTabs [data-baseweb="tab-list"] { gap:1.25rem; border-bottom:1px solid var(--line); } .stTabs [data-baseweb="tab"] { padding:0 0 .75rem; font-weight:600; }
         .stTabs [aria-selected="true"] { color:var(--green); }
         .section-title { display:flex; align-items:end; justify-content:space-between; margin:1.25rem 0 .65rem; }
+        .today-section-title { margin-top:.25rem !important; }
         .section-title h2 { margin:0; } .section-hint { color:var(--muted); font-size:.78rem; }
         .goal-card { background:white; border:1px solid var(--line); border-radius:24px; padding:1rem 1.1rem; display:flex; align-items:center; gap:1rem; box-shadow:0 3px 12px #1c3a2710; }
         .goal-card.goal-complete { background:#dff3e8; border-color:#8fd0a8; }
@@ -440,6 +441,7 @@ def css():
         .water-amount { margin:.25rem 0 .65rem; color:#2584ad; font:700 1.35rem 'Space Grotesk'; }
         .water-amount span { color:var(--muted); font:500 .78rem 'DM Sans'; }
         [class*="st-key-water-actions"] [data-testid="stHorizontalBlock"] { flex-wrap:wrap !important; gap:.35rem !important; }
+        [class*="st-key-water-actions"] { margin-bottom:0 !important; }
         [class*="st-key-water-actions"] button { min-height:2.3rem !important; padding:.35rem .55rem !important; font-size:.75rem !important; }
         [class*="st-key-water-actions"] [data-testid="stNumberInput"] input { min-height:2.3rem !important; font-size:16px !important; }
         @media (max-width:600px) { .water-card { grid-template-columns:76px 1fr; gap:.7rem; padding:.8rem; } .water-glass { width:62px; height:102px; } .water-copy h3 { font-size:.95rem; } .water-amount { font-size:1.15rem; } }
@@ -897,7 +899,7 @@ with tab_today:
         if st.button("−", key="water-remove", help="Eemalda viimane sisestatud kogus"):
             change_water(-water_input, TODAY)
             st.rerun()
-    st.markdown(f'<div class="section-title"><h2>Tänane logi</h2><span class="section-hint">{TODAY.strftime("%d. %b")}</span></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-title today-section-title"><h2>Tänane logi</h2><span class="section-hint">{TODAY.strftime("%d. %b")}</span></div>', unsafe_allow_html=True)
     if not today_entries:
         st.info("Sinu päev on tühi. Lisa esimene toit allpool.")
     meal_categories = [("Hommikusöök", "Hommik"), ("Lõuna", "Lõuna"), ("Õhtusöök", "Õhtu"), ("Vahepala", "Snäkk")]
