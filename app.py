@@ -639,6 +639,11 @@ def css():
         .meal-box-item span { min-width:0; overflow-wrap:anywhere; }
         .meal-box-item strong { flex:0 0 auto; white-space:nowrap; font-weight:600; }
         .meal-box-empty { color:#8aa094; font-size:.68rem; line-height:1.25; }
+        [class*="st-key-meal-box-"] { min-height:96px !important; padding:.65rem !important; background:#f4f8f5 !important; border:1px solid #dfe8e1 !important; border-radius:15px !important; }
+        [class*="st-key-meal-box-"] [data-testid="stSelectbox"] { margin-top:.35rem !important; }
+        [class*="st-key-meal-box-"] [data-baseweb="select"] > div { min-height:2rem !important; border-radius:9px !important; font-size:.7rem !important; }
+        [class*="st-key-meal-box-actions-"] [data-testid="stHorizontalBlock"] { gap:.25rem !important; }
+        [class*="st-key-meal-box-actions-"] button { min-width:2.1rem !important; min-height:2.1rem !important; padding:.25rem .4rem !important; border-radius:9px !important; }
         @media (max-width:600px) {
             [class*="st-key-meal-boxes"] [data-testid="stHorizontalBlock"] { flex-wrap:wrap !important; }
             [class*="st-key-meal-boxes"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 calc(50% - .25rem) !important; width:calc(50% - .25rem) !important; min-width:0 !important; }
@@ -682,16 +687,40 @@ with tab_today:
         meal_box_columns = st.columns(4)
         for box_column, (meal_value, meal_label) in zip(meal_box_columns, meal_categories):
             with box_column:
-                box_items = [item for item in displayed_today_entries if item.get("meal") == meal_value]
-                items_html = "".join(
-                    f'<div class="meal-box-item"><span>{item.get("count", 1)}× {item["name"]}</span><strong>{int(item.get("kcal", 0))} kcal</strong></div>'
-                    for item in box_items
-                )
-                if not items_html:
-                    items_html = '<div class="meal-box-empty">Lisa toit siia</div>'
-                st.markdown(f'<div class="meal-box"><div class="meal-box-title"><span>{meal_label}</span><span>{len(box_items)}</span></div>{items_html}</div>', unsafe_allow_html=True)
+                with st.container(key=f"meal-box-{meal_value}", width="stretch"):
+                    box_items = [item for item in displayed_today_entries if item.get("meal") == meal_value]
+                    st.markdown(f'<div class="meal-box-title"><span>{meal_label}</span><span>{len(box_items)}</span></div>', unsafe_allow_html=True)
+                    if not box_items:
+                        st.markdown('<div class="meal-box-empty">Lisa toit siia</div>', unsafe_allow_html=True)
+                    for box_index, item in enumerate(box_items):
+                        st.markdown(f'<div class="meal-box-item"><span>{item.get("count", 1)}× {item["name"]}</span><strong>{int(item.get("kcal", 0))} kcal</strong></div>', unsafe_allow_html=True)
+                        selected_meal = st.selectbox(
+                            "Liiguta kasti",
+                            [value for value, _ in meal_categories],
+                            index=[value for value, _ in meal_categories].index(meal_value),
+                            format_func=lambda value: dict(meal_categories)[value],
+                            key=f"move-meal-{meal_value}-{box_index}-{item['_indices'][0]}",
+                            label_visibility="collapsed",
+                        )
+                        if selected_meal != meal_value:
+                            for index in item["_indices"]:
+                                today_entries[index]["meal"] = selected_meal
+                            save_daily_logs()
+                            st.rerun()
+                        with st.container(key=f"meal-box-actions-{meal_value}-{box_index}-{item['_indices'][0]}", horizontal=True, width="content", gap="small"):
+                            if st.button("+", key=f"box-add-{meal_value}-{box_index}-{item['_indices'][0]}", help="Lisa üks sama toit"):
+                                add_entry(item["_prototype"], meal_value, TODAY)
+                                st.rerun()
+                            if st.button("−", key=f"box-subtract-{meal_value}-{box_index}-{item['_indices'][0]}", help="Eemalda üks kogus"):
+                                remove_entry_group([item["_indices"][-1]], TODAY)
+                                st.rerun()
+                            if st.button("×", key=f"box-remove-{meal_value}-{box_index}-{item['_indices'][0]}", help="Eemalda kogu toit"):
+                                remove_entry_group(item["_indices"], TODAY)
+                                st.rerun()
     for i, item in enumerate(displayed_today_entries):
         is_recipe = item.get("meal") == "Retsept"
+        if not is_recipe:
+            continue
         quantity_label = f'{item["count"]}× ' if item.get("count", 1) > 1 else ""
         meal_label = "Päeva jooksul" if item.get("count", 1) > 1 and item.get("meal") != "Retsept" else item.get("meal", "Toit")
         st.markdown(f'<div class="food-row"><div><div class="pill">{meal_label}</div><div class="food-name">{quantity_label}{item["name"]}</div><div class="food-meta">{item.get("time", "")} · {int(item.get("protein", 0))}g valku · {int(item.get("carbs", 0))}g süsivesikuid</div></div><div class="food-kcal">{int(item["kcal"])} kcal</div></div>', unsafe_allow_html=True)
