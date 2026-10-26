@@ -527,6 +527,13 @@ def css():
             [class*="st-key-food_actions_"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; justify-content:flex-start !important; gap:clamp(.2rem, 2vw, .7rem) !important; }
             [class*="st-key-food_actions_"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:0 1 clamp(2.4rem, 13vw, 3.4rem) !important; width:clamp(2.4rem, 13vw, 3.4rem) !important; min-width:0 !important; padding:0 !important; }
             [class*="st-key-food_actions_"] button { width:100% !important; min-width:0 !important; padding:.35rem .2rem !important; font-size:clamp(.78rem, 3.5vw, 1rem) !important; }
+            [class*="st-key-macro-cards"] { width:100% !important; max-width:100% !important; overflow:hidden !important; }
+            [class*="st-key-macro-cards"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; gap:.35rem !important; width:100% !important; max-width:100% !important; }
+            [class*="st-key-macro-cards"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 0% !important; width:0 !important; min-width:0 !important; padding:0 !important; }
+            [class*="st-key-macro-cards"] .metric-card { min-height:78px !important; padding:.65rem .5rem !important; border-radius:15px !important; overflow:hidden !important; }
+            [class*="st-key-macro-cards"] .metric-label { font-size:.62rem !important; white-space:nowrap !important; overflow:hidden !important; text-overflow:ellipsis !important; }
+            [class*="st-key-macro-cards"] .metric-value { font-size:1.05rem !important; }
+            [class*="st-key-macro-cards"] .metric-note { font-size:.62rem !important; white-space:nowrap !important; }
             [class*="food-actions"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; justify-content:flex-start !important; gap:clamp(.2rem, 2vw, .7rem) !important; }
             [class*="food-actions"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:0 0 clamp(2.4rem, 13vw, 3.4rem) !important; width:clamp(2.4rem, 13vw, 3.4rem) !important; min-width:0 !important; padding:0 !important; }
             [class*="food-actions"] button { width:100% !important; min-width:0 !important; padding:.35rem .2rem !important; font-size:clamp(.78rem, 3.5vw, 1rem) !important; }
@@ -600,12 +607,13 @@ with tab_today:
     st.markdown(f'<div class="goal-card"><div class="goal-ring" style="--percent:{percent}%"><span>{percent}%</span></div><div class="goal-copy"><div class="metric-label">PÄEVA EESMÄRK</div><div class="metric-value">{int(t["kcal"]):,} <span style="font-size:.85rem;color:#000000;font-weight:500">/ {goal:,} kcal</span></div><div class="metric-note">{remaining:,} kcal alles · {len(today_entries)} toidukirjet</div></div></div>', unsafe_allow_html=True)
     st.markdown(f'<div class="streak-card">🔥 <b>{streak_count()} päeva järjest</b> · oled oma logimisega heas rütmis</div>', unsafe_allow_html=True)
     st.write("")
-    c1, c2, c3 = st.columns(3)
-    macro_goal_values = iter((st.session_state.goals["protein"], st.session_state.goals["carbs"], st.session_state.goals["fat"]))
-    for col, label, value, goal_value in [(c1, "Valk", t["protein"], 140), (c2, "Süsivesikud", t["carbs"], 250), (c3, "Rasv", t["fat"], 70)]:
-        with col:
-            goal_value = next(macro_goal_values)
-            st.markdown(f'<div class="metric-card"><div class="metric-label">{label.upper()}</div><div class="metric-value">{int(value)}g</div><div class="metric-note">/{goal_value}g</div></div>', unsafe_allow_html=True)
+    with st.container(key="macro-cards", horizontal=True, width="stretch", gap="small"):
+        c1, c2, c3 = st.columns(3)
+        macro_goal_values = iter((st.session_state.goals["protein"], st.session_state.goals["carbs"], st.session_state.goals["fat"]))
+        for col, label, value, goal_value in [(c1, "Valk", t["protein"], 140), (c2, "Süsivesikud", t["carbs"], 250), (c3, "Rasv", t["fat"], 70)]:
+            with col:
+                goal_value = next(macro_goal_values)
+                st.markdown(f'<div class="metric-card"><div class="metric-label">{label.upper()}</div><div class="metric-value">{int(value)}g</div><div class="metric-note">/{goal_value}g</div></div>', unsafe_allow_html=True)
     st.markdown(f'<div class="section-title"><h2>Tänane logi</h2><span class="section-hint">{TODAY.strftime("%d. %b")}</span></div>', unsafe_allow_html=True)
     if not today_entries:
         st.info("Sinu päev on tühi. Lisa esimene toit allpool.")
