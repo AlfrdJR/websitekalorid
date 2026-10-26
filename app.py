@@ -392,16 +392,14 @@ def css():
         .calendar-macro-ring svg { position:absolute; inset:0; width:100%; height:100%; transform:rotate(-90deg); overflow:visible; }
         .calendar-macro-ring .ring-track, .calendar-macro-ring .ring-progress { fill:none; stroke-width:10; }
         .calendar-macro-ring .ring-track { stroke:var(--line); }
-        .calendar-macro-ring .ring-progress { stroke:var(--ring-color); stroke-linecap:round; stroke-dasharray:100; stroke-dashoffset:calc(100 - var(--progress)); animation:ring-progress-fill .9s cubic-bezier(.22,.8,.28,1) both; }
+        .calendar-macro-ring .ring-progress { stroke:var(--ring-color); stroke-linecap:round; stroke-dasharray:100; stroke-dashoffset:calc(100 - var(--progress)); }
         .calendar-macro-card.macro-complete { background:#e5f4eb; border-color:#b9dfc5; }
         .calendar-macro-card.macro-complete .ring-track { stroke:#bfe5ca; }
         html[data-theme="dark"] .calendar-macro-card.macro-complete { background:#173d2c; border-color:#315b43; }
         html[data-theme="dark"] .calendar-macro-card.macro-complete .ring-track { stroke:#2d6548; }
-        @keyframes ring-progress-fill { from { stroke-dashoffset:100; } to { stroke-dashoffset:calc(100 - var(--progress)); } }
         .calendar-macro-ring span { z-index:1; color:var(--ring-color); font:700 .72rem 'Space Grotesk'; }
         .calendar-macro-label { color:var(--muted); font-size:.66rem; font-weight:800; text-transform:uppercase; letter-spacing:.04em; }
         .calendar-macro-value { margin-top:.15rem; color:var(--ink); font:700 .8rem 'Space Grotesk'; white-space:nowrap; }
-        @media (prefers-reduced-motion: reduce) { .calendar-macro-ring .ring-progress { animation:none !important; } }
         .goal-copy { flex:1; } .goal-copy .metric-value { margin:0; font-size:1.35rem; }
         .add-card { background:#e5f4eb; border-radius:20px; padding:1rem; margin-top:1rem; }
         .add-card-title { font-weight:700; font-size:1rem; } .add-card-sub { font-size:.8rem; color:#547063; margin:.2rem 0 .8rem; }
