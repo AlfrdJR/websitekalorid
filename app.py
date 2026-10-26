@@ -687,6 +687,8 @@ def css():
 
 
 css()
+if st.session_state.pop("close_recipe_editor_once", False):
+    st.markdown('<style>[data-testid="stPopoverBody"] { display:none !important; }</style>', unsafe_allow_html=True)
 st.markdown('<div class="brand-card"><span class="brand-mark">N</span><span>NÕU</span></div>', unsafe_allow_html=True)
 tab_today, tab_add, tab_calendar, tab_recipes, tab_insights = st.tabs(["Täna", "Lisa toit", "Kalender", "Retseptid", "Ülevaade"])
 
@@ -935,6 +937,7 @@ with tab_recipes:
                             normalized_ingredients = [{"name": item["name"], "grams": item["grams"]} for item in edited_ingredients_data]
                             save_custom_recipe({"name": edit_name.strip(), "tag": "", "kcal": int(auto_totals["kcal"]), "protein": int(auto_totals["protein"]), "carbs": int(auto_totals["carbs"]), "fat": int(auto_totals["fat"]), "time": "", "ingredients": edit_ingredients, "ingredients_data": normalized_ingredients})
                             del st.session_state[edit_key]
+                            st.session_state.close_recipe_editor_once = True
                             st.rerun()
                 if st.button("🗑", key=f"delete_recipe_{index}", help="Kustuta retsept"):
                     delete_custom_recipe(recipe["name"])
