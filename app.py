@@ -626,6 +626,10 @@ def css():
         [class*="food-adjust"] button p { color:#287a56 !important; font-family:inherit !important; font-weight:600 !important; text-align:center !important; }
         [class*="food-adjust"] button p::after { content:none !important; }
         [class*="food-adjust"] button:focus, [class*="food-adjust"] button:focus-visible, [class*="food-adjust"] button:active { outline:none !important; box-shadow:none !important; background:#eaf6ed !important; }
+        [class*="st-key-meal-categories-"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; gap:.35rem !important; width:100% !important; }
+        [class*="st-key-meal-categories-"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 0% !important; width:0 !important; min-width:0 !important; padding:0 !important; }
+        [class*="st-key-meal-categories-"] button { width:100% !important; min-width:0 !important; min-height:2.35rem !important; padding:.35rem .2rem !important; border-radius:11px !important; font-size:.72rem !important; }
+        [class*="st-key-meal-categories-"] button[kind="primary"] { background:#e5f4eb !important; color:#287a56 !important; border-color:#b9dfc5 !important; }
         </style>
         """,
         unsafe_allow_html=True,
@@ -660,23 +664,7 @@ with tab_today:
     st.markdown(f'<div class="section-title"><h2>Tänane logi</h2><span class="section-hint">{TODAY.strftime("%d. %b")}</span></div>', unsafe_allow_html=True)
     if not today_entries:
         st.info("Sinu päev on tühi. Lisa esimene toit allpool.")
-    normal_items = [item for item in displayed_today_entries if item.get("meal") != "Retsept"]
-    meal_categories = ["Hommikusöök", "Lõuna", "Õhtusöök", "Vahepala"]
-    meal_labels = {"Hommikusöök": "Hommikusöök", "Lõuna": "Lõuna", "Õhtusöök": "Õhtusöök", "Vahepala": "Snäkid"}
-    for item in normal_items:
-        current_meal = item.get("meal") if item.get("meal") in meal_categories else "Vahepala"
-        selected_meal = st.selectbox(
-            f"{item['name']} kategooria",
-            meal_categories,
-            index=meal_categories.index(current_meal),
-            format_func=lambda meal: meal_labels[meal],
-            key=f"meal_category_{item['_indices'][0]}",
-        )
-        if selected_meal != current_meal:
-            for index in item["_indices"]:
-                today_entries[index]["meal"] = selected_meal
-            save_daily_logs()
-            st.rerun()
+    meal_categories = [("Hommikusöök", "Hommik"), ("Lõuna", "Lõuna"), ("Õhtusöök", "Õhtu"), ("Vahepala", "Snäkk")]
     for i, item in enumerate(displayed_today_entries):
         is_recipe = item.get("meal") == "Retsept"
         quantity_label = f'{item["count"]}× ' if item.get("count", 1) > 1 else ""
@@ -689,6 +677,14 @@ with tab_today:
                     remove_entry_group(item["_indices"], TODAY)
                     st.rerun()
         else:
+            with st.container(key=f"meal-categories-{i}", horizontal=True, width="stretch", gap="small"):
+                for meal_value, meal_label in meal_categories:
+                    if st.button(meal_label, type="primary" if item.get("meal") == meal_value else "secondary", key=f"meal_move_{i}_{meal_value}"):
+                        if item.get("meal") != meal_value:
+                            for index in item["_indices"]:
+                                today_entries[index]["meal"] = meal_value
+                            save_daily_logs()
+                            st.rerun()
             with st.container(key=f"food-actions-{i}", horizontal=True, width="stretch", horizontal_alignment="distribute", gap="small", vertical_alignment="center"):
                 with st.container(key=f"food-adjust-{i}", horizontal=True, width="content", gap="small"):
                     if st.button("+", key=f"add_one_today_{i}", help="Lisa üks sama toit"):
