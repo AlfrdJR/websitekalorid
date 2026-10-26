@@ -640,7 +640,7 @@ def css():
         .meal-box-item-top { display:flex; justify-content:space-between; align-items:flex-start; gap:.35rem; }
         .meal-box-item-top span { min-width:0; overflow-wrap:anywhere; font-weight:650; }
         .meal-box-item-top strong { flex:0 0 auto; white-space:nowrap; color:#287a56; font-size:.68rem; font-weight:800; }
-        .meal-box-macros { display:flex; flex-wrap:wrap; gap:.25rem .4rem; margin-top:.35rem; color:#668072; font-size:.6rem; line-height:1.2; }
+        .meal-box-macros { display:flex; flex-wrap:wrap; gap:.25rem .4rem; margin-top:.35rem; color:#000 !important; font-size:.6rem; line-height:1.2; }
         .meal-box-macros span { white-space:nowrap; }
         .meal-box-empty { padding:.65rem .1rem; color:#8aa094; font-size:.68rem; line-height:1.25; text-align:center; }
         [class*="st-key-meal-box-"] { min-height:96px !important; padding:.75rem !important; background:linear-gradient(180deg,#f4fbf6,#eef7f1) !important; border:1px solid #d5e9da !important; border-radius:18px !important; box-shadow:0 5px 16px #1c3a270c !important; }
@@ -649,7 +649,7 @@ def css():
         [class*="st-key-meal-box-"] [data-baseweb="select"] > div { min-height:2rem !important; border-radius:9px !important; font-size:.7rem !important; background:transparent !important; border:1px solid #d5e9da !important; box-shadow:none !important; }
         [class*="st-key-meal-box-actions-"] { min-height:0 !important; padding:0 !important; background:transparent !important; border:0 !important; border-radius:0 !important; box-shadow:none !important; }
         [class*="st-key-meal-box-actions-"] button { background:transparent !important; border:1px solid #c8dfcf !important; box-shadow:none !important; }
-        [class*="st-key-meal-controls-"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; align-items:center !important; gap:.45rem !important; width:100% !important; }
+        [class*="st-key-meal-controls-"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; align-items:center !important; gap:.45rem !important; width:100% !important; min-height:2.6rem !important; }
         [class*="st-key-meal-controls-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:first-child { flex:0 0 7rem !important; width:7rem !important; min-width:7rem !important; }
         [class*="st-key-meal-controls-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:last-child { flex:1 1 auto !important; width:auto !important; min-width:0 !important; }
         [class*="st-key-meal-controls-"] [data-testid="stSelectbox"] { width:100% !important; }
@@ -659,7 +659,7 @@ def css():
         [class*="st-key-calendar-meal-boxes"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; gap:.45rem !important; width:100% !important; }
         [class*="st-key-calendar-meal-boxes"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 0% !important; width:0 !important; min-width:0 !important; padding:0 !important; }
         [class*="st-key-meal-box-actions-"] [data-testid="stHorizontalBlock"] { gap:.25rem !important; }
-        [class*="st-key-meal-box-actions-"] button { min-width:2.1rem !important; min-height:2.1rem !important; padding:.25rem .4rem !important; border-radius:9px !important; }
+        [class*="st-key-meal-box-actions-"] button { min-width:2.1rem !important; min-height:2.6rem !important; height:2.6rem !important; padding:.25rem .4rem !important; border-radius:9px !important; }
         @media (max-width:600px) {
             [class*="st-key-meal-boxes"] [data-testid="stHorizontalBlock"] { flex-wrap:wrap !important; }
             [class*="st-key-meal-boxes"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 calc(50% - .25rem) !important; width:calc(50% - .25rem) !important; min-width:0 !important; }
