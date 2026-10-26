@@ -535,7 +535,8 @@ def css():
         [class*="food-adjust"] button:hover { background:#eaf6ed !important; color:#173f2d !important; }
         [class*="food-remove"] button:hover { background:#fff0f0 !important; color:#8d3f3f !important; }
         [class*="food-adjust"] button:focus-visible, [class*="food-remove"] button:focus-visible { outline:2px solid #76b58c !important; outline-offset:-2px; }
-        [class*="product-actions"], [class*="recipe-actions"] { display:flex; width:100%; }
+        [class*="product-actions"] { display:flex; width:100%; }
+        [class*="recipe-actions"] { display:block; width:100%; }
         [class*="product-actions"] button, [class*="recipe-actions"] button { min-height:2.25rem !important; border-radius:11px !important; }
         [class*="product-actions"] [data-testid="stHorizontalBlock"], [class*="recipe-actions"] [data-testid="stHorizontalBlock"] { width:100% !important; }
         [class*="st-key-remove_today_"] button, [class*="st-key-remove_one_today_"] button,
@@ -1195,7 +1196,7 @@ with tab_recipes:
                     st.markdown(f'<div class="recipe-read-row"><span>{ingredient["name"]}</span><strong>{ingredient["grams"]} g</strong></div>', unsafe_allow_html=True)
             else:
                 st.write("")
-            with st.container(key=f"recipe-actions-{recipe_token}", horizontal=True, width="stretch", horizontal_alignment="distribute", gap="small", vertical_alignment="center"):
+            with st.container(key=f"recipe-actions-{recipe_token}", width="stretch"):
                 if st.button("✎", key=f"edit_recipe_{recipe_token}", help="Muuda retsepti"):
                     st.session_state.active_recipe_editor = recipe_token
                     st.rerun()
