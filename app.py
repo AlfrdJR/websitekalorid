@@ -470,6 +470,12 @@ def css():
         html[data-theme="dark"] .protein-table tr:first-child td { background:#1b3326; }
         html[data-theme="dark"] .protein-table tbody tr:nth-child(even) td { background:#18221d; }
         @media (max-width:600px) { .protein-table { font-size:.72rem; } .protein-table th, .protein-table td { padding:.65rem .55rem; } }
+        .protein-top-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.65rem; }
+        .protein-top-card { min-width:0; padding:.9rem; background:var(--surface); border:1px solid var(--line); border-radius:18px; box-shadow:0 3px 12px #1c3a2709; }
+        .protein-top-label { color:var(--muted); font-size:.62rem; font-weight:800; text-transform:uppercase; letter-spacing:.06em; }
+        .protein-top-value { margin:.35rem 0 .15rem; color:var(--ink); font:700 1.35rem 'Space Grotesk'; }
+        .protein-top-note { color:var(--muted); font-size:.75rem; }
+        @media (max-width:600px) { .protein-top-grid { grid-template-columns:1fr; gap:.5rem; } .protein-top-card { padding:.75rem .85rem; } .protein-top-value { font-size:1.15rem; } }
         .week-bars { display:flex; align-items:end; justify-content:space-between; gap:.45rem; height:145px; padding:.8rem .35rem .2rem; }
         .week-day { display:flex; flex-direction:column; align-items:center; gap:.35rem; flex:1; height:100%; justify-content:end; color:var(--muted); font-size:.68rem; }
         .week-track { height:105px; width:100%; max-width:28px; background:#edf3ee; border-radius:9px; display:flex; align-items:end; overflow:hidden; }
@@ -1244,10 +1250,10 @@ with tab_insights:
     top_protein_days = protein_days[:3]
     st.markdown("### Laksud sisse · top 3")
     if top_protein_days:
-        protein_rows = []
-        for parsed_day, day_totals in top_protein_days:
-            protein_rows.append(f'<tr><td>{parsed_day.strftime("%d.%m.%Y")}</td><td class="protein-total">{int(day_totals["protein"])} g</td></tr>')
-        st.markdown(f'<div class="protein-table-wrap"><table class="protein-table"><thead><tr><th>Kuupäev</th><th>Valgu kogus</th></tr></thead><tbody>{"".join(protein_rows)}</tbody></table></div>', unsafe_allow_html=True)
+        protein_cards = []
+        for place, (parsed_day, day_totals) in enumerate(top_protein_days, start=1):
+            protein_cards.append(f'<div class="protein-top-card"><div class="protein-top-label">{place}. KOHT · VALK</div><div class="protein-top-value">{int(day_totals["protein"])} g</div><div class="protein-top-note">{parsed_day.strftime("%d.%m.%Y")} · logitud päeval</div></div>')
+        st.markdown(f'<div class="protein-top-grid">{"".join(protein_cards)}</div>', unsafe_allow_html=True)
     else:
         st.info("Päevade andmed ilmuvad siia pärast toitude logimist.")
     st.markdown("### Päevased eesmärgid")
