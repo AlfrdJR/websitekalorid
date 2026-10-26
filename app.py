@@ -307,6 +307,13 @@ def remove_entry_group(indices, day=None):
     save_daily_logs()
 
 
+def entry_grams(entry):
+    if entry.get("grams") is not None:
+        return float(entry["grams"])
+    product = next((product for product in all_products() if product.get("name") == entry.get("name")), None)
+    return product_base_grams(product) if product else 0.0
+
+
 def grouped_log_entries(entries):
     grouped = []
     grouped_by_name = {}
@@ -318,10 +325,11 @@ def grouped_log_entries(entries):
         name_key = entry.get("name", "").strip().lower()
         if name_key not in grouped_by_name:
             grouped_by_name[name_key] = len(grouped)
-            grouped.append({**entry, "count": 1, "_indices": [index], "_prototype": {**entry}})
+            grouped.append({**entry, "count": 1, "grams": entry_grams(entry), "_indices": [index], "_prototype": {**entry}})
         else:
             item = grouped[grouped_by_name[name_key]]
             item["count"] += 1
+            item["grams"] += entry_grams(entry)
             item["_indices"].append(index)
             for key in ("kcal", "protein", "carbs", "fat"):
                 item[key] = float(item.get(key, 0)) + float(entry.get(key, 0))
@@ -790,7 +798,8 @@ with tab_today:
                         st.markdown('<div class="meal-box-empty">Lisa toit siia</div>', unsafe_allow_html=True)
                     for box_index, item in enumerate(box_items):
                         item_macros = f'<div class="meal-box-macros"><span>Valk {int(item.get("protein", 0))}g</span><span>Süsivesikud {int(item.get("carbs", 0))}g</span><span>Rasv {int(item.get("fat", 0))}g</span></div>'
-                        st.markdown(f'<div class="meal-box-item"><div class="meal-box-item-top"><span>{item.get("count", 1)}× {item["name"]}</span><strong>{int(item.get("kcal", 0))} kcal</strong></div>{item_macros}</div>', unsafe_allow_html=True)
+                        item_quantity = f'{int(item["grams"])} g' if item.get("grams", 0) else f'{item.get("count", 1)}×'
+                        st.markdown(f'<div class="meal-box-item"><div class="meal-box-item-top"><span>{item_quantity} {item["name"]}</span><strong>{int(item.get("kcal", 0))} kcal</strong></div>{item_macros}</div>', unsafe_allow_html=True)
                         with st.container(key=f"meal-controls-{meal_value}-{box_index}-{item['_indices'][0]}", horizontal=True, width="stretch", gap="small"):
                             with st.container(key=f"meal-box-actions-{meal_value}-{box_index}-{item['_indices'][0]}", horizontal=True, width="content", gap="small"):
                                 if st.button("+", key=f"box-add-{meal_value}-{box_index}-{item['_indices'][0]}", help="Lisa üks sama toit"):
