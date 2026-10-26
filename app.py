@@ -476,10 +476,10 @@ def css():
         .protein-top-value { margin:.35rem 0 .15rem; color:var(--ink); font:700 1.35rem 'Space Grotesk'; }
         .protein-top-note { color:var(--muted); font-size:.75rem; }
         .protein-best-card { display:grid; grid-template-columns:1fr 1fr; align-items:center; padding:1.1rem 1.25rem; }
-        .protein-best-date { color:var(--ink); font:700 1.05rem 'Space Grotesk'; }
-        .protein-best-amount { padding-left:1.25rem; color:var(--ink); font:700 1.45rem 'Space Grotesk'; }
+        .protein-best-date, .protein-best-amount { color:var(--ink); font:700 1.25rem 'Space Grotesk'; }
+        .protein-best-amount { padding-left:1.25rem; }
         .protein-top-grid.single { grid-template-columns:minmax(0,1fr); }
-        @media (max-width:600px) { .protein-top-grid { grid-template-columns:1fr; gap:.5rem; } .protein-top-card { padding:.75rem .85rem; } .protein-top-value { font-size:1.15rem; } .protein-best-card { padding:1rem; } .protein-best-date { font-size:.95rem; } .protein-best-amount { padding-left:1rem; font-size:1.3rem; } }
+        @media (max-width:600px) { .protein-top-grid { grid-template-columns:1fr; gap:.5rem; } .protein-top-card { padding:.75rem .85rem; } .protein-top-value { font-size:1.15rem; } .protein-best-card { padding:1rem; } .protein-best-date, .protein-best-amount { font-size:1rem; } .protein-best-amount { padding-left:1rem; } }
         .week-bars { display:flex; align-items:end; justify-content:space-between; gap:.45rem; height:145px; padding:.8rem .35rem .2rem; }
         .week-day { display:flex; flex-direction:column; align-items:center; gap:.35rem; flex:1; height:100%; justify-content:end; color:var(--muted); font-size:.68rem; }
         .week-track { height:105px; width:100%; max-width:28px; background:#edf3ee; border-radius:9px; display:flex; align-items:end; overflow:hidden; }
