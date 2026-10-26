@@ -357,6 +357,7 @@ def css():
         .recipe-read-row strong { color:var(--muted); white-space:nowrap; font-weight:600; }
         .metric-label, .metric-note, .food-meta, .section-hint, .table-note, .add-card-sub, .week-day, .builder-weight, .recipe-read-row strong,
         .stCaption, [data-testid="stCaptionContainer"], .stMarkdown span[style*="718078"], .stMarkdown span[style*="78857d"] { color:#000000 !important; }
+        input::placeholder, textarea::placeholder { color:#000000 !important; opacity:1 !important; }
         .recipe-edit-row input { border-radius:12px !important; }
         .table-note { color:var(--muted); font-size:.78rem; margin:.2rem 0 .6rem; }
         .recipe-macros { display:flex; flex-wrap:wrap; gap:.4rem; margin:.65rem 0 .8rem; }
@@ -470,7 +471,7 @@ def css():
             [class*="food-adjust"] button:hover { background:#214b35 !important; color:#b7f3ca !important; }
             [class*="food-remove"] button:hover { background:#4a2929 !important; color:#ffb1b1 !important; }
             input, textarea, [data-baseweb="select"] > div, [data-testid="stNumberInput"] button { background:var(--input) !important; color:var(--ink) !important; border-color:var(--line) !important; }
-            input::placeholder, textarea::placeholder { color:#8da097 !important; }
+            input::placeholder, textarea::placeholder { color:#aabbb1 !important; opacity:1 !important; }
             [data-baseweb="popover"] [role="listbox"], [data-baseweb="menu"] { background:var(--surface) !important; color:var(--ink) !important; }
             [data-baseweb="popover"] [role="option"]:hover, [data-baseweb="menu"] [role="option"]:hover { background:#294333 !important; }
             .stTabs [data-baseweb="tab-list"] { border-bottom-color:var(--line); }
