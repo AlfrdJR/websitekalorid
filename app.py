@@ -802,7 +802,7 @@ def css():
         [class*="st-key-product-actions-"] button { width:100% !important; min-width:0 !important; }
         /* Give every searched food a single connected card. */
         div[data-testid="stElementContainer"]:has(.product-card-meta) {
-            margin-top:.9rem !important;
+            margin-top:.35rem !important;
             margin-bottom:0 !important;
             padding:1rem 1rem .35rem !important;
             background:var(--surface) !important;
@@ -813,7 +813,7 @@ def css():
         }
         [class*="st-key-product-actions-"] {
             margin-top:-.9rem !important;
-            margin-bottom:.9rem !important;
+            margin-bottom:.35rem !important;
             padding:.1rem 1rem .9rem !important;
             background:var(--surface) !important;
             border:1px solid var(--line) !important;
