@@ -1165,12 +1165,6 @@ with tab_recipes:
     recipe_query = st.text_input("Otsi retsepti", placeholder="nt kana, hommikusöök…", key="recipe_query")
     visible_recipes = [r for r in all_recipes() if not recipe_query or recipe_query.lower() in (r.get("name", "") + " " + r.get("ingredients", "")).lower()]
     for index, recipe in enumerate(visible_recipes):
-        recipe_meal = st.selectbox(
-            "Toidukord",
-            [value for value, _ in meal_categories],
-            format_func=lambda value: dict(meal_categories)[value],
-            key=f"recipe_meal_{index}",
-        )
         with st.expander(f'{recipe["name"]} · {recipe["kcal"]} kcal', expanded=False):
             st.markdown(f'<div class="recipe-macros"><span class="recipe-macro">{int(recipe["kcal"])} kcal</span><span class="recipe-macro">Valk {int(recipe["protein"])} g</span><span class="recipe-macro">Süsivesikud {int(recipe["carbs"])} g</span><span class="recipe-macro">Rasv {int(recipe["fat"])} g</span></div>', unsafe_allow_html=True)
             recipe_ingredients = recipe.get("ingredients_data", [])
@@ -1234,7 +1228,7 @@ with tab_recipes:
                     delete_custom_recipe(recipe["name"])
                     st.rerun()
             if st.button("Lisa tänasesse", key=f"recipe_add_{index}", use_container_width=True):
-                add_entry(recipe, recipe_meal, TODAY, entry_type="recipe")
+                add_entry(recipe, "Vahepala", TODAY, entry_type="recipe")
                 st.rerun()
 
     st.markdown("### Lisa uus retsept")
