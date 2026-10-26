@@ -863,17 +863,20 @@ with tab_add:
         for idx, product in enumerate(visible_products):
             st.markdown(f'**{product["name"]}**  \n<span class="product-card-meta" style="color:#000000;font-size:.8rem">{product["brand"]} · {product["portion"]} · {product["kcal"]} kcal</span>  \n<span class="product-card-macros" style="color:#000000;font-size:.75rem;font-weight:600">Valk {product["protein"]}g · Süsivesikud {product["carbs"]}g · Rasv {product["fat"]}g</span>', unsafe_allow_html=True)
             with st.container(key=f"product-actions-{idx}", horizontal=True, width="stretch", horizontal_alignment="distribute", gap="small", vertical_alignment="center"):
+                weight_key = f"add_weight_{idx}_{product['name']}_{st.session_state.get('add_weight_version', 0)}"
                 product_weight = st.number_input(
                     "Kaal (g)",
-                    min_value=1.0,
-                    value=float(product_base_grams(product)),
+                    min_value=0.0,
+                    value=0.0,
                     step=1.0,
                     format="%.0f",
-                    key=f"add_weight_{idx}_{product['name']}",
+                    key=weight_key,
                     label_visibility="collapsed",
                 )
                 if st.button("Lisa", type="primary", key=f"add_{idx}_{product['name']}"):
-                    add_entry(product_for_grams(product, product_weight), day=TODAY)
+                    if product_weight > 0:
+                        add_entry(product_for_grams(product, product_weight), day=TODAY)
+                    st.session_state.add_weight_version = st.session_state.get('add_weight_version', 0) + 1
                     st.rerun()
                 if st.button("×", key=f"delete_product_{idx}_{product['name']}", help="Eemalda see toode otsingust"):
                     hide_product(product["name"])
