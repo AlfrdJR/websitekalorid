@@ -215,6 +215,18 @@ def product_base_grams(product):
     return numbers[-1] if numbers else 100.0
 
 
+def product_for_grams(product, grams):
+    """Return a product scaled from its catalogue portion to the entered grams."""
+    base_grams = product_base_grams(product)
+    factor = float(grams) / base_grams if base_grams else 1.0
+    scaled = {**product}
+    for key in ("kcal", "protein", "carbs", "fat"):
+        scaled[key] = round(float(product.get(key, 0)) * factor, 2)
+    scaled["portion"] = f"{int(grams)} g"
+    scaled["grams"] = float(grams)
+    return scaled
+
+
 def calculate_recipe_ingredients(ingredients):
     products = {product["name"]: product for product in all_products()}
     totals = {"kcal": 0.0, "protein": 0.0, "carbs": 0.0, "fat": 0.0}
@@ -684,6 +696,17 @@ def css():
             [class*="st-key-calendar-meal-boxes"] [data-testid="stHorizontalBlock"] { flex-wrap:wrap !important; }
             [class*="st-key-calendar-meal-boxes"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 calc(50% - .25rem) !important; width:calc(50% - .25rem) !important; min-width:0 !important; }
         }
+        /* Search results: exact weight first, then add, then remove. */
+        [class*="st-key-product-actions-"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; align-items:center !important; gap:.45rem !important; width:100% !important; }
+        [class*="st-key-product-actions-"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { min-width:0 !important; padding:0 !important; }
+        [class*="st-key-product-actions-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(1) { flex:1 1 7rem !important; width:auto !important; }
+        [class*="st-key-product-actions-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { flex:0 0 4.2rem !important; width:4.2rem !important; }
+        [class*="st-key-product-actions-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 2.5rem !important; width:2.5rem !important; }
+        [class*="st-key-product-actions-"] [data-testid="stNumberInput"] { width:100% !important; }
+        [class*="st-key-product-actions-"] [data-testid="stNumberInput"] input { min-height:46px !important; padding-left:.7rem !important; padding-right:.35rem !important; font-size:16px !important; }
+        [class*="st-key-product-actions-"] [data-testid="stNumberInput"] [data-testid="stNumberInput-StepDown"],
+        [class*="st-key-product-actions-"] [data-testid="stNumberInput"] [data-testid="stNumberInput-StepUp"] { display:none !important; }
+        [class*="st-key-product-actions-"] button { width:100% !important; min-width:0 !important; }
         </style>
         """,
         unsafe_allow_html=True,
@@ -809,8 +832,17 @@ with tab_add:
         for idx, product in enumerate(visible_products):
             st.markdown(f'**{product["name"]}**  \n<span style="color:#000000;font-size:.8rem">{product["brand"]} · {product["portion"]} · {product["kcal"]} kcal</span>  \n<span style="color:#000000;font-size:.75rem;font-weight:600">Valk {product["protein"]}g · Süsivesikud {product["carbs"]}g · Rasv {product["fat"]}g</span>', unsafe_allow_html=True)
             with st.container(key=f"product-actions-{idx}", horizontal=True, width="stretch", horizontal_alignment="distribute", gap="small", vertical_alignment="center"):
+                product_weight = st.number_input(
+                    "Kaal (g)",
+                    min_value=1.0,
+                    value=float(product_base_grams(product)),
+                    step=1.0,
+                    format="%.0f",
+                    key=f"add_weight_{idx}_{product['name']}",
+                    label_visibility="collapsed",
+                )
                 if st.button("Lisa", type="primary", key=f"add_{idx}_{product['name']}"):
-                    add_entry(product, day=TODAY)
+                    add_entry(product_for_grams(product, product_weight), day=TODAY)
                     st.rerun()
                 if st.button("×", key=f"delete_product_{idx}_{product['name']}", help="Eemalda see toode otsingust"):
                     hide_product(product["name"])
