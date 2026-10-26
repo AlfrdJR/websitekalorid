@@ -589,12 +589,13 @@ def css():
             [class*="st-key-food_actions_"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:0 1 clamp(2.4rem, 13vw, 3.4rem) !important; width:clamp(2.4rem, 13vw, 3.4rem) !important; min-width:0 !important; padding:0 !important; }
             [class*="st-key-food_actions_"] button { width:100% !important; min-width:0 !important; padding:.35rem .2rem !important; font-size:clamp(.78rem, 3.5vw, 1rem) !important; }
             [class*="st-key-macro-cards"] { width:100% !important; max-width:100% !important; overflow:hidden !important; }
-            [class*="st-key-macro-cards"] [data-testid="stHorizontalBlock"] { flex-wrap:wrap !important; gap:.55rem !important; width:100% !important; max-width:100% !important; }
-            [class*="st-key-macro-cards"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 100% !important; width:100% !important; min-width:100% !important; padding:0 !important; overflow:hidden !important; }
-            [class*="st-key-macro-cards"] .metric-card { box-sizing:border-box !important; width:100% !important; min-height:90px !important; padding:.8rem clamp(.55rem, 2.5vw, .75rem) !important; border-radius:15px !important; overflow:hidden !important; }
-            [class*="st-key-macro-cards"] .metric-label { font-size:clamp(.72rem, 3.2vw, .9rem) !important; line-height:1.1 !important; white-space:normal !important; overflow-wrap:anywhere !important; }
-            [class*="st-key-macro-cards"] .metric-value { font-size:clamp(1.25rem, 6vw, 1.5rem) !important; white-space:nowrap !important; }
-            [class*="st-key-macro-cards"] .macro-goal { font-size:clamp(.82rem, 3.8vw, 1rem) !important; }
+            [class*="st-key-macro-cards"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; gap:.35rem !important; width:100% !important; max-width:100% !important; }
+            [class*="st-key-macro-cards"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 0% !important; width:0 !important; min-width:0 !important; padding:0 !important; overflow:hidden !important; }
+            [class*="st-key-macro-cards"] .calendar-macro-card { width:100% !important; min-height:150px !important; padding:.65rem .2rem !important; }
+            [class*="st-key-macro-cards"] .calendar-macro-ring { width:52px !important; height:52px !important; }
+            [class*="st-key-macro-cards"] .calendar-macro-ring::after { width:37px !important; height:37px !important; }
+            [class*="st-key-macro-cards"] .calendar-macro-label { font-size:.58rem !important; white-space:nowrap !important; overflow:hidden !important; text-overflow:ellipsis !important; }
+            [class*="st-key-macro-cards"] .calendar-macro-value { font-size:.68rem !important; }
             [class*="food-actions"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; justify-content:flex-start !important; gap:clamp(.2rem, 2vw, .7rem) !important; }
             [class*="food-actions"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:0 0 clamp(2.4rem, 13vw, 3.4rem) !important; width:clamp(2.4rem, 13vw, 3.4rem) !important; min-width:0 !important; padding:0 !important; }
             [class*="food-actions"] button { width:100% !important; min-width:0 !important; padding:.35rem .2rem !important; font-size:clamp(.78rem, 3.5vw, 1rem) !important; }
@@ -792,8 +793,8 @@ with tab_today:
         for col, label, value, goal_value in [(c1, "Valk", t["protein"], 140), (c2, "Süsivesikud", t["carbs"], 250), (c3, "Rasv", t["fat"], 70)]:
             with col:
                 goal_value = next(macro_goal_values)
-                macro_class = "metric-card macro-complete" if value >= goal_value else "metric-card"
-                st.markdown(f'<div class="{macro_class}"><div class="metric-label">{label.upper()}</div><div class="metric-value macro-value"><span>{int(value)}g</span><span class="macro-goal">/{goal_value}g</span></div></div>', unsafe_allow_html=True)
+                macro_percent = min(100, int(float(value) / goal_value * 100)) if goal_value else 0
+                st.markdown(f'<div class="calendar-macro-card"><div class="calendar-macro-label">{label}</div><div class="calendar-macro-ring" style="--percent:{macro_percent}%;--ring-color:#287a56"><span>{macro_percent}%</span></div><div class="calendar-macro-value">{int(value)}g / {int(goal_value)}g</div></div>', unsafe_allow_html=True)
     st.markdown(f'<div class="section-title"><h2>Tänane logi</h2><span class="section-hint">{TODAY.strftime("%d. %b")}</span></div>', unsafe_allow_html=True)
     if not today_entries:
         st.info("Sinu päev on tühi. Lisa esimene toit allpool.")
