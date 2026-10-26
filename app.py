@@ -317,7 +317,7 @@ def css():
     st.markdown(
         """
         <style>
-        :root { --ink:#17231d; --muted:#68776e; --mint:#dff3e8; --green:#217a52; --cream:#ffffff; --line:#dfe8e1; --surface:#ffffff; --surface-soft:#eef7f1; --input:#ffffff; --shadow:#1c3a2714; }
+        :root { --ink:#17231d; --muted:#000000; --mint:#dff3e8; --green:#217a52; --cream:#ffffff; --line:#dfe8e1; --surface:#ffffff; --surface-soft:#eef7f1; --input:#ffffff; --shadow:#1c3a2714; }
         .stApp { background:var(--cream); color:var(--ink); font-family:'DM Sans',sans-serif; }
         [data-testid="stHeader"] { background:transparent; }
         .block-container { max-width:720px; padding:1.5rem 1rem 5rem; }
@@ -355,6 +355,8 @@ def css():
         .ingredient-header { display:grid; grid-template-columns:4fr 1.5fr .8fr; gap:.5rem; padding:.35rem .6rem; color:var(--muted); text-transform:uppercase; font-size:.68rem; font-weight:700; letter-spacing:.08em; border-bottom:1px solid var(--line); }
         .recipe-read-row { display:grid; grid-template-columns:minmax(0, 1fr) auto; align-items:center; gap:.75rem; padding:.7rem .6rem; border-bottom:1px solid var(--line); color:var(--ink); }
         .recipe-read-row strong { color:var(--muted); white-space:nowrap; font-weight:600; }
+        .metric-label, .metric-note, .food-meta, .section-hint, .table-note, .add-card-sub, .week-day, .builder-weight, .recipe-read-row strong,
+        .stCaption, [data-testid="stCaptionContainer"], .stMarkdown span[style*="718078"], .stMarkdown span[style*="78857d"] { color:#000000 !important; }
         .recipe-edit-row input { border-radius:12px !important; }
         .table-note { color:var(--muted); font-size:.78rem; margin:.2rem 0 .6rem; }
         .recipe-macros { display:flex; flex-wrap:wrap; gap:.4rem; margin:.65rem 0 .8rem; }
@@ -447,6 +449,8 @@ def css():
             .pill { background:#214b35; color:#9ae6b7; }
             .add-card { background:#173d2c; }
             .add-card-sub, .table-note, .section-hint, .metric-label, .metric-note, .food-meta, .week-day { color:var(--muted); }
+            .metric-label, .metric-note, .food-meta, .section-hint, .table-note, .add-card-sub, .week-day, .builder-weight, .recipe-read-row strong,
+            .stCaption, [data-testid="stCaptionContainer"], .stMarkdown span[style*="718078"], .stMarkdown span[style*="78857d"] { color:var(--muted) !important; }
             .streak-card { background:#3b301d; border-color:#665027; color:#f1ca77; }
             .recipe-macro { background:#1d3a29; border-color:#2c5a3e; color:#8ee0ac; }
             .builder-product, .builder-weight { background:var(--input) !important; color:var(--ink) !important; }
