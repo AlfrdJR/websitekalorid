@@ -416,6 +416,7 @@ def css():
         .goal-ring:after { content:''; width:66px; height:66px; border-radius:50%; background:white; position:absolute; }
         .goal-ring span { z-index:1; font:700 1rem 'Space Grotesk'; color:#287a56; }
         .calendar-macro-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.55rem; margin:0; }
+        .today-macro-grid { margin-bottom:2.5rem; }
         .calendar-macro-card { min-width:0; padding:.8rem .45rem; text-align:center; background:var(--surface); border:1px solid var(--line); border-radius:18px; }
         .calendar-macro-ring { width:58px; height:58px; margin:.35rem auto .5rem; display:grid; place-items:center; position:relative; }
         .calendar-macro-ring svg { position:absolute; inset:0; width:100%; height:100%; transform:rotate(-90deg); overflow:visible; }
@@ -874,7 +875,7 @@ with tab_today:
         macro_percent = min(100, int(float(macro_value) / macro_goal * 100)) if macro_goal else 0
         macro_card_class = "calendar-macro-card macro-complete" if macro_percent >= 100 else "calendar-macro-card"
         today_macro_cards.append(f'<div class="{macro_card_class}"><div class="calendar-macro-label">{macro_label}</div><div class="calendar-macro-ring" style="--progress:{macro_percent};--ring-color:{macro_color}"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="ring-track" cx="50" cy="50" r="40"></circle><circle class="ring-progress" cx="50" cy="50" r="40" pathLength="100"></circle></svg><span>{macro_percent}%</span></div><div class="calendar-macro-value">{int(macro_value)}g / {int(macro_goal)}g</div></div>')
-    st.markdown(f'<div class="calendar-macro-grid">{"".join(today_macro_cards)}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="calendar-macro-grid today-macro-grid">{"".join(today_macro_cards)}</div>', unsafe_allow_html=True)
     water_ml = water_total(TODAY)
     water_percent = min(100, int(water_ml / 3000 * 100))
     water_over_goal = max(0, water_ml - 3000)
