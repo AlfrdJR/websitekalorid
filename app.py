@@ -397,6 +397,9 @@ def css():
         [class*="st-key-remove_calendar_"] button::after, [class*="st-key-remove_recipe_row_"] button::after,
         [class*="st-key-delete_recipe_"] button::after, [class*="st-key-remove_recipe_ingredient_"] button::after { content:"X"; color:#b45d5d; font-size:1rem; }
         [class*="st-key-remove_one_today_"] button::after { content:"-"; color:#287a56; font-size:1rem; }
+        [class*="st-key-remove_one_today_"] button::after { content:none !important; }
+        [class*="st-key-remove_one_today_"] button p { font-size:0 !important; color:transparent !important; }
+        [class*="st-key-remove_one_today_"] button p::after { content:"−"; color:#287a56 !important; font-size:1.35rem !important; }
         [class*="st-key-add_recipe_row_"] button { font-size:0 !important; color:transparent !important; }
         [class*="st-key-add_recipe_row_"] button::after { content:"+ Lisa toode"; color:#287a56; font-size:.82rem; }
         [class*="food-remove"] button { font-size:0 !important; color:transparent !important; }
