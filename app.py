@@ -1016,7 +1016,8 @@ with tab_today:
                                 today_entries[index]["meal"] = selected_meal
                             save_daily_logs()
                             st.rerun()
-    for i, item in enumerate(displayed_today_entries):
+    # Meal boxes above are the single source of truth for today's food log.
+    for i, item in enumerate([]):
         is_recipe = item.get("meal") == "Retsept" or item.get("entry_type") == "recipe"
         if not is_recipe:
             continue
