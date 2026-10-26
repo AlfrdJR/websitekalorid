@@ -389,10 +389,13 @@ def css():
         .calendar-macro-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.55rem; margin:.7rem 0 1.1rem; }
         .calendar-macro-card { min-width:0; padding:.8rem .45rem; text-align:center; background:var(--surface); border:1px solid var(--line); border-radius:18px; }
         .calendar-macro-ring { width:58px; height:58px; margin:.35rem auto .5rem; border-radius:50%; display:grid; place-items:center; position:relative; background:conic-gradient(var(--ring-color) var(--percent), var(--line) 0); }
+        @keyframes macro-ring-fill { from { background:conic-gradient(var(--ring-color) 0%, var(--line) 0); } to { background:conic-gradient(var(--ring-color) var(--percent), var(--line) 0); } }
+        .calendar-macro-ring { animation:macro-ring-fill .85s cubic-bezier(.22,.8,.28,1) both; }
         .calendar-macro-ring::after { content:''; position:absolute; width:42px; height:42px; border-radius:50%; background:var(--surface); }
         .calendar-macro-ring span { z-index:1; color:var(--ring-color); font:700 .72rem 'Space Grotesk'; }
         .calendar-macro-label { color:var(--muted); font-size:.66rem; font-weight:800; text-transform:uppercase; letter-spacing:.04em; }
         .calendar-macro-value { margin-top:.15rem; color:var(--ink); font:700 .8rem 'Space Grotesk'; white-space:nowrap; }
+        @media (prefers-reduced-motion: reduce) { .calendar-macro-ring { animation:none !important; } }
         .goal-copy { flex:1; } .goal-copy .metric-value { margin:0; font-size:1.35rem; }
         .add-card { background:#e5f4eb; border-radius:20px; padding:1rem; margin-top:1rem; }
         .add-card-title { font-weight:700; font-size:1rem; } .add-card-sub { font-size:.8rem; color:#547063; margin:.2rem 0 .8rem; }
