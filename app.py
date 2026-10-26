@@ -885,11 +885,11 @@ st.markdown(
     [class*="st-key-recipe-builder-row-"] .builder-product,
     [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] input,
     [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button { font-family:'DM Sans',sans-serif !important; }
-    [class*="st-key-recipe-builder-row-"] .builder-product { font-size:.9rem !important; }
-    [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] input { min-height:46px !important; height:46px !important; border:0 !important; border-radius:0 !important; background:transparent !important; color:var(--ink) !important; text-align:right !important; font-size:.9rem !important; font-weight:600 !important; }
+    [class*="st-key-recipe-builder-row-"] .builder-product { font-size:1.05rem !important; }
+    [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] input { min-height:46px !important; height:46px !important; border:0 !important; border-radius:0 !important; background:transparent !important; color:var(--ink) !important; text-align:right !important; font-size:1.05rem !important; font-weight:700 !important; }
     [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button { width:100% !important; min-height:32px !important; height:32px !important; border-radius:8px !important; border:0 !important; background:transparent !important; color:#b45d5d !important; font-size:0 !important; }
     [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button p::after { font-family:'DM Sans',sans-serif !important; font-weight:500 !important; }
-    .ingredient-header { font-family:'DM Sans',sans-serif !important; }
+    .ingredient-header { font-family:'DM Sans',sans-serif !important; font-size:.78rem !important; font-weight:800 !important; color:var(--ink) !important; }
     [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button p { font-size:0 !important; }
     [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button p::after { content:"×"; font-size:1.25rem !important; line-height:1 !important; }
     [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button:hover { background:#fff0f0 !important; }
