@@ -331,6 +331,7 @@ def css():
         .hero-sub { color:#c4e4d1; margin-top:.3rem; font-size:.88rem; }
         .metric-card { background:white; border:1px solid var(--line); border-radius:20px; padding:1rem; min-height:98px; box-shadow:0 3px 12px #1c3a2710; }
         .metric-label { color:var(--muted); font-size:.76rem; font-weight:600; } .metric-value { font:700 1.5rem 'Space Grotesk'; margin-top:.35rem; }
+        .macro-value { display:flex; align-items:baseline; gap:.25rem; white-space:nowrap; } .macro-goal { color:var(--muted); font-size:.72em; font-weight:500; }
         .metric-note { color:var(--muted); font-size:.72rem; margin-top:.15rem; }
         .progress { height:9px; background:#e7eee9; border-radius:99px; overflow:hidden; margin-top:.7rem; } .progress > div { height:100%; background:#287a56; border-radius:99px; }
         .food-row { display:flex; justify-content:space-between; align-items:center; padding:.95rem 1rem; background:white; border-bottom:1px solid var(--line); }
@@ -615,7 +616,7 @@ with tab_today:
         for col, label, value, goal_value in [(c1, "Valk", t["protein"], 140), (c2, "Süsivesikud", t["carbs"], 250), (c3, "Rasv", t["fat"], 70)]:
             with col:
                 goal_value = next(macro_goal_values)
-                st.markdown(f'<div class="metric-card"><div class="metric-label">{label.upper()}</div><div class="metric-value">{int(value)}g</div><div class="metric-note">/{goal_value}g</div></div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="metric-card"><div class="metric-label">{label.upper()}</div><div class="metric-value macro-value"><span>{int(value)}g</span><span class="macro-goal">/{goal_value}g</span></div></div>', unsafe_allow_html=True)
     st.markdown(f'<div class="section-title"><h2>Tänane logi</h2><span class="section-hint">{TODAY.strftime("%d. %b")}</span></div>', unsafe_allow_html=True)
     if not today_entries:
         st.info("Sinu päev on tühi. Lisa esimene toit allpool.")
