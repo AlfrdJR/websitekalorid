@@ -954,7 +954,8 @@ with tab_calendar:
                         st.markdown('<div class="meal-box-empty">Tühi</div>', unsafe_allow_html=True)
                     for box_index, item in enumerate(box_items):
                         item_macros = f'<div class="meal-box-macros"><span>Valk {int(item.get("protein", 0))}g</span><span>Süsivesikud {int(item.get("carbs", 0))}g</span><span>Rasv {int(item.get("fat", 0))}g</span></div>'
-                        st.markdown(f'<div class="meal-box-item"><div class="meal-box-item-top"><span>{item.get("count", 1)}× {item["name"]}</span><strong>{int(item.get("kcal", 0))} kcal</strong></div>{item_macros}</div>', unsafe_allow_html=True)
+                        item_quantity = f'{int(item["grams"])} g' if item.get("grams", 0) else f'{item.get("count", 1)}×'
+                        st.markdown(f'<div class="meal-box-item"><div class="meal-box-item-top"><span>{item_quantity} {item["name"]}</span><strong>{int(item.get("kcal", 0))} kcal</strong></div>{item_macros}</div>', unsafe_allow_html=True)
                         if st.button("×", key=f"calendar-remove-{selected_day}-{meal_value}-{box_index}", help="Eemalda see toit"):
                             remove_entry_group(item["_indices"], selected_day)
                             st.rerun()
