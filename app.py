@@ -474,8 +474,11 @@ def css():
             [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { flex:0 0 4.5rem !important; width:4.5rem !important; min-width:4.5rem !important; }
             [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 5.5rem !important; width:5.5rem !important; min-width:5.5rem !important; }
             [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; }
-            [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { flex:0 0 6.2rem !important; width:6.2rem !important; min-width:6.2rem !important; }
-            [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 5.5rem !important; width:5.5rem !important; min-width:5.5rem !important; }
+            [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { flex:0 0 5.5rem !important; width:5.5rem !important; min-width:5.5rem !important; }
+            [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 2.5rem !important; width:2.5rem !important; min-width:2.5rem !important; }
+            [class*="st-key-recipe-builder-row-"] [class*="st-key-remove_recipe_ingredient_"] button { width:2.5rem !important; min-width:2.5rem !important; padding:0 !important; }
+            [class*="st-key-recipe-builder-row-"] [class*="st-key-remove_recipe_ingredient_"] button p { font-size:0 !important; }
+            [class*="st-key-recipe-builder-row-"] [class*="st-key-remove_recipe_ingredient_"] button p::after { content:"←" !important; color:#b45d5d !important; font-size:1.1rem !important; }
             [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] [data-testid="stButton"] button { width:2.5rem !important; min-width:2.5rem !important; padding:0 !important; }
             [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] { max-width:100% !important; overflow-x:hidden !important; }
             [class*="st-key-food_actions_"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; justify-content:flex-start !important; gap:clamp(.2rem, 2vw, .7rem) !important; }
