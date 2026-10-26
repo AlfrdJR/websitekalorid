@@ -1084,7 +1084,6 @@ with tab_add:
             with st.form("inline_create_food_form"):
                 inline_name = st.text_input("Toidu nimi", value=st.session_state.inline_create_food)
                 inline_basis = st.selectbox("Toiteväärtus käib", ["100 g", "100 ml", "1 tk", "1 portsjon"])
-                inline_meal = st.selectbox("Toidukord", ["Hommikusöök", "Lõuna", "Õhtusöök", "Vahepala"])
                 inline_a, inline_b = st.columns(2)
                 with inline_a:
                     inline_kcal = st.number_input("Kalorid", min_value=0, value=0)
@@ -1095,14 +1094,13 @@ with tab_add:
                 if st.form_submit_button("Salvesta ja lisa tänasesse", type="primary", use_container_width=True) and inline_name.strip():
                     new_product = {"name": inline_name.strip(), "brand": "Minu toit", "kcal": inline_kcal, "protein": inline_protein, "carbs": inline_carbs, "fat": inline_fat, "portion": inline_basis}
                     save_custom_product(new_product)
-                    add_entry(new_product, inline_meal, TODAY)
+                    add_entry(new_product, "Vahepala", TODAY)
                     st.session_state.inline_create_food = ""
                     st.rerun()
     else:
         manual_form_key = f"manual_food_{st.session_state.get('manual_food_form_version', 0)}"
         with st.form(manual_form_key):
             name = st.text_input("Toidu nimi", placeholder="nt õhtusöök")
-            meal = st.selectbox("Toidukord", ["Hommikusöök", "Lõuna", "Õhtusöök", "Vahepala"])
             nutrition_basis = st.selectbox("Toiteväärtus käib", ["100 g", "100 ml", "1 tk", "1 portsjon"], index=0, help="Märgi, mille kohta pakendil või sinu andmetes kalorid ja makrod käivad.")
             c1, c2 = st.columns(2)
             with c1:
@@ -1116,7 +1114,7 @@ with tab_add:
                 new_product = {"name": name, "brand": "Minu toit", "kcal": kcal, "protein": protein, "carbs": carbs, "fat": fat, "portion": nutrition_basis}
                 if save_product:
                     save_custom_product(new_product)
-                add_entry(new_product, meal, TODAY)
+                add_entry(new_product, "Vahepala", TODAY)
                 st.session_state.manual_food_form_version = st.session_state.get("manual_food_form_version", 0) + 1
                 st.rerun()
 
