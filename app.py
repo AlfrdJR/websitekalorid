@@ -474,6 +474,23 @@ def css():
             div[data-testid="stRadio"] label { font-size:.78rem; padding:.55rem .6rem; }
             [data-testid="stFileUploader"] section { padding:.75rem; }
             .stCaption, [data-testid="stCaptionContainer"] { font-size:.72rem; }
+            [class*="product-actions"] button:not([kind="primary"]) p::after,
+            [class*="food-remove"] button p::after,
+            [class*="st-key-remove_today_"] button p::after,
+            [class*="st-key-delete_product_"] button p::after,
+            [class*="st-key-remove_calendar_"] button p::after,
+            [class*="st-key-remove_recipe_row_"] button p::after,
+            [class*="st-key-delete_recipe_"] button p::after,
+            [class*="st-key-remove_recipe_ingredient_"] button p::after {
+                display:inline-block !important;
+                font-family:Arial, sans-serif !important;
+                font-size:16px !important;
+                font-weight:400 !important;
+                line-height:1 !important;
+                -webkit-text-size-adjust:100% !important;
+                text-size-adjust:100% !important;
+                transform:none !important;
+            }
         }
         </style>
         """,
