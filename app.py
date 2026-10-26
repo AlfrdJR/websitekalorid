@@ -388,14 +388,16 @@ def css():
         .goal-ring span { z-index:1; font:700 1rem 'Space Grotesk'; color:#287a56; }
         .calendar-macro-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.55rem; margin:.7rem 0 1.1rem; }
         .calendar-macro-card { min-width:0; padding:.8rem .45rem; text-align:center; background:var(--surface); border:1px solid var(--line); border-radius:18px; }
-        .calendar-macro-ring { width:58px; height:58px; margin:.35rem auto .5rem; border-radius:50%; display:grid; place-items:center; position:relative; background:conic-gradient(var(--ring-color) var(--percent), var(--line) 0); }
-        @keyframes macro-ring-fill { from { background:conic-gradient(var(--ring-color) 0%, var(--line) 0); } to { background:conic-gradient(var(--ring-color) var(--percent), var(--line) 0); } }
-        .calendar-macro-ring { animation:macro-ring-fill .85s cubic-bezier(.22,.8,.28,1) both; }
-        .calendar-macro-ring::after { content:''; position:absolute; width:42px; height:42px; border-radius:50%; background:var(--surface); }
+        .calendar-macro-ring { width:58px; height:58px; margin:.35rem auto .5rem; display:grid; place-items:center; position:relative; }
+        .calendar-macro-ring svg { position:absolute; inset:0; width:100%; height:100%; transform:rotate(-90deg); overflow:visible; }
+        .calendar-macro-ring .ring-track, .calendar-macro-ring .ring-progress { fill:none; stroke-width:10; }
+        .calendar-macro-ring .ring-track { stroke:var(--line); }
+        .calendar-macro-ring .ring-progress { stroke:var(--ring-color); stroke-linecap:round; stroke-dasharray:100; stroke-dashoffset:calc(100 - var(--progress)); animation:ring-progress-fill .9s cubic-bezier(.22,.8,.28,1) both; }
+        @keyframes ring-progress-fill { from { stroke-dashoffset:100; } to { stroke-dashoffset:calc(100 - var(--progress)); } }
         .calendar-macro-ring span { z-index:1; color:var(--ring-color); font:700 .72rem 'Space Grotesk'; }
         .calendar-macro-label { color:var(--muted); font-size:.66rem; font-weight:800; text-transform:uppercase; letter-spacing:.04em; }
         .calendar-macro-value { margin-top:.15rem; color:var(--ink); font:700 .8rem 'Space Grotesk'; white-space:nowrap; }
-        @media (prefers-reduced-motion: reduce) { .calendar-macro-ring { animation:none !important; } }
+        @media (prefers-reduced-motion: reduce) { .calendar-macro-ring .ring-progress { animation:none !important; } }
         .goal-copy { flex:1; } .goal-copy .metric-value { margin:0; font-size:1.35rem; }
         .add-card { background:#e5f4eb; border-radius:20px; padding:1rem; margin-top:1rem; }
         .add-card-title { font-weight:700; font-size:1rem; } .add-card-sub { font-size:.8rem; color:#547063; margin:.2rem 0 .8rem; }
@@ -794,12 +796,12 @@ with tab_today:
             with col:
                 goal_value = next(macro_goal_values)
                 macro_percent = min(100, int(float(value) / goal_value * 100)) if goal_value else 0
-                st.markdown(f'<div class="calendar-macro-card"><div class="calendar-macro-label">{label}</div><div class="calendar-macro-ring" style="--percent:{macro_percent}%;--ring-color:#287a56"><span>{macro_percent}%</span></div><div class="calendar-macro-value">{int(value)}g / {int(goal_value)}g</div></div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="calendar-macro-card"><div class="calendar-macro-label">{label}</div><div class="calendar-macro-ring" style="--progress:{macro_percent};--ring-color:#287a56"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="ring-track" cx="50" cy="50" r="40"></circle><circle class="ring-progress" cx="50" cy="50" r="40" pathLength="100"></circle></svg><span>{macro_percent}%</span></div><div class="calendar-macro-value">{int(value)}g / {int(goal_value)}g</div></div>', unsafe_allow_html=True)
     today_macro_data = [("Valk", t["protein"], st.session_state.goals["protein"], "#287a56"), ("Süsivesikud", t["carbs"], st.session_state.goals["carbs"], "#d28a32"), ("Rasv", t["fat"], st.session_state.goals["fat"], "#bd6262")]
     today_macro_cards = []
     for macro_label, macro_value, macro_goal, macro_color in today_macro_data:
         macro_percent = min(100, int(float(macro_value) / macro_goal * 100)) if macro_goal else 0
-        today_macro_cards.append(f'<div class="calendar-macro-card"><div class="calendar-macro-label">{macro_label}</div><div class="calendar-macro-ring" style="--percent:{macro_percent}%;--ring-color:{macro_color}"><span>{macro_percent}%</span></div><div class="calendar-macro-value">{int(macro_value)}g / {int(macro_goal)}g</div></div>')
+        today_macro_cards.append(f'<div class="calendar-macro-card"><div class="calendar-macro-label">{macro_label}</div><div class="calendar-macro-ring" style="--progress:{macro_percent};--ring-color:{macro_color}"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="ring-track" cx="50" cy="50" r="40"></circle><circle class="ring-progress" cx="50" cy="50" r="40" pathLength="100"></circle></svg><span>{macro_percent}%</span></div><div class="calendar-macro-value">{int(macro_value)}g / {int(macro_goal)}g</div></div>')
     st.markdown(f'<div class="calendar-macro-grid">{"".join(today_macro_cards)}</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="section-title"><h2>Tänane logi</h2><span class="section-hint">{TODAY.strftime("%d. %b")}</span></div>', unsafe_allow_html=True)
     if not today_entries:
@@ -955,7 +957,7 @@ with tab_calendar:
     calendar_macro_cards = []
     for macro_label, macro_value, macro_goal, macro_color in calendar_macro_data:
         macro_percent = min(100, int(float(macro_value) / macro_goal * 100)) if macro_goal else 0
-        calendar_macro_cards.append(f'<div class="calendar-macro-card"><div class="calendar-macro-label">{macro_label}</div><div class="calendar-macro-ring" style="--percent:{macro_percent}%;--ring-color:{macro_color}"><span>{macro_percent}%</span></div><div class="calendar-macro-value">{int(macro_value)}g / {int(macro_goal)}g</div></div>')
+        calendar_macro_cards.append(f'<div class="calendar-macro-card"><div class="calendar-macro-label">{macro_label}</div><div class="calendar-macro-ring" style="--progress:{macro_percent};--ring-color:{macro_color}"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="ring-track" cx="50" cy="50" r="40"></circle><circle class="ring-progress" cx="50" cy="50" r="40" pathLength="100"></circle></svg><span>{macro_percent}%</span></div><div class="calendar-macro-value">{int(macro_value)}g / {int(macro_goal)}g</div></div>')
     st.markdown(f'<div class="calendar-macro-grid">{"".join(calendar_macro_cards)}</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="goal-card"><div class="goal-copy"><div class="metric-label">{selected_day.strftime("%d. %B %Y").upper()}</div><div class="metric-value">{int(selected_totals["kcal"]):,} kcal</div><div class="metric-note">{len(selected_entries)} toidukirjet · {int(selected_totals["protein"])}g valku</div></div></div>', unsafe_allow_html=True)
     st.markdown("### Selle päeva toit")
