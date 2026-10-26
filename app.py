@@ -381,6 +381,11 @@ def css():
         [class*="food-remove"] { display:flex; width:max-content; background:#ffffff; border:1px solid #f0d9d9; border-radius:15px; padding:.22rem; box-shadow:0 3px 10px #1c3a2710; }
         [class*="food-adjust"] [data-testid="stHorizontalBlock"], [class*="food-remove"] [data-testid="stHorizontalBlock"] { gap:.2rem !important; }
         [class*="food-adjust"] button, [class*="food-remove"] button { min-width:2.35rem !important; min-height:2.25rem !important; border:0 !important; background:transparent !important; border-radius:11px !important; box-shadow:none !important; font-size:1rem !important; }
+        [class*="food-adjust"] { display:inline-flex !important; flex:0 0 auto !important; width:5.6rem !important; max-width:5.6rem !important; }
+        [class*="food-adjust"] [data-testid="stHorizontalBlock"] { display:flex !important; flex:0 0 auto !important; width:5rem !important; max-width:5rem !important; flex-wrap:nowrap !important; justify-content:flex-start !important; gap:0 !important; }
+        [class*="food-adjust"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:0 0 2.5rem !important; width:2.5rem !important; min-width:2.5rem !important; padding:0 !important; }
+        [class*="food-adjust"] button { width:2.5rem !important; min-width:2.5rem !important; height:2.8rem !important; min-height:2.8rem !important; font-size:1.35rem !important; }
+        [class*="food-adjust"] button p { display:flex !important; align-items:center !important; justify-content:center !important; width:100% !important; height:100% !important; margin:0 !important; font-size:1.35rem !important; }
         [class*="food-adjust"] button { color:#287a56 !important; }
         [class*="food-remove"] button { color:#b45d5d !important; }
         [class*="food-adjust"] button:hover { background:#eaf6ed !important; color:#173f2d !important; }
