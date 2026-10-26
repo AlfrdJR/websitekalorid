@@ -49,7 +49,7 @@
     let dragged = null;
 
     function send(action, entry) {
-      Streamlit.setComponentValue({ action, indices: entry.indices });
+      Streamlit.setComponentValue({ action, indices: entry.indices, meal: entry.meal || null });
     }
 
     function render() {
