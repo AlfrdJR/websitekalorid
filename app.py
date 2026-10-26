@@ -338,7 +338,6 @@ def css():
         .progress { height:9px; background:#e7eee9; border-radius:99px; overflow:hidden; margin-top:.7rem; } .progress > div { height:100%; background:#287a56; border-radius:99px; }
         .food-row { display:flex; justify-content:space-between; align-items:center; padding:.95rem 1rem; background:white; border-bottom:1px solid var(--line); }
         .food-row:first-child { border-radius:18px 18px 0 0; } .food-row:last-child { border-radius:0 0 18px 18px; border-bottom:0; }
-        .food-row.food-row-highlight { background:#e5f4eb; border-color:#b9dfc5; }
         .food-name { font-weight:600; margin-top:.45rem; } .food-meta { color:var(--muted); font-size:.78rem; margin-top:.15rem; } .food-kcal { font-weight:700; white-space:nowrap; }
         .pill { display:inline-block; padding:.3rem .65rem; border-radius:99px; background:#edf5ef; color:#287a56; font-weight:600; font-size:.72rem; }
         div.stButton > button { border-radius:14px; border:1px solid #dce7de; min-height:2.7rem; font-weight:600; }
@@ -665,8 +664,7 @@ with tab_today:
         is_recipe = item.get("meal") == "Retsept"
         quantity_label = f'{item["count"]}× ' if item.get("count", 1) > 1 else ""
         meal_label = "Päeva jooksul" if item.get("count", 1) > 1 and item.get("meal") != "Retsept" else item.get("meal", "Toit")
-        row_class = "food-row food-row-highlight" if item["name"] == st.session_state.get("highlight_added_food") else "food-row"
-        st.markdown(f'<div class="{row_class}"><div><div class="pill">{meal_label}</div><div class="food-name">{quantity_label}{item["name"]}</div><div class="food-meta">{item.get("time", "")} · {int(item.get("protein", 0))}g valku · {int(item.get("carbs", 0))}g süsivesikuid</div></div><div class="food-kcal">{int(item["kcal"])} kcal</div></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="food-row"><div><div class="pill">{meal_label}</div><div class="food-name">{quantity_label}{item["name"]}</div><div class="food-meta">{item.get("time", "")} · {int(item.get("protein", 0))}g valku · {int(item.get("carbs", 0))}g süsivesikuid</div></div><div class="food-kcal">{int(item["kcal"])} kcal</div></div>', unsafe_allow_html=True)
         if is_recipe:
             remove_col, spacer = st.columns([1, 5])
             with remove_col:
@@ -686,7 +684,6 @@ with tab_today:
                     if st.button("×", key=f"remove_today_{i}", help="Eemalda kogu see toidugrupp"):
                         remove_entry_group(item["_indices"], TODAY)
                         st.rerun()
-    st.session_state.pop("highlight_added_food", None)
 with tab_add:
     st.markdown("## Lisa toit")
     add_mode = st.radio("Vali viis", ["Otsi toitu", "Sisesta ise"], horizontal=True, label_visibility="collapsed")
@@ -695,6 +692,8 @@ with tab_add:
         filtered = [p for p in all_products() if not query or query.lower() in (p["name"] + " " + p["brand"]).lower()]
         for idx, product in enumerate(filtered[:15]):
             st.markdown(f'**{product["name"]}**  \n<span style="color:#000000;font-size:.8rem">{product["brand"]} · {product["portion"]} · {product["kcal"]} kcal</span>  \n<span style="color:#000000;font-size:.75rem;font-weight:600">Valk {product["protein"]}g · Süsivesikud {product["carbs"]}g · Rasv {product["fat"]}g</span>', unsafe_allow_html=True)
+            if product["name"] == st.session_state.get("highlight_added_food"):
+                st.markdown(f'<style>[class*="st-key-product-actions-{idx}"] button[kind="primary"] {{ background:#dff3ff !important; color:#176b91 !important; border-color:#9ed5f0 !important; }}</style>', unsafe_allow_html=True)
             with st.container(key=f"product-actions-{idx}", horizontal=True, width="stretch", horizontal_alignment="distribute", gap="small", vertical_alignment="center"):
                 if st.button("Lisa", type="primary", key=f"add_{idx}_{product['name']}"):
                     add_entry(product, day=TODAY)
