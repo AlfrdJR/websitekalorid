@@ -387,6 +387,8 @@ def css():
         [class*="st-key-add_recipe_row_"] button::after { content:"+ Lisa toode"; color:#287a56; font-size:.82rem; }
         [class*="food-remove"] button { font-size:0 !important; color:transparent !important; }
         [class*="food-remove"] button::after { content:"X"; color:#b45d5d !important; font-size:1rem !important; }
+        [class*="product-actions"] button:not([kind="primary"]), [class*="product-actions"] [data-testid="stBaseButton-secondary"] { font-size:0 !important; color:transparent !important; text-shadow:none !important; }
+        [class*="product-actions"] button:not([kind="primary"])::after, [class*="product-actions"] [data-testid="stBaseButton-secondary"]::after { content:"X"; color:#b45d5d !important; font-size:1rem !important; }
         @media (prefers-color-scheme: dark), (html[data-theme="dark"]) {
             :root { --ink:#edf5ef; --muted:#aabbb1; --mint:#173d2c; --green:#72d09b; --cream:#111714; --line:#2b3b33; --surface:#1b2520; --surface-soft:#20382a; --input:#202b25; --shadow:#00000035; }
             .stApp, [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] { background:var(--cream); color:var(--ink); }
