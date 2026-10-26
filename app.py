@@ -862,12 +862,12 @@ st.markdown(
     [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] > div,
     [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] input { width:100% !important; box-sizing:border-box !important; }
     [class*="st-key-recipe-builder-row-"] {
-        padding:.35rem !important;
-        margin:.35rem 0 !important;
-        background:var(--surface) !important;
-        border:1px solid var(--line) !important;
-        border-radius:16px !important;
-        box-shadow:0 4px 14px var(--shadow) !important;
+        padding:0 !important;
+        margin:.65rem 0 !important;
+        background:transparent !important;
+        border:0 !important;
+        border-radius:0 !important;
+        box-shadow:none !important;
     }
     [class*="st-key-recipe-builder-row-"] .builder-product,
     [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] > div {
@@ -877,10 +877,10 @@ st.markdown(
         align-items:center !important;
         border:1px solid var(--line) !important;
         border-radius:14px !important;
-        background:var(--input) !important;
+        background:#f1f3f7 !important;
         color:var(--ink) !important;
     }
-    [class*="st-key-recipe-builder-row-"] .builder-product { padding:.7rem .85rem !important; font-weight:600 !important; overflow:hidden !important; text-overflow:ellipsis !important; white-space:nowrap !important; }
+    [class*="st-key-recipe-builder-row-"] .builder-product { padding:.7rem .85rem !important; font-weight:600 !important; overflow:hidden !important; text-overflow:ellipsis !important; white-space:nowrap !important; background:#f1f3f7 !important; }
     [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] input { min-height:48px !important; height:48px !important; border:0 !important; border-radius:14px !important; background:transparent !important; color:var(--ink) !important; }
     [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button { width:100% !important; min-height:48px !important; height:48px !important; border-radius:14px !important; border:1px solid #e5baba !important; background:#fff8f8 !important; color:#b45d5d !important; font-size:0 !important; }
     [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button p { font-size:0 !important; }
@@ -888,9 +888,11 @@ st.markdown(
     [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button:hover { background:#fff0f0 !important; border-color:#d99b9b !important; }
     [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"]:focus-within > div { border-color:var(--green) !important; box-shadow:0 0 0 3px #287a5618 !important; }
     html[data-theme="dark"] [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button { background:#2b2020 !important; border-color:#714343 !important; color:#f08b8b !important; }
+    html[data-theme="dark"] [class*="st-key-recipe-builder-row-"] .builder-product,
+    html[data-theme="dark"] [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] > div { background:var(--input) !important; }
     [class*="st-key-recipe-builder-row-"] + div [data-testid="stAlert"] { margin-top:.75rem !important; border-radius:16px !important; border:1px solid #cfe2f2 !important; box-shadow:0 4px 14px #2b6da00d !important; }
     @media (max-width:600px) {
-        [class*="st-key-recipe-builder-row-"] { padding:.3rem !important; margin:.3rem 0 !important; }
+        [class*="st-key-recipe-builder-row-"] { padding:0 !important; margin:.55rem 0 !important; }
         [class*="st-key-recipe-builder-row-"] .builder-product,
         [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] > div,
         [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] input,
