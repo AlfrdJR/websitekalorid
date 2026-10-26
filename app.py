@@ -716,7 +716,7 @@ def css():
             border:1px solid var(--line) !important;
             border-bottom:0 !important;
             border-radius:18px 18px 0 0 !important;
-            box-shadow:0 5px 16px var(--shadow) !important;
+            box-shadow:none !important;
         }
         [class*="st-key-product-actions-"] {
             margin-top:-.9rem !important;
@@ -726,7 +726,7 @@ def css():
             border:1px solid var(--line) !important;
             border-top:0 !important;
             border-radius:0 0 18px 18px !important;
-            box-shadow:0 5px 16px var(--shadow) !important;
+            box-shadow:none !important;
         }
         [class*="st-key-product-actions-"] [data-testid="stHorizontalBlock"] { margin:0 !important; }
         </style>
