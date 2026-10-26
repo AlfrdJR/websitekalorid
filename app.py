@@ -317,7 +317,7 @@ def css():
     st.markdown(
         """
         <style>
-        :root { --ink:#18231e; --muted:#78857d; --mint:#dff3e8; --green:#287a56; --cream:#f5f6f1; --line:#e8ece6; --surface:#ffffff; --surface-soft:#edf5ef; --input:#ffffff; --shadow:#1c3a2710; }
+        :root { --ink:#17231d; --muted:#68776e; --mint:#dff3e8; --green:#217a52; --cream:#ffffff; --line:#dfe8e1; --surface:#ffffff; --surface-soft:#eef7f1; --input:#ffffff; --shadow:#1c3a2714; }
         .stApp { background:var(--cream); color:var(--ink); font-family:'DM Sans',sans-serif; }
         [data-testid="stHeader"] { background:transparent; }
         .block-container { max-width:720px; padding:1.5rem 1rem 5rem; }
