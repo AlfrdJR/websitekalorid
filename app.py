@@ -906,10 +906,21 @@ with tab_recipes:
                             if st.button("×", key=f"remove_recipe_row_{index}_{ingredient_index}", help="Eemalda koostisosa"):
                                 edited_ingredients_data.pop(ingredient_index)
                                 st.rerun()
-                    if st.button("＋ Lisa toode", key=f"add_recipe_row_{index}", use_container_width=True):
-                        if recipe_products:
-                            edited_ingredients_data.append({"name": recipe_products[0]["name"], "grams": 100})
+                    st.markdown("### Lisa koostisosa")
+                    recipe_add_query = st.text_input("Otsi toodet", placeholder="nt kana, kartul, jogurt…", key=f"recipe_add_query_{index}")
+                    filtered_recipe_products = [
+                        product for product in recipe_products
+                        if not recipe_add_query or recipe_add_query.lower() in (product["name"] + " " + product["brand"]).lower()
+                    ]
+                    if filtered_recipe_products:
+                        filtered_recipe_labels = [f'{product["name"]} · {product["brand"]}' for product in filtered_recipe_products]
+                        selected_add_label = st.selectbox("Vali toode", filtered_recipe_labels, key=f"recipe_add_product_{index}")
+                        if st.button("Lisa valitud toode", key=f"add_recipe_row_{index}", use_container_width=True):
+                            selected_product = filtered_recipe_products[filtered_recipe_labels.index(selected_add_label)]
+                            edited_ingredients_data.append({"name": selected_product["name"], "grams": 100})
                             st.rerun()
+                    else:
+                        st.info("Selle otsinguga toodet ei leitud.")
                     auto_totals = calculate_recipe_ingredients(edited_ingredients_data)
                     st.info(f'Kokku: {int(auto_totals["kcal"])} kcal · {int(auto_totals["protein"])}g valku · {int(auto_totals["carbs"])}g süsivesikuid · {int(auto_totals["fat"])}g rasva')
                     edit_ingredients = " · ".join(f'{item["name"]} ({item["grams"]} g)' for item in edited_ingredients_data)
