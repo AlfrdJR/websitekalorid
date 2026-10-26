@@ -708,8 +708,9 @@ def css():
         [class*="st-key-product-actions-"] [data-testid="stNumberInput"] [data-testid="stNumberInput-StepUp"] { display:none !important; }
         [class*="st-key-product-actions-"] button { width:100% !important; min-width:0 !important; }
         /* Give every searched food a single connected card. */
-        div[data-testid="stElementContainer"]:has(span[style*="font-size:.8rem"]) {
+        div[data-testid="stElementContainer"]:has(.product-card-meta) {
             margin-top:.9rem !important;
+            margin-bottom:0 !important;
             padding:1rem 1rem .35rem !important;
             background:var(--surface) !important;
             border:1px solid var(--line) !important;
@@ -718,6 +719,7 @@ def css():
             box-shadow:0 5px 16px var(--shadow) !important;
         }
         [class*="st-key-product-actions-"] {
+            margin-top:0 !important;
             margin-bottom:.9rem !important;
             padding:.1rem 1rem .9rem !important;
             background:var(--surface) !important;
@@ -850,7 +852,7 @@ with tab_add:
         highlighted_style = "" if highlighted_index is None else f'[class*="st-key-product-actions-{highlighted_index}"] button[kind="primary"] {{ background:#e5f4eb !important; color:#287a56 !important; border-color:#b9dfc5 !important; }}'
         st.markdown(f'<style>{highlighted_style}</style>', unsafe_allow_html=True)
         for idx, product in enumerate(visible_products):
-            st.markdown(f'**{product["name"]}**  \n<span style="color:#000000;font-size:.8rem">{product["brand"]} · {product["portion"]} · {product["kcal"]} kcal</span>  \n<span style="color:#000000;font-size:.75rem;font-weight:600">Valk {product["protein"]}g · Süsivesikud {product["carbs"]}g · Rasv {product["fat"]}g</span>', unsafe_allow_html=True)
+            st.markdown(f'**{product["name"]}**  \n<span class="product-card-meta" style="color:#000000;font-size:.8rem">{product["brand"]} · {product["portion"]} · {product["kcal"]} kcal</span>  \n<span class="product-card-macros" style="color:#000000;font-size:.75rem;font-weight:600">Valk {product["protein"]}g · Süsivesikud {product["carbs"]}g · Rasv {product["fat"]}g</span>', unsafe_allow_html=True)
             with st.container(key=f"product-actions-{idx}", horizontal=True, width="stretch", horizontal_alignment="distribute", gap="small", vertical_alignment="center"):
                 product_weight = st.number_input(
                     "Kaal (g)",
