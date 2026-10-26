@@ -457,16 +457,16 @@ def css():
         .overview-card { background:#fff; border:1px solid var(--line); border-radius:20px; padding:1rem; box-shadow:0 3px 12px #1c3a2710; }
         .protein-table-wrap { overflow:hidden; background:var(--surface); border:1px solid var(--line); border-radius:20px; box-shadow:0 6px 18px #1c3a270c; }
         .protein-table { width:100%; border-collapse:separate; border-spacing:0; font-size:.82rem; }
-        .protein-table th { padding:.85rem 1rem; background:linear-gradient(135deg,#e5f4eb,#d9f0e2); color:#287a56; font-size:.66rem; text-align:left; text-transform:uppercase; letter-spacing:.06em; white-space:nowrap; }
+        .protein-table th { padding:.85rem 1rem; background:#f1f3f5; color:var(--ink); font-size:.66rem; text-align:left; text-transform:uppercase; letter-spacing:.06em; white-space:nowrap; }
         .protein-table th:last-child, .protein-table td:last-child { text-align:right; }
         .protein-table td { padding:.8rem 1rem; border-top:1px solid var(--line); color:var(--ink); }
         .protein-table tbody tr:nth-child(even) td { background:#fafdfb; }
         .protein-table tr:first-child td { font-weight:700; background:#f0faf3; }
-        .protein-table tr:first-child td:first-child::before { content:'①'; margin-right:.4rem; color:#287a56; }
+        .protein-table tr:first-child td:first-child::before { content:'①'; margin-right:.4rem; color:var(--muted); }
         .protein-table tr:hover td { background:var(--surface-soft); }
-        .protein-table .protein-total { color:var(--green); font:700 .95rem 'Space Grotesk'; }
+        .protein-table .protein-total { color:var(--ink); font:700 .95rem 'Space Grotesk'; }
         .protein-table td:first-child { white-space:nowrap; font-weight:650; }
-        html[data-theme="dark"] .protein-table th { background:#173d2c; color:#72d09b; }
+        html[data-theme="dark"] .protein-table th { background:#27312c; color:var(--ink); }
         html[data-theme="dark"] .protein-table tr:first-child td { background:#1b3326; }
         html[data-theme="dark"] .protein-table tbody tr:nth-child(even) td { background:#18221d; }
         @media (max-width:600px) { .protein-table { font-size:.72rem; } .protein-table th, .protein-table td { padding:.65rem .55rem; } }
@@ -1241,10 +1241,11 @@ with tab_insights:
         day_totals = totals(parsed_day)
         protein_days.append((parsed_day, day_totals))
     protein_days.sort(key=lambda item: item[1]["protein"], reverse=True)
-    st.markdown("### Laksud sisse")
-    if protein_days:
+    top_protein_days = protein_days[:3]
+    st.markdown("### Laksud sisse · top 3")
+    if top_protein_days:
         protein_rows = []
-        for parsed_day, day_totals in protein_days:
+        for parsed_day, day_totals in top_protein_days:
             protein_rows.append(f'<tr><td>{parsed_day.strftime("%d.%m.%Y")}</td><td class="protein-total">{int(day_totals["protein"])} g</td></tr>')
         st.markdown(f'<div class="protein-table-wrap"><table class="protein-table"><thead><tr><th>Kuupäev</th><th>Valgu kogus</th></tr></thead><tbody>{"".join(protein_rows)}</tbody></table></div>', unsafe_allow_html=True)
     else:
