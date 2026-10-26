@@ -630,6 +630,19 @@ def css():
         [class*="st-key-meal-categories-"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 0% !important; width:0 !important; min-width:0 !important; padding:0 !important; }
         [class*="st-key-meal-categories-"] button { width:100% !important; min-width:0 !important; min-height:2.35rem !important; padding:.35rem .2rem !important; border-radius:11px !important; font-size:.72rem !important; }
         [class*="st-key-meal-categories-"] button[kind="primary"] { background:#e5f4eb !important; color:#287a56 !important; border-color:#b9dfc5 !important; }
+        [class*="st-key-meal-boxes"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; gap:.45rem !important; width:100% !important; }
+        [class*="st-key-meal-boxes"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 0% !important; width:0 !important; min-width:0 !important; padding:0 !important; }
+        .meal-box { min-height:96px; padding:.65rem; background:#f4f8f5; border:1px solid #dfe8e1; border-radius:15px; }
+        .meal-box-title { display:flex; justify-content:space-between; gap:.35rem; margin-bottom:.45rem; color:#287a56; font-size:.78rem; font-weight:700; }
+        .meal-box-title span:last-child { color:#668072; font-weight:500; }
+        .meal-box-item { display:flex; justify-content:space-between; gap:.35rem; padding:.35rem 0; border-top:1px solid #e3ece5; color:#17231d; font-size:.7rem; }
+        .meal-box-item span { min-width:0; overflow-wrap:anywhere; }
+        .meal-box-item strong { flex:0 0 auto; white-space:nowrap; font-weight:600; }
+        .meal-box-empty { color:#8aa094; font-size:.68rem; line-height:1.25; }
+        @media (max-width:600px) {
+            [class*="st-key-meal-boxes"] [data-testid="stHorizontalBlock"] { flex-wrap:wrap !important; }
+            [class*="st-key-meal-boxes"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 calc(50% - .25rem) !important; width:calc(50% - .25rem) !important; min-width:0 !important; }
+        }
         </style>
         """,
         unsafe_allow_html=True,
@@ -665,6 +678,18 @@ with tab_today:
     if not today_entries:
         st.info("Sinu päev on tühi. Lisa esimene toit allpool.")
     meal_categories = [("Hommikusöök", "Hommik"), ("Lõuna", "Lõuna"), ("Õhtusöök", "Õhtu"), ("Vahepala", "Snäkk")]
+    with st.container(key="meal-boxes", horizontal=True, width="stretch", gap="small"):
+        meal_box_columns = st.columns(4)
+        for box_column, (meal_value, meal_label) in zip(meal_box_columns, meal_categories):
+            with box_column:
+                box_items = [item for item in displayed_today_entries if item.get("meal") == meal_value]
+                items_html = "".join(
+                    f'<div class="meal-box-item"><span>{item.get("count", 1)}× {item["name"]}</span><strong>{int(item.get("kcal", 0))} kcal</strong></div>'
+                    for item in box_items
+                )
+                if not items_html:
+                    items_html = '<div class="meal-box-empty">Lisa toit siia</div>'
+                st.markdown(f'<div class="meal-box"><div class="meal-box-title"><span>{meal_label}</span><span>{len(box_items)}</span></div>{items_html}</div>', unsafe_allow_html=True)
     for i, item in enumerate(displayed_today_entries):
         is_recipe = item.get("meal") == "Retsept"
         quantity_label = f'{item["count"]}× ' if item.get("count", 1) > 1 else ""
