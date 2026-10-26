@@ -346,6 +346,9 @@ def css():
         .section-title { display:flex; align-items:end; justify-content:space-between; margin:1.25rem 0 .65rem; }
         .section-title h2 { margin:0; } .section-hint { color:var(--muted); font-size:.78rem; }
         .goal-card { background:white; border:1px solid var(--line); border-radius:24px; padding:1rem 1.1rem; display:flex; align-items:center; gap:1rem; box-shadow:0 3px 12px #1c3a2710; }
+        .goal-card.goal-complete { background:#dff3e8; border-color:#8fd0a8; }
+        .goal-card.goal-complete .goal-ring { background:conic-gradient(#217a52 100%, #bfe5ca 0); }
+        .goal-card.goal-complete .goal-ring:after { background:#dff3e8; }
         .goal-ring { width:86px; height:86px; border-radius:50%; display:grid; place-items:center; flex:0 0 auto; background:conic-gradient(#287a56 var(--percent), #e7eee9 0); position:relative; }
         .goal-ring:after { content:''; width:66px; height:66px; border-radius:50%; background:white; position:absolute; }
         .goal-ring span { z-index:1; font:700 1rem 'Space Grotesk'; color:#287a56; }
@@ -461,6 +464,8 @@ def css():
             .progress, .week-track { background:#2a3931; }
             .goal-ring { background:conic-gradient(#72d09b var(--percent), #2a3931 0); }
             .goal-ring:after { background:var(--surface); }
+            .goal-card.goal-complete { background:#173d2c !important; border-color:#3d815a !important; }
+            .goal-card.goal-complete .goal-ring:after { background:#173d2c; }
             .goal-ring span { color:#72d09b; }
             .mobile-footer { background:#111714e8; border-top-color:var(--line); color:var(--muted); }
             div.stButton > button, [data-testid="stDownloadButton"] button { background:var(--surface); color:var(--ink); border-color:var(--line); }
@@ -605,7 +610,8 @@ with tab_today:
     goal = st.session_state.goals["kcal"]
     remaining = max(0, goal - int(t["kcal"]))
     percent = min(100, int(t["kcal"] / goal * 100))
-    st.markdown(f'<div class="goal-card"><div class="goal-ring" style="--percent:{percent}%"><span>{percent}%</span></div><div class="goal-copy"><div class="metric-label">PÄEVA EESMÄRK</div><div class="metric-value">{int(t["kcal"]):,} <span style="font-size:.85rem;color:#000000;font-weight:500">/ {goal:,} kcal</span></div><div class="metric-note">{remaining:,} kcal alles · {len(today_entries)} toidukirjet</div></div></div>', unsafe_allow_html=True)
+    goal_class = "goal-card goal-complete" if t["kcal"] >= goal else "goal-card"
+    st.markdown(f'<div class="{goal_class}"><div class="goal-ring" style="--percent:{percent}%"><span>{percent}%</span></div><div class="goal-copy"><div class="metric-label">PÄEVA EESMÄRK</div><div class="metric-value">{int(t["kcal"]):,} <span style="font-size:.85rem;color:#000000;font-weight:500">/ {goal:,} kcal</span></div><div class="metric-note">{remaining:,} kcal alles · {len(today_entries)} toidukirjet</div></div></div>', unsafe_allow_html=True)
     st.markdown(f'<div class="streak-card">🔥 <b>{streak_count()} päeva järjest</b> · oled oma logimisega heas rütmis</div>', unsafe_allow_html=True)
     st.write("")
     # Keep the wrapper as a normal full-width container. A horizontal wrapper
