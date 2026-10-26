@@ -27,6 +27,9 @@
     .card-actions { display: flex; gap: 5px; margin-top: 8px; }
     .action { min-width: 28px; height: 26px; padding: 0 7px; border: 1px solid #dfe8e1; border-radius: 8px; background: #fff; color: #287a56; cursor: pointer; font-weight: 700; }
     .action.remove { color: #b45d5d; border-color: #f0d9d9; }
+    .move-actions { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+    .move-action { min-height: 24px; padding: 3px 6px; border: 1px solid #dfe8e1; border-radius: 7px; background: #f4f8f5; color: #287a56; cursor: pointer; font-size: 10px; }
+    .move-action.current { background: #e5f4eb; border-color: #8fd0a8; font-weight: 700; }
     .empty { color: #8aa094; font-size: 11px; text-align: center; padding: 14px 2px; }
     @media (max-width: 600px) {
       .board { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
@@ -73,9 +76,16 @@
           card.className = "card";
           card.draggable = true;
           card.dataset.indices = JSON.stringify(entry.indices);
-          card.innerHTML = `<div class="card-name"></div><div class="card-meta"></div><div class="card-actions"><button class="action add">+</button><button class="action subtract">−</button><button class="action remove">×</button></div>`;
+          card.innerHTML = `<div class="card-name"></div><div class="card-meta"></div><div class="card-actions"><button class="action add">+</button><button class="action subtract">−</button><button class="action remove">×</button></div><div class="move-actions"></div>`;
           card.querySelector(".card-name").textContent = `${entry.count > 1 ? entry.count + "× " : ""}${entry.name}`;
           card.querySelector(".card-meta").textContent = `${Math.round(entry.kcal)} kcal · ${Math.round(entry.protein)}g valku · ${Math.round(entry.carbs)}g süsivesikuid`;
+          categories.forEach(target => {
+            const moveButton = document.createElement("button");
+            moveButton.className = `move-action${entry.meal === target.key ? " current" : ""}`;
+            moveButton.textContent = target.key === "Hommikusöök" ? "Hommik" : target.key === "Õhtusöök" ? "Õhtu" : target.label;
+            moveButton.onclick = event => { event.stopPropagation(); if (entry.meal !== target.key) send("move", { ...entry, meal: target.key }); };
+            card.querySelector(".move-actions").appendChild(moveButton);
+          });
           card.addEventListener("dragstart", event => { if (event.target.closest(".action")) { event.preventDefault(); return; } dragged = entry; card.classList.add("dragging"); });
           card.addEventListener("dragend", () => { dragged = null; card.classList.remove("dragging"); });
           card.addEventListener("pointerdown", event => {
