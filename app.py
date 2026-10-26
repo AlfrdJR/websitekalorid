@@ -553,6 +553,7 @@ def css():
             [class*="food-adjust"] { width:7.2rem !important; max-width:7.2rem !important; padding:.3rem !important; border-radius:18px !important; }
             [class*="food-adjust"] [data-testid="stHorizontalBlock"] { width:6.6rem !important; max-width:6.6rem !important; flex-wrap:nowrap !important; justify-content:flex-start !important; gap:0 !important; }
             [class*="food-adjust"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:0 0 3.3rem !important; width:3.3rem !important; min-width:3.3rem !important; padding:0 !important; }
+            [class*="food-adjust"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { transform:translateX(-.7rem) !important; }
             [class*="food-adjust"] button { width:3.3rem !important; min-width:3.3rem !important; height:2.8rem !important; min-height:2.8rem !important; font-size:1.35rem !important; }
             [class*="food-adjust"] button p { display:flex !important; align-items:center !important; justify-content:center !important; width:100% !important; height:100% !important; margin:0 !important; font-size:1.35rem !important; }
             .goal-card { border-radius:20px; padding:.8rem; gap:.7rem; }
