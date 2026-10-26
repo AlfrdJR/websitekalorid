@@ -861,6 +861,41 @@ st.markdown(
     [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"],
     [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] > div,
     [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] input { width:100% !important; box-sizing:border-box !important; }
+    [class*="st-key-recipe-builder-row-"] {
+        padding:.35rem !important;
+        margin:.35rem 0 !important;
+        background:var(--surface) !important;
+        border:1px solid var(--line) !important;
+        border-radius:16px !important;
+        box-shadow:0 4px 14px var(--shadow) !important;
+    }
+    [class*="st-key-recipe-builder-row-"] .builder-product,
+    [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] > div {
+        min-height:48px !important;
+        height:48px !important;
+        display:flex !important;
+        align-items:center !important;
+        border:1px solid var(--line) !important;
+        border-radius:14px !important;
+        background:var(--input) !important;
+        color:var(--ink) !important;
+    }
+    [class*="st-key-recipe-builder-row-"] .builder-product { padding:.7rem .85rem !important; font-weight:600 !important; overflow:hidden !important; text-overflow:ellipsis !important; white-space:nowrap !important; }
+    [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] input { min-height:48px !important; height:48px !important; border:0 !important; border-radius:14px !important; background:transparent !important; color:var(--ink) !important; }
+    [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button { width:100% !important; min-height:48px !important; height:48px !important; border-radius:14px !important; border:1px solid #e5baba !important; background:#fff8f8 !important; color:#b45d5d !important; font-size:0 !important; }
+    [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button p { font-size:0 !important; }
+    [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button p::after { content:"×"; font-size:1.25rem !important; line-height:1 !important; }
+    [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button:hover { background:#fff0f0 !important; border-color:#d99b9b !important; }
+    [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"]:focus-within > div { border-color:var(--green) !important; box-shadow:0 0 0 3px #287a5618 !important; }
+    html[data-theme="dark"] [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button { background:#2b2020 !important; border-color:#714343 !important; color:#f08b8b !important; }
+    [class*="st-key-recipe-builder-row-"] + div [data-testid="stAlert"] { margin-top:.75rem !important; border-radius:16px !important; border:1px solid #cfe2f2 !important; box-shadow:0 4px 14px #2b6da00d !important; }
+    @media (max-width:600px) {
+        [class*="st-key-recipe-builder-row-"] { padding:.3rem !important; margin:.3rem 0 !important; }
+        [class*="st-key-recipe-builder-row-"] .builder-product,
+        [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] > div,
+        [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] input,
+        [class*="st-key-recipe-builder-row-"] [data-testid="stButton"] button { min-height:46px !important; height:46px !important; }
+    }
     </style>
     """,
     unsafe_allow_html=True,
