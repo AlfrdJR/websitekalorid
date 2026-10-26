@@ -455,6 +455,12 @@ def css():
         .recipe-macros { display:flex; flex-wrap:wrap; gap:.4rem; margin:.65rem 0 .8rem; }
         .recipe-macro { background:#f1f7f2; border:1px solid #e1eee3; border-radius:10px; padding:.35rem .55rem; color:#287a56; font-size:.75rem; font-weight:700; }
         .overview-card { background:#fff; border:1px solid var(--line); border-radius:20px; padding:1rem; box-shadow:0 3px 12px #1c3a2710; }
+        .protein-table-wrap { overflow-x:auto; background:var(--surface); border:1px solid var(--line); border-radius:18px; }
+        .protein-table { width:100%; border-collapse:collapse; font-size:.8rem; }
+        .protein-table th { padding:.7rem .75rem; background:var(--surface-soft); color:var(--muted); font-size:.65rem; text-align:left; text-transform:uppercase; letter-spacing:.05em; }
+        .protein-table td { padding:.75rem; border-top:1px solid var(--line); color:var(--ink); }
+        .protein-table tr:first-child td { font-weight:700; }
+        .protein-table .protein-total { color:var(--green); font:700 .95rem 'Space Grotesk'; }
         .week-bars { display:flex; align-items:end; justify-content:space-between; gap:.45rem; height:145px; padding:.8rem .35rem .2rem; }
         .week-day { display:flex; flex-direction:column; align-items:center; gap:.35rem; flex:1; height:100%; justify-content:end; color:var(--muted); font-size:.68rem; }
         .week-track { height:105px; width:100%; max-width:28px; background:#edf3ee; border-radius:9px; display:flex; align-items:end; overflow:hidden; }
@@ -1216,6 +1222,25 @@ with tab_insights:
         with col:
             st.markdown(f'<div class="metric-card"><div class="metric-label">KESKMINE {label.upper()}</div><div class="metric-value">{value}g</div><div class="metric-note">logitud päevadel</div></div>', unsafe_allow_html=True)
     st.markdown("### Päevased eesmärgid")
+    protein_days = []
+    for log_day, entries in st.session_state.daily_logs.items():
+        if not entries:
+            continue
+        try:
+            parsed_day = date.fromisoformat(log_day)
+        except ValueError:
+            continue
+        day_totals = totals(parsed_day)
+        protein_days.append((parsed_day, day_totals))
+    protein_days.sort(key=lambda item: item[1]["protein"], reverse=True)
+    st.markdown("### Kõige rohkem valku")
+    if protein_days:
+        protein_rows = []
+        for parsed_day, day_totals in protein_days:
+            protein_rows.append(f'<tr><td>{parsed_day.strftime("%d.%m.%Y")}</td><td class="protein-total">{int(day_totals["protein"])} g</td><td>{int(day_totals["kcal"])} kcal</td><td>{int(day_totals["carbs"])} g</td><td>{int(day_totals["fat"])} g</td></tr>')
+        st.markdown(f'<div class="protein-table-wrap"><table class="protein-table"><thead><tr><th>Päev</th><th>Valk</th><th>Kalorid</th><th>Süsivesikud</th><th>Rasv</th></tr></thead><tbody>{"".join(protein_rows)}</tbody></table></div>', unsafe_allow_html=True)
+    else:
+        st.info("Päevade andmed ilmuvad siia pärast toitude logimist.")
     goal_left, goal_right = st.columns(2)
     with goal_left:
         goal_kcal = st.number_input("Kalorid päevas", min_value=1, max_value=10000, value=int(st.session_state.goals["kcal"]), step=50, key="goal_kcal")
