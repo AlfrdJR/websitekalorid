@@ -607,7 +607,9 @@ with tab_today:
     st.markdown(f'<div class="goal-card"><div class="goal-ring" style="--percent:{percent}%"><span>{percent}%</span></div><div class="goal-copy"><div class="metric-label">PÄEVA EESMÄRK</div><div class="metric-value">{int(t["kcal"]):,} <span style="font-size:.85rem;color:#000000;font-weight:500">/ {goal:,} kcal</span></div><div class="metric-note">{remaining:,} kcal alles · {len(today_entries)} toidukirjet</div></div></div>', unsafe_allow_html=True)
     st.markdown(f'<div class="streak-card">🔥 <b>{streak_count()} päeva järjest</b> · oled oma logimisega heas rütmis</div>', unsafe_allow_html=True)
     st.write("")
-    with st.container(key="macro-cards", horizontal=True, width="stretch", gap="small"):
+    # Keep the wrapper as a normal full-width container. A horizontal wrapper
+    # around st.columns makes the first card keep its desktop width on phones.
+    with st.container(key="macro-cards", width="stretch"):
         c1, c2, c3 = st.columns(3)
         macro_goal_values = iter((st.session_state.goals["protein"], st.session_state.goals["carbs"], st.session_state.goals["fat"]))
         for col, label, value, goal_value in [(c1, "Valk", t["protein"], 140), (c2, "Süsivesikud", t["carbs"], 250), (c3, "Rasv", t["fat"], 70)]:
