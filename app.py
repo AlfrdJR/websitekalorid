@@ -385,8 +385,6 @@ def css():
         [class*="st-key-remove_one_today_"] button::after { content:"-"; color:#287a56; font-size:1rem; }
         [class*="st-key-add_recipe_row_"] button { font-size:0 !important; color:transparent !important; }
         [class*="st-key-add_recipe_row_"] button::after { content:"+ Lisa toode"; color:#287a56; font-size:.82rem; }
-        /* Goal editing is kept in the Overview tab, not duplicated in Today. */
-        [role="tabpanel"]:first-of-type [data-testid="stExpander"] { display:none !important; }
         [class*="food-remove"] button { font-size:0 !important; color:transparent !important; }
         [class*="food-remove"] button::after { content:"X"; color:#b45d5d !important; font-size:1rem !important; }
         [class*="product-actions"] button:not([kind="primary"]), [class*="product-actions"] [data-testid="stBaseButton-secondary"] { font-size:0 !important; color:transparent !important; text-shadow:none !important; }
@@ -527,19 +525,6 @@ with tab_today:
     st.markdown(f'<div class="goal-card"><div class="goal-ring" style="--percent:{percent}%"><span>{percent}%</span></div><div class="goal-copy"><div class="metric-label">PÄEVA EESMÄRK</div><div class="metric-value">{int(t["kcal"]):,} <span style="font-size:.85rem;color:#78857d;font-weight:500">/ {goal:,} kcal</span></div><div class="metric-note">{remaining:,} kcal alles · {len(today_entries)} toidukirjet</div></div></div>', unsafe_allow_html=True)
     st.markdown(f'<div class="streak-card">🔥 <b>{streak_count()} päeva järjest</b> · oled oma logimisega heas rütmis</div>', unsafe_allow_html=True)
     st.write("")
-    with st.expander("Muuda päevaseid eesmärke", expanded=False):
-        st.caption("Määra oma päevane kalorite ja makrode siht.")
-        today_goal_left, today_goal_right = st.columns(2)
-        with today_goal_left:
-            today_goal_kcal = st.number_input("Kalorid", min_value=1, max_value=10000, value=int(st.session_state.goals["kcal"]), step=50, key="today_goal_kcal")
-            today_goal_protein = st.number_input("Valk (g)", min_value=1, max_value=1000, value=int(st.session_state.goals["protein"]), step=5, key="today_goal_protein")
-        with today_goal_right:
-            today_goal_carbs = st.number_input("Süsivesikud (g)", min_value=1, max_value=1500, value=int(st.session_state.goals["carbs"]), step=5, key="today_goal_carbs")
-            today_goal_fat = st.number_input("Rasv (g)", min_value=1, max_value=500, value=int(st.session_state.goals["fat"]), step=5, key="today_goal_fat")
-        if st.button("Salvesta eesmärgid", type="primary", use_container_width=True, key="today_save_goals"):
-            st.session_state.goals = {"kcal": int(today_goal_kcal), "protein": int(today_goal_protein), "carbs": int(today_goal_carbs), "fat": int(today_goal_fat)}
-            save_goals(st.session_state.goals)
-            st.rerun()
     c1, c2, c3 = st.columns(3)
     macro_goal_values = iter((st.session_state.goals["protein"], st.session_state.goals["carbs"], st.session_state.goals["fat"]))
     for col, label, value, goal_value in [(c1, "Valk", t["protein"], 140), (c2, "Süsivesikud", t["carbs"], 250), (c3, "Rasv", t["fat"], 70)]:
@@ -780,19 +765,18 @@ with tab_recipes:
             st.rerun()
 
 with tab_insights:
-    with st.expander("Muuda eesmärke", expanded=False):
-        st.caption("Need eesmärgid kuvatakse tänases vaates ja ülevaate graafikul.")
-        goal_left, goal_right = st.columns(2)
-        with goal_left:
-            goal_kcal = st.number_input("Kalorid päevas", min_value=1, max_value=10000, value=int(st.session_state.goals["kcal"]), step=50, key="goal_kcal")
-            goal_protein = st.number_input("Valk (g)", min_value=1, max_value=1000, value=int(st.session_state.goals["protein"]), step=5, key="goal_protein")
-        with goal_right:
-            goal_carbs = st.number_input("Süsivesikud (g)", min_value=1, max_value=1500, value=int(st.session_state.goals["carbs"]), step=5, key="goal_carbs")
-            goal_fat = st.number_input("Rasv (g)", min_value=1, max_value=500, value=int(st.session_state.goals["fat"]), step=5, key="goal_fat")
-        if st.button("Salvesta eesmärgid", type="primary", use_container_width=True, key="save_goals"):
-            st.session_state.goals = {"kcal": int(goal_kcal), "protein": int(goal_protein), "carbs": int(goal_carbs), "fat": int(goal_fat)}
-            save_goals(st.session_state.goals)
-            st.rerun()
+    st.markdown("### Päevased eesmärgid")
+    goal_left, goal_right = st.columns(2)
+    with goal_left:
+        goal_kcal = st.number_input("Kalorid päevas", min_value=1, max_value=10000, value=int(st.session_state.goals["kcal"]), step=50, key="goal_kcal")
+        goal_protein = st.number_input("Valk (g)", min_value=1, max_value=1000, value=int(st.session_state.goals["protein"]), step=5, key="goal_protein")
+    with goal_right:
+        goal_carbs = st.number_input("Süsivesikud (g)", min_value=1, max_value=1500, value=int(st.session_state.goals["carbs"]), step=5, key="goal_carbs")
+        goal_fat = st.number_input("Rasv (g)", min_value=1, max_value=500, value=int(st.session_state.goals["fat"]), step=5, key="goal_fat")
+    if st.button("Salvesta eesmärgid", type="primary", use_container_width=True, key="save_goals"):
+        st.session_state.goals = {"kcal": int(goal_kcal), "protein": int(goal_protein), "carbs": int(goal_carbs), "fat": int(goal_fat)}
+        save_goals(st.session_state.goals)
+        st.rerun()
     st.markdown("## Sinu ülevaade")
     st.caption("Päris sinu logi põhjal — ilma oletuste ja näidisandmeteta.")
     last_seven_days = [TODAY - timedelta(days=offset) for offset in range(7)]
