@@ -2,7 +2,16 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <script src="https://unpkg.com/streamlit-component-lib@2.0.0/dist/index.js"></script>
+  <script>
+    const Streamlit = {
+      events: { addEventListener: (type, handler) => window.addEventListener("message", event => {
+        if (event.data && event.data.type === "streamlit:render") handler({ detail: { args: event.data.args || {} } });
+      }) },
+      setComponentReady: () => window.parent.postMessage({ isStreamlitMessage: true, type: "streamlit:componentReady", apiVersion: 1 }, "*"),
+      setFrameHeight: height => window.parent.postMessage({ isStreamlitMessage: true, type: "streamlit:setFrameHeight", height }, "*"),
+      setComponentValue: value => window.parent.postMessage({ isStreamlitMessage: true, type: "streamlit:setComponentValue", value: { type: "json", value } }, "*")
+    };
+  </script>
   <style>
     * { box-sizing: border-box; }
     body { margin: 0; font-family: system-ui, sans-serif; color: #17231d; background: transparent; }
