@@ -384,8 +384,9 @@ def css():
         [class*="food-adjust"] { display:inline-flex !important; flex:0 0 auto !important; width:5.6rem !important; max-width:5.6rem !important; overflow:hidden !important; box-sizing:border-box !important; }
         [class*="food-adjust"] [data-testid="stHorizontalBlock"] { display:flex !important; flex:0 0 auto !important; width:5rem !important; max-width:5rem !important; flex-wrap:nowrap !important; justify-content:flex-start !important; gap:0 !important; }
         [class*="food-adjust"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:0 0 2.5rem !important; width:2.5rem !important; min-width:2.5rem !important; padding:0 !important; }
-        [class*="food-adjust"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { transform:translateX(-.45rem) !important; }
+        [class*="food-adjust"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { transform:none !important; }
         [class*="food-adjust"] button { width:2.5rem !important; min-width:2.5rem !important; height:2.8rem !important; min-height:2.8rem !important; font-size:1.35rem !important; }
+        [class*="food-adjust"] button:focus, [class*="food-adjust"] button:focus-visible, [class*="food-adjust"] button:active { background:#eaf6ed !important; border-radius:11px !important; outline:none !important; }
         [class*="food-adjust"] button p { display:flex !important; align-items:center !important; justify-content:center !important; width:100% !important; height:100% !important; margin:0 !important; font-size:1.35rem !important; }
         [class*="food-adjust"] button { color:#287a56 !important; }
         [class*="food-remove"] button { color:#b45d5d !important; }
@@ -559,7 +560,7 @@ def css():
             [class*="food-adjust"] { display:inline-flex !important; flex:0 0 auto !important; width:5.6rem !important; max-width:5.6rem !important; padding:.3rem !important; border-radius:18px !important; overflow:hidden !important; box-sizing:border-box !important; }
             [class*="food-adjust"] [data-testid="stHorizontalBlock"] { display:flex !important; flex:0 0 auto !important; width:5rem !important; max-width:5rem !important; flex-wrap:nowrap !important; justify-content:flex-start !important; gap:0 !important; }
             [class*="food-adjust"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:0 0 2.5rem !important; width:2.5rem !important; min-width:2.5rem !important; padding:0 !important; }
-            [class*="food-adjust"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { transform:translateX(-.45rem) !important; }
+            [class*="food-adjust"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { transform:none !important; }
             [class*="food-adjust"] button { width:2.5rem !important; min-width:2.5rem !important; height:2.8rem !important; min-height:2.8rem !important; font-size:1.35rem !important; }
             [class*="food-adjust"] button p { display:flex !important; align-items:center !important; justify-content:center !important; width:100% !important; height:100% !important; margin:0 !important; font-size:1.35rem !important; }
             .goal-card { border-radius:20px; padding:.8rem; gap:.7rem; }
