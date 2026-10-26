@@ -772,10 +772,12 @@ with tab_add:
     if add_mode == "Otsi toitu":
         query = st.text_input("Otsi toodet", placeholder="nt kohuke, rukkileib, skyr…", key="food_search_query")
         filtered = [p for p in all_products() if not query or query.lower() in (p["name"] + " " + p["brand"]).lower()]
-        for idx, product in enumerate(filtered[:15]):
+        visible_products = filtered[:15]
+        highlighted_index = next((idx for idx, product in enumerate(visible_products) if product["name"] == st.session_state.get("highlight_added_food")), None)
+        highlighted_style = "" if highlighted_index is None else f'[class*="st-key-product-actions-{highlighted_index}"] button[kind="primary"] {{ background:#e5f4eb !important; color:#287a56 !important; border-color:#b9dfc5 !important; }}'
+        st.markdown(f'<style>{highlighted_style}</style>', unsafe_allow_html=True)
+        for idx, product in enumerate(visible_products):
             st.markdown(f'**{product["name"]}**  \n<span style="color:#000000;font-size:.8rem">{product["brand"]} · {product["portion"]} · {product["kcal"]} kcal</span>  \n<span style="color:#000000;font-size:.75rem;font-weight:600">Valk {product["protein"]}g · Süsivesikud {product["carbs"]}g · Rasv {product["fat"]}g</span>', unsafe_allow_html=True)
-            if product["name"] == st.session_state.get("highlight_added_food"):
-                st.markdown(f'<style>[class*="st-key-product-actions-{idx}"] button[kind="primary"] {{ background:#e5f4eb !important; color:#287a56 !important; border-color:#b9dfc5 !important; }}</style>', unsafe_allow_html=True)
             with st.container(key=f"product-actions-{idx}", horizontal=True, width="stretch", horizontal_alignment="distribute", gap="small", vertical_alignment="center"):
                 if st.button("Lisa", type="primary", key=f"add_{idx}_{product['name']}"):
                     add_entry(product, day=TODAY)
