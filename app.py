@@ -1295,25 +1295,28 @@ with tab_recipes:
             st.info("Selle otsinguga toodet ei leitud.")
             filtered_recipe_products = recipe_products[:1]
         recipe_products = filtered_recipe_products
+        used_builder_names = {item.get("name", "").strip().casefold() for item in st.session_state.recipe_builder}
+        available_recipe_products = [
+            product for product in recipe_products
+            if product["name"].strip().casefold() not in used_builder_names
+        ]
         recipe_labels = [f'{p["name"]} · {p["brand"]}' for p in recipe_products]
+        recipe_labels = [f'{p["name"]} · {p["brand"]}' for p in available_recipe_products] or ["Kõik selle otsingu tooted on juba lisatud"]
         if st.session_state.get("recipe_ingredient_product") not in recipe_labels:
             st.session_state.recipe_ingredient_product = recipe_labels[0]
         ingredient_col, grams_col, add_col = st.columns([4, 2, 1])
         with ingredient_col:
-            selected_ingredient_label = st.selectbox("Toode", recipe_labels, key="recipe_ingredient_product")
+            selected_ingredient_label = st.selectbox("Toode", recipe_labels, key="recipe_ingredient_product", disabled=not available_recipe_products)
         with grams_col:
             ingredient_grams = st.number_input("Grammid", min_value=1, value=100, step=5, key="recipe_ingredient_grams")
         with add_col:
             st.write("")
             if st.button("Lisa", key="recipe_add_ingredient"):
-                selected_product = recipe_products[recipe_labels.index(selected_ingredient_label)]
-                existing_ingredient = next((item for item in st.session_state.recipe_builder if item["name"] == selected_product["name"]), None)
-                if existing_ingredient:
-                    existing_ingredient["grams"] += ingredient_grams
-                else:
+                if available_recipe_products:
+                    selected_product = available_recipe_products[recipe_labels.index(selected_ingredient_label)]
                     builder_id = f"builder-{uuid.uuid4().hex[:12]}"
                     st.session_state.recipe_builder.append({"name": selected_product["name"], "grams": ingredient_grams, "_edit_id": builder_id})
-                st.rerun()
+                    st.rerun()
 
     if st.session_state.recipe_builder:
         st.markdown("### Koostisosad")
