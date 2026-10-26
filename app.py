@@ -623,6 +623,8 @@ def css():
         [class*="food-adjust"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { position:static !important; flex:0 0 2.5rem !important; width:2.5rem !important; min-width:2.5rem !important; height:2.8rem !important; padding:0 !important; transform:none !important; }
         [class*="food-adjust"] button { display:flex !important; align-items:center !important; justify-content:center !important; box-sizing:border-box !important; width:2.5rem !important; min-width:2.5rem !important; height:2.8rem !important; min-height:2.8rem !important; margin:0 !important; padding:0 !important; border:0 !important; border-radius:11px !important; background:transparent !important; color:#287a56 !important; outline:none !important; }
         [class*="food-adjust"] button p { display:block !important; width:auto !important; height:auto !important; margin:0 !important; font-size:1.35rem !important; line-height:1 !important; }
+        [class*="food-adjust"] button p { color:#287a56 !important; font-family:inherit !important; font-weight:600 !important; text-align:center !important; }
+        [class*="food-adjust"] button p::after { content:none !important; }
         [class*="food-adjust"] button:focus, [class*="food-adjust"] button:focus-visible, [class*="food-adjust"] button:active { outline:none !important; box-shadow:none !important; background:#eaf6ed !important; }
         </style>
         """,
