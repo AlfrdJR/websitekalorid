@@ -423,6 +423,8 @@ def css():
             .mobile-footer { background:#111714e8; border-top-color:var(--line); color:var(--muted); }
             div.stButton > button, [data-testid="stDownloadButton"] button { background:var(--surface); color:var(--ink); border-color:var(--line); }
             div.stButton > button[kind="primary"] { background:#287a56; color:white; border-color:#287a56; }
+            [class*="product-actions"] button:not([kind="primary"]), [class*="product-actions"] [data-testid="stBaseButton-secondary"] { background:#202b25 !important; border:1px solid #405047 !important; color:transparent !important; box-shadow:none !important; }
+            [class*="product-actions"] button:not([kind="primary"]):hover, [class*="product-actions"] [data-testid="stBaseButton-secondary"]:hover { background:#293b31 !important; border-color:#72d09b !important; }
             [class*="food-adjust"] button { color:#72d09b !important; }
             [class*="food-remove"] button { color:#f08b8b !important; }
             [class*="food-adjust"] button:hover { background:#214b35 !important; color:#b7f3ca !important; }
