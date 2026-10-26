@@ -597,7 +597,7 @@ with tab_today:
     goal = st.session_state.goals["kcal"]
     remaining = max(0, goal - int(t["kcal"]))
     percent = min(100, int(t["kcal"] / goal * 100))
-    st.markdown(f'<div class="goal-card"><div class="goal-ring" style="--percent:{percent}%"><span>{percent}%</span></div><div class="goal-copy"><div class="metric-label">PÄEVA EESMÄRK</div><div class="metric-value">{int(t["kcal"]):,} <span style="font-size:.85rem;color:#78857d;font-weight:500">/ {goal:,} kcal</span></div><div class="metric-note">{remaining:,} kcal alles · {len(today_entries)} toidukirjet</div></div></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="goal-card"><div class="goal-ring" style="--percent:{percent}%"><span>{percent}%</span></div><div class="goal-copy"><div class="metric-label">PÄEVA EESMÄRK</div><div class="metric-value">{int(t["kcal"]):,} <span style="font-size:.85rem;color:#000000;font-weight:500">/ {goal:,} kcal</span></div><div class="metric-note">{remaining:,} kcal alles · {len(today_entries)} toidukirjet</div></div></div>', unsafe_allow_html=True)
     st.markdown(f'<div class="streak-card">🔥 <b>{streak_count()} päeva järjest</b> · oled oma logimisega heas rütmis</div>', unsafe_allow_html=True)
     st.write("")
     c1, c2, c3 = st.columns(3)
@@ -640,7 +640,7 @@ with tab_add:
         query = st.text_input("Otsi toodet", placeholder="nt kohuke, rukkileib, skyr…", key="food_search_query")
         filtered = [p for p in all_products() if not query or query.lower() in (p["name"] + " " + p["brand"]).lower()]
         for idx, product in enumerate(filtered[:15]):
-            st.markdown(f'**{product["name"]}**  \n<span style="color:#718078;font-size:.8rem">{product["brand"]} · {product["portion"]} · {product["kcal"]} kcal</span>  \n<span style="color:#287a56;font-size:.75rem;font-weight:600">Valk {product["protein"]}g · Süsivesikud {product["carbs"]}g · Rasv {product["fat"]}g</span>', unsafe_allow_html=True)
+            st.markdown(f'**{product["name"]}**  \n<span style="color:#000000;font-size:.8rem">{product["brand"]} · {product["portion"]} · {product["kcal"]} kcal</span>  \n<span style="color:#000000;font-size:.75rem;font-weight:600">Valk {product["protein"]}g · Süsivesikud {product["carbs"]}g · Rasv {product["fat"]}g</span>', unsafe_allow_html=True)
             with st.container(key=f"product-actions-{idx}", horizontal=True, width="stretch", horizontal_alignment="distribute", gap="small", vertical_alignment="center"):
                 if st.button("Lisa", type="primary", key=f"add_{idx}_{product['name']}"):
                     add_entry(product, day=TODAY)
