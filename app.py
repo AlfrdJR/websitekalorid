@@ -408,7 +408,7 @@ def css():
         [class*="st-key-remove_one_today_"] button::after { content:"-"; color:#287a56; font-size:1rem; }
         [class*="st-key-remove_one_today_"] button::after { content:none !important; }
         [class*="st-key-remove_one_today_"] button p { font-size:0 !important; color:transparent !important; }
-        [class*="st-key-remove_one_today_"] button p::after { content:"−"; color:#287a56 !important; font-size:1.35rem !important; }
+        [class*="st-key-remove_one_today_"] button p::after { content:"−1"; color:#287a56 !important; font-size:1.1rem !important; }
         [class*="st-key-add_recipe_row_"] button { font-size:0 !important; color:transparent !important; }
         [class*="st-key-add_recipe_row_"] button::after { content:"+ Lisa toode"; color:#287a56; font-size:.82rem; }
         [class*="food-remove"] button { font-size:0 !important; color:transparent !important; }
@@ -674,10 +674,10 @@ with tab_today:
         else:
             with st.container(key=f"food-actions-{i}", horizontal=True, width="stretch", horizontal_alignment="distribute", gap="small", vertical_alignment="center"):
                 with st.container(key=f"food-adjust-{i}", horizontal=True, width="content", gap="small"):
-                    if st.button("+", key=f"add_one_today_{i}", help="Lisa üks sama toit"):
+                    if st.button("+1", key=f"add_one_today_{i}", help="Lisa üks sama toit"):
                         add_entry(item["_prototype"], item["_prototype"].get("meal", "Vahepala"), TODAY)
                         st.rerun()
-                    if st.button("−", key=f"remove_one_today_{i}", help="Eemalda üks kogus"):
+                    if st.button("−1", key=f"remove_one_today_{i}", help="Eemalda üks kogus"):
                         remove_entry_group([item["_indices"][-1]], TODAY)
                         st.rerun()
                 with st.container(key=f"food-remove-{i}", horizontal=True, width="content"):
