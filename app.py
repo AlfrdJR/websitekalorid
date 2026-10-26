@@ -418,7 +418,7 @@ def css():
         [class*="st-key-remove_one_today_"] button p { font-size:0 !important; color:transparent !important; }
         [class*="st-key-remove_one_today_"] button p::after { content:"−"; color:#287a56 !important; font-size:1.35rem !important; }
         [class*="st-key-add_recipe_row_"] button { font-size:0 !important; color:transparent !important; }
-        [class*="st-key-add_recipe_row_"] button::after { content:"+ Lisa toode"; color:#287a56; font-size:.82rem; }
+        [class*="st-key-add_recipe_row_"] button::after { content:"+ Lisa toode"; display:block !important; width:100% !important; color:#287a56; font-size:.82rem; text-align:center !important; }
         [class*="food-remove"] button { font-size:0 !important; color:transparent !important; }
         [class*="food-remove"] button::after { content:"X"; color:#b45d5d !important; font-size:1rem !important; }
         [class*="product-actions"] button:not([kind="primary"]), [class*="product-actions"] [data-testid="stBaseButton-secondary"] { font-size:0 !important; color:transparent !important; text-shadow:none !important; }
