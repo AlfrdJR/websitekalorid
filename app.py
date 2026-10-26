@@ -674,7 +674,6 @@ def css():
         [class*="st-key-add_recipe_row_"] { display:flex !important; justify-content:flex-start !important; align-self:flex-start !important; width:100% !important; margin-left:0 !important; margin-right:auto !important; }
         [class*="st-key-add_recipe_row_"] > div { display:flex !important; justify-content:flex-start !important; width:100% !important; margin-left:0 !important; margin-right:auto !important; }
         [class*="st-key-add_recipe_row_"] button { width:7.5rem !important; min-width:7.5rem !important; height:3rem !important; padding:.45rem .55rem !important; white-space:nowrap !important; text-align:center !important; justify-content:center !important; margin-left:0 !important; margin-right:auto !important; align-self:flex-start !important; }
-        [data-testid="stPopoverBody"] { transform:translateX(34px) !important; }
         @media (max-width:600px) {
             [class*="st-key-meal-boxes"] [data-testid="stHorizontalBlock"] { flex-wrap:wrap !important; }
             [class*="st-key-meal-boxes"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 calc(50% - .25rem) !important; width:calc(50% - .25rem) !important; min-width:0 !important; }
