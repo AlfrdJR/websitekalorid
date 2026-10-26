@@ -634,11 +634,11 @@ def css():
 
 css()
 st.markdown('<div class="brand-card"><span class="brand-mark">N</span><span>NÕU</span></div>', unsafe_allow_html=True)
+if added_message := st.session_state.pop("last_added_message", None):
+    st.success(f"✓ {added_message}")
 tab_today, tab_add, tab_calendar, tab_recipes, tab_insights = st.tabs(["Täna", "Lisa toit", "Kalender", "Retseptid", "Ülevaade"])
 
 with tab_today:
-    if st.session_state.pop("last_added_message", None):
-        st.success("Toit on kohe tänases logis.")
     today_entries = entries_for(TODAY)
     displayed_today_entries = grouped_log_entries(today_entries)
     t = totals(TODAY)
