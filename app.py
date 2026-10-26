@@ -673,7 +673,7 @@ def css():
         [class*="st-key-meal-box-actions-"] button { min-width:2.1rem !important; min-height:2.6rem !important; height:2.6rem !important; padding:.25rem .4rem !important; border-radius:9px !important; }
         [class*="st-key-add_recipe_row_"] { display:flex !important; justify-content:flex-start !important; align-self:flex-start !important; width:100% !important; margin-left:0 !important; margin-right:auto !important; }
         [class*="st-key-add_recipe_row_"] > div { display:flex !important; justify-content:flex-start !important; width:100% !important; margin-left:0 !important; margin-right:auto !important; }
-        [class*="st-key-add_recipe_row_"] button { width:max-content !important; min-width:0 !important; margin-left:0 !important; margin-right:auto !important; align-self:flex-start !important; }
+        [class*="st-key-add_recipe_row_"] button { width:6rem !important; min-width:6rem !important; height:3rem !important; padding:.45rem .55rem !important; white-space:nowrap !important; margin-left:0 !important; margin-right:auto !important; align-self:flex-start !important; }
         @media (max-width:600px) {
             [class*="st-key-meal-boxes"] [data-testid="stHorizontalBlock"] { flex-wrap:wrap !important; }
             [class*="st-key-meal-boxes"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 calc(50% - .25rem) !important; width:calc(50% - .25rem) !important; min-width:0 !important; }
