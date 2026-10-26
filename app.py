@@ -1256,7 +1256,7 @@ with tab_insights:
     if top_protein_days:
         protein_cards = []
         for place, (parsed_day, day_totals) in enumerate(top_protein_days, start=1):
-            protein_cards.append(f'<div class="protein-top-card protein-best-card"><div class="protein-best-date">{parsed_day.strftime("%d.%m.%Y")}</div><div class="protein-best-amount">{int(day_totals["protein"])} g</div></div>')
+            protein_cards.append(f'<div class="protein-top-card protein-best-card"><div class="protein-best-date">{parsed_day.strftime("%d.%m.%Y")}</div><div class="protein-best-amount">{int(day_totals["protein"])} g valku</div></div>')
         grid_class = "protein-top-grid single" if len(protein_cards) == 1 else "protein-top-grid"
         st.markdown(f'<div class="{grid_class}">{"".join(protein_cards)}</div>', unsafe_allow_html=True)
     else:
