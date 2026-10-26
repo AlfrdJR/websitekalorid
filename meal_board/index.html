@@ -76,14 +76,38 @@
           card.innerHTML = `<div class="card-name"></div><div class="card-meta"></div><div class="card-actions"><button class="action add">+</button><button class="action subtract">−</button><button class="action remove">×</button></div>`;
           card.querySelector(".card-name").textContent = `${entry.count > 1 ? entry.count + "× " : ""}${entry.name}`;
           card.querySelector(".card-meta").textContent = `${Math.round(entry.kcal)} kcal · ${Math.round(entry.protein)}g valku · ${Math.round(entry.carbs)}g süsivesikuid`;
-          card.addEventListener("dragstart", () => { dragged = entry; card.classList.add("dragging"); });
+          card.addEventListener("dragstart", event => { if (event.target.closest(".action")) { event.preventDefault(); return; } dragged = entry; card.classList.add("dragging"); });
           card.addEventListener("dragend", () => { dragged = null; card.classList.remove("dragging"); });
-          card.addEventListener("pointerdown", event => { card.setPointerCapture(event.pointerId); dragged = entry; });
+          card.addEventListener("pointerdown", event => {
+            if (event.target.closest(".action") || event.pointerType === "touch") return;
+            card.setPointerCapture(event.pointerId); dragged = entry; card.classList.add("dragging");
+          });
           card.addEventListener("pointerup", event => {
+            if (event.target.closest(".action") || event.pointerType === "touch") return;
             const target = document.elementFromPoint(event.clientX, event.clientY)?.closest(".column");
             if (target && target.dataset.meal !== entry.meal) send("move", { ...entry, meal: target.dataset.meal });
-            dragged = null;
+            dragged = null; card.classList.remove("dragging");
           });
+          card.addEventListener("touchstart", event => {
+            if (event.target.closest(".action")) return;
+            event.preventDefault(); dragged = entry; card.classList.add("dragging");
+          }, { passive: false });
+          card.addEventListener("touchmove", event => {
+            if (!dragged) return;
+            event.preventDefault();
+            const touch = event.touches[0];
+            document.querySelectorAll(".column").forEach(column => column.classList.remove("over"));
+            document.elementFromPoint(touch.clientX, touch.clientY)?.closest(".column")?.classList.add("over");
+          }, { passive: false });
+          card.addEventListener("touchend", event => {
+            if (!dragged) return;
+            event.preventDefault();
+            const touch = event.changedTouches[0];
+            const target = document.elementFromPoint(touch.clientX, touch.clientY)?.closest(".column");
+            if (target && target.dataset.meal !== entry.meal) send("move", { ...entry, meal: target.dataset.meal });
+            document.querySelectorAll(".column").forEach(column => column.classList.remove("over"));
+            dragged = null; card.classList.remove("dragging");
+          }, { passive: false });
           card.querySelector(".add").onclick = event => { event.stopPropagation(); send("add", entry); };
           card.querySelector(".subtract").onclick = event => { event.stopPropagation(); send("subtract", entry); };
           card.querySelector(".remove").onclick = event => { event.stopPropagation(); send("remove", entry); };
