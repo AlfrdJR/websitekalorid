@@ -810,23 +810,25 @@ with tab_add:
                     st.session_state.inline_create_food = ""
                     st.rerun()
     else:
-        with st.form("manual_food"):
+        manual_form_key = f"manual_food_{st.session_state.get('manual_food_form_version', 0)}"
+        with st.form(manual_form_key):
             name = st.text_input("Toidu nimi", placeholder="nt õhtusöök")
             meal = st.selectbox("Toidukord", ["Hommikusöök", "Lõuna", "Õhtusöök", "Vahepala"])
-            nutrition_basis = st.selectbox("Toiteväärtus käib", ["100 g", "100 ml", "1 tk", "1 portsjon"], help="Märgi, mille kohta pakendil või sinu andmetes kalorid ja makrod käivad.")
+            nutrition_basis = st.selectbox("Toiteväärtus käib", ["100 g", "100 ml", "1 tk", "1 portsjon"], index=0, help="Märgi, mille kohta pakendil või sinu andmetes kalorid ja makrod käivad.")
             c1, c2 = st.columns(2)
             with c1:
-                kcal = st.number_input("Kalorid", min_value=0, value=300)
-                protein = st.number_input("Valk (g)", min_value=0, value=20)
+                kcal = st.number_input("Kalorid", min_value=0, value=0)
+                protein = st.number_input("Valk (g)", min_value=0, value=0)
             with c2:
-                carbs = st.number_input("Süsivesikud (g)", min_value=0, value=30)
-                fat = st.number_input("Rasv (g)", min_value=0, value=10)
+                carbs = st.number_input("Süsivesikud (g)", min_value=0, value=0)
+                fat = st.number_input("Rasv (g)", min_value=0, value=0)
             save_product = st.checkbox("Salvesta see toit toodete alla järgmiseks korraks", value=True)
             if st.form_submit_button("Lisa logisse", type="primary", use_container_width=True) and name:
                 new_product = {"name": name, "brand": "Minu toit", "kcal": kcal, "protein": protein, "carbs": carbs, "fat": fat, "portion": nutrition_basis}
                 if save_product:
                     save_custom_product(new_product)
                 add_entry(new_product, meal, TODAY)
+                st.session_state.manual_food_form_version = st.session_state.get("manual_food_form_version", 0) + 1
                 st.rerun()
 
 with tab_calendar:
