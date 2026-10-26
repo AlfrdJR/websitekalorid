@@ -790,10 +790,9 @@ with tab_recipes:
         st.markdown('<div class="ingredient-header"><span>Toode</span><span>Kaal</span><span></span></div>', unsafe_allow_html=True)
         for ingredient_index, ingredient in enumerate(st.session_state.recipe_builder):
             ingredient_product = next((p for p in recipe_products if p["name"] == ingredient["name"]), None)
-            ingredient_kcal = calculate_recipe_ingredients([ingredient])["kcal"]
             with st.container(key=f"recipe-builder-row-{ingredient_index}", horizontal=True, width="stretch", gap="small", vertical_alignment="center"):
                 st.markdown(f'<div class="builder-product">{ingredient["name"]}</div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="builder-weight">{ingredient["grams"]} g · {int(ingredient_kcal)} kcal</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="builder-weight">{ingredient["grams"]} g</div>', unsafe_allow_html=True)
                 if st.button("×", key=f"remove_recipe_ingredient_{ingredient_index}"):
                     st.session_state.recipe_builder.pop(ingredient_index)
                     st.rerun()
