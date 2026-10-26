@@ -1023,6 +1023,11 @@ with tab_calendar:
         macro_card_class = "calendar-macro-card macro-complete" if macro_percent >= 100 else "calendar-macro-card"
         calendar_macro_cards.append(f'<div class="{macro_card_class}"><div class="calendar-macro-label">{macro_label}</div><div class="calendar-macro-ring" style="--progress:{macro_percent};--ring-color:{macro_color}"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="ring-track" cx="50" cy="50" r="40"></circle><circle class="ring-progress" cx="50" cy="50" r="40" pathLength="100"></circle></svg><span>{macro_percent}%</span></div><div class="calendar-macro-value">{int(macro_value)}g / {int(macro_goal)}g</div></div>')
     st.markdown(f'<div class="calendar-macro-grid">{"".join(calendar_macro_cards)}</div>', unsafe_allow_html=True)
+    calendar_water_ml = water_total(selected_day)
+    calendar_water_percent = min(100, int(calendar_water_ml / 3000 * 100))
+    calendar_water_over_goal = max(0, calendar_water_ml - 3000)
+    calendar_water_note = f"{calendar_water_over_goal} ml üle eesmärgi" if calendar_water_over_goal else f"{3000 - calendar_water_ml} ml veel eesmärgini"
+    st.markdown(f'<div class="water-card"><div class="water-glass" style="--water-percent:{calendar_water_percent}%"><div class="water-fill"></div></div><div class="water-copy"><h3>Joodik</h3><div class="water-amount">{calendar_water_ml} ml <span>/ 3000 ml</span></div><div class="metric-note">{calendar_water_note}</div></div></div>', unsafe_allow_html=True)
     st.markdown(f'<div class="goal-card"><div class="goal-copy"><div class="metric-label">{selected_day.strftime("%d. %B %Y").upper()}</div><div class="metric-value">{int(selected_totals["kcal"]):,} kcal</div><div class="metric-note">{len(selected_entries)} toidukirjet · {int(selected_totals["protein"])}g valku</div></div></div>', unsafe_allow_html=True)
     st.markdown("### Selle päeva toit")
     if not selected_entries:
