@@ -455,6 +455,14 @@ def css():
             .stTabs [data-baseweb="tab"] { min-width:max-content; font-size:.82rem; padding-bottom:.65rem; }
             [data-testid="stHorizontalBlock"] { gap:clamp(.15rem, 1.6vw, .45rem) !important; flex-wrap:wrap !important; max-width:100% !important; }
             [data-testid="stHorizontalBlock"] > [data-testid="column"] { min-width:0 !important; max-width:100% !important; flex:1 1 100% !important; width:100% !important; }
+            [class*="st-key-recipe-read-row-"] [data-testid="stHorizontalBlock"],
+            [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; align-items:center !important; gap:.35rem !important; }
+            [class*="st-key-recipe-read-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(1),
+            [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(1) { flex:1 1 auto !important; width:auto !important; min-width:0 !important; }
+            [class*="st-key-recipe-read-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2),
+            [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { flex:0 0 4.5rem !important; width:4.5rem !important; min-width:4.5rem !important; }
+            [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 2.5rem !important; width:2.5rem !important; min-width:2.5rem !important; }
+            [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] [data-testid="stButton"] button { width:2.5rem !important; min-width:2.5rem !important; padding:0 !important; }
             [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] { max-width:100% !important; overflow-x:hidden !important; }
             [class*="st-key-food_actions_"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; justify-content:flex-start !important; gap:clamp(.2rem, 2vw, .7rem) !important; }
             [class*="st-key-food_actions_"] [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:0 1 clamp(2.4rem, 13vw, 3.4rem) !important; width:clamp(2.4rem, 13vw, 3.4rem) !important; min-width:0 !important; padding:0 !important; }
@@ -648,12 +656,13 @@ with tab_recipes:
             recipe_ingredients = recipe.get("ingredients_data", [])
             if recipe_ingredients:
                 st.markdown('<div class="ingredient-header"><span>Toode</span><span>Kaal</span><span></span></div>', unsafe_allow_html=True)
-                for ingredient in recipe_ingredients:
-                    read_product_col, read_weight_col, _ = st.columns([4, 1.5, .8])
-                    with read_product_col:
-                        st.write(ingredient["name"])
-                    with read_weight_col:
-                        st.write(f'{ingredient["grams"]} g')
+                for ingredient_index, ingredient in enumerate(recipe_ingredients):
+                    with st.container(key=f"recipe-read-row-{index}-{ingredient_index}", horizontal=True, width="stretch", gap="small", vertical_alignment="center"):
+                        read_product_col, read_weight_col, _ = st.columns([4, 1.5, .8])
+                        with read_product_col:
+                            st.write(ingredient["name"])
+                        with read_weight_col:
+                            st.write(f'{ingredient["grams"]} g')
             else:
                 st.write("")
             with st.container(key=f"recipe-actions-{index}", horizontal=True, width="stretch", horizontal_alignment="distribute", gap="small", vertical_alignment="center"):
@@ -669,18 +678,19 @@ with tab_recipes:
                     recipe_labels = [f'{product["name"]} · {product["brand"]}' for product in recipe_products]
                     st.markdown('<div class="ingredient-header"><span>Toode</span><span>Kaal</span><span></span></div>', unsafe_allow_html=True)
                     for ingredient_index, ingredient in enumerate(edited_ingredients_data):
-                        product_col, grams_col, remove_col = st.columns([4, 1.5, .8])
-                        with product_col:
-                            current_label = next((label for label in recipe_labels if label.startswith(f'{ingredient["name"]} ·')), recipe_labels[0] if recipe_labels else "")
-                            selected_label = st.selectbox("Toode", recipe_labels, index=recipe_labels.index(current_label) if current_label in recipe_labels else 0, key=f"recipe_product_{index}_{ingredient_index}", label_visibility="collapsed") if recipe_labels else ""
-                            if selected_label:
-                                ingredient["name"] = selected_label.rsplit(" · ", 1)[0]
-                        with grams_col:
-                            ingredient["grams"] = st.number_input("Kaal (g)", min_value=1, value=int(ingredient.get("grams", 100)), step=5, key=f"recipe_grams_{index}_{ingredient_index}", label_visibility="collapsed")
-                        with remove_col:
-                            if st.button("×", key=f"remove_recipe_row_{index}_{ingredient_index}", help="Eemalda rida"):
-                                edited_ingredients_data.pop(ingredient_index)
-                                st.rerun()
+                        with st.container(key=f"recipe-edit-row-{index}-{ingredient_index}", horizontal=True, width="stretch", gap="small", vertical_alignment="center"):
+                            product_col, grams_col, remove_col = st.columns([4, 1.5, .8])
+                            with product_col:
+                                current_label = next((label for label in recipe_labels if label.startswith(f'{ingredient["name"]} ·')), recipe_labels[0] if recipe_labels else "")
+                                selected_label = st.selectbox("Toode", recipe_labels, index=recipe_labels.index(current_label) if current_label in recipe_labels else 0, key=f"recipe_product_{index}_{ingredient_index}", label_visibility="collapsed") if recipe_labels else ""
+                                if selected_label:
+                                    ingredient["name"] = selected_label.rsplit(" · ", 1)[0]
+                            with grams_col:
+                                ingredient["grams"] = st.number_input("Kaal (g)", min_value=1, value=int(ingredient.get("grams", 100)), step=5, key=f"recipe_grams_{index}_{ingredient_index}", label_visibility="collapsed")
+                            with remove_col:
+                                if st.button("×", key=f"remove_recipe_row_{index}_{ingredient_index}", help="Eemalda rida"):
+                                    edited_ingredients_data.pop(ingredient_index)
+                                    st.rerun()
                     if st.button("＋ Lisa toode", key=f"add_recipe_row_{index}", use_container_width=True):
                         if recipe_products:
                             edited_ingredients_data.append({"name": recipe_products[0]["name"], "grams": 100})
