@@ -410,6 +410,12 @@ def css():
         [class*="st-key-remove_recipe_row_"] button p { font-size:.72rem !important; color:#b45d5d !important; white-space:nowrap !important; }
         [class*="st-key-remove_recipe_row_"] button p::after { content:none !important; }
         [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 5.5rem !important; width:5.5rem !important; min-width:5.5rem !important; }
+        [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; align-items:center !important; gap:.35rem !important; }
+        [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(1) { flex:1 1 auto !important; width:auto !important; min-width:0 !important; }
+        [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { flex:0 0 7rem !important; width:7rem !important; min-width:7rem !important; }
+        [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 5.5rem !important; width:5.5rem !important; min-width:5.5rem !important; }
+        [class*="st-key-recipe-builder-row-"] [class*="st-key-remove_recipe_ingredient_"] button p { font-size:.72rem !important; color:#b45d5d !important; white-space:nowrap !important; }
+        [class*="st-key-recipe-builder-row-"] [class*="st-key-remove_recipe_ingredient_"] button p::after { content:none !important; }
         [class*="product-actions"] button:not([kind="primary"]) p, [class*="food-remove"] button p,
         [class*="st-key-remove_today_"] button p, [class*="st-key-delete_product_"] button p,
         [class*="st-key-remove_calendar_"] button p, [class*="st-key-remove_recipe_row_"] button p,
@@ -467,6 +473,9 @@ def css():
             [class*="st-key-recipe-read-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2),
             [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { flex:0 0 4.5rem !important; width:4.5rem !important; min-width:4.5rem !important; }
             [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 5.5rem !important; width:5.5rem !important; min-width:5.5rem !important; }
+            [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; }
+            [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(2) { flex:0 0 6.2rem !important; width:6.2rem !important; min-width:6.2rem !important; }
+            [class*="st-key-recipe-builder-row-"] [data-testid="stHorizontalBlock"] > [data-testid="column"]:nth-child(3) { flex:0 0 5.5rem !important; width:5.5rem !important; min-width:5.5rem !important; }
             [class*="st-key-recipe-edit-row-"] [data-testid="stHorizontalBlock"] [data-testid="stButton"] button { width:2.5rem !important; min-width:2.5rem !important; padding:0 !important; }
             [data-testid="stAppViewContainer"], [data-testid="stMainBlockContainer"] { max-width:100% !important; overflow-x:hidden !important; }
             [class*="st-key-food_actions_"] [data-testid="stHorizontalBlock"] { flex-wrap:nowrap !important; justify-content:flex-start !important; gap:clamp(.2rem, 2vw, .7rem) !important; }
@@ -742,15 +751,16 @@ with tab_recipes:
         for ingredient_index, ingredient in enumerate(st.session_state.recipe_builder):
             ingredient_product = next((p for p in recipe_products if p["name"] == ingredient["name"]), None)
             ingredient_kcal = calculate_recipe_ingredients([ingredient])["kcal"]
-            row_product, row_weight, row_remove = st.columns([4, 2, 1])
-            with row_product:
-                st.write(ingredient["name"])
-            with row_weight:
-                st.write(f'{ingredient["grams"]} g · {int(ingredient_kcal)} kcal')
-            with row_remove:
-                if st.button("×", key=f"remove_recipe_ingredient_{ingredient_index}"):
-                    st.session_state.recipe_builder.pop(ingredient_index)
-                    st.rerun()
+            with st.container(key=f"recipe-builder-row-{ingredient_index}", horizontal=True, width="stretch", gap="small", vertical_alignment="center"):
+                row_product, row_weight, row_remove = st.columns([4, 2, 1])
+                with row_product:
+                    st.write(ingredient["name"])
+                with row_weight:
+                    st.write(f'{ingredient["grams"]} g · {int(ingredient_kcal)} kcal')
+                with row_remove:
+                    if st.button("← Eemalda", key=f"remove_recipe_ingredient_{ingredient_index}"):
+                        st.session_state.recipe_builder.pop(ingredient_index)
+                        st.rerun()
         builder_totals = calculate_recipe_ingredients(st.session_state.recipe_builder)
         st.info(f'Kokku: {int(builder_totals["kcal"])} kcal · {int(builder_totals["protein"])}g valku · {int(builder_totals["carbs"])}g süsivesikuid · {int(builder_totals["fat"])}g rasva')
 
