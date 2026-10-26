@@ -3,6 +3,7 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 
 import streamlit as st
+import streamlit.components.v1 as components
 
 
 st.set_page_config(
@@ -67,6 +68,7 @@ HIDDEN_PRODUCTS_FILE = Path(__file__).with_name("hidden_products.json")
 CUSTOM_RECIPES_FILE = Path(__file__).with_name("custom_recipes.json")
 DAILY_LOGS_FILE = Path(__file__).with_name("daily_logs.json")
 GOALS_FILE = Path(__file__).with_name("goals.json")
+MEAL_BOARD = components.declare_component("meal_board", path=str(Path(__file__).with_name("meal_board")))
 
 DEFAULT_GOALS = {"kcal": 2200, "protein": 140, "carbs": 250, "fat": 70}
 
@@ -660,8 +662,41 @@ with tab_today:
     st.markdown(f'<div class="section-title"><h2>Tänane logi</h2><span class="section-hint">{TODAY.strftime("%d. %b")}</span></div>', unsafe_allow_html=True)
     if not today_entries:
         st.info("Sinu päev on tühi. Lisa esimene toit allpool.")
+    normal_items = [item for item in displayed_today_entries if item.get("meal") != "Retsept"]
+    meal_categories = {"Hommikusöök", "Lõuna", "Õhtusöök", "Vahepala"}
+    board_entries = []
+    for item in normal_items:
+        board_entries.append({
+            "indices": item["_indices"],
+            "name": item["name"],
+            "count": item.get("count", 1),
+            "meal": item.get("meal") if item.get("meal") in meal_categories else "Vahepala",
+            "kcal": item.get("kcal", 0),
+            "protein": item.get("protein", 0),
+            "carbs": item.get("carbs", 0),
+        })
+    if board_entries:
+        meal_event = MEAL_BOARD(entries=board_entries, key=f"meal-board-{TODAY_KEY}")
+        if isinstance(meal_event, dict) and meal_event.get("indices"):
+            changed_indices = [int(index) for index in meal_event["indices"]]
+            source_entry = next((item for item in normal_items if item["_indices"] == changed_indices), None)
+            if source_entry:
+                action = meal_event.get("action")
+                if action == "move" and meal_event.get("meal") in meal_categories:
+                    for index in changed_indices:
+                        today_entries[index]["meal"] = meal_event["meal"]
+                    save_daily_logs()
+                elif action == "add":
+                    add_entry(source_entry["_prototype"], source_entry.get("meal", "Vahepala"), TODAY)
+                elif action == "subtract":
+                    remove_entry_group([changed_indices[-1]], TODAY)
+                elif action == "remove":
+                    remove_entry_group(changed_indices, TODAY)
+                st.rerun()
     for i, item in enumerate(displayed_today_entries):
         is_recipe = item.get("meal") == "Retsept"
+        if not is_recipe:
+            continue
         quantity_label = f'{item["count"]}× ' if item.get("count", 1) > 1 else ""
         meal_label = "Päeva jooksul" if item.get("count", 1) > 1 and item.get("meal") != "Retsept" else item.get("meal", "Toit")
         st.markdown(f'<div class="food-row"><div><div class="pill">{meal_label}</div><div class="food-name">{quantity_label}{item["name"]}</div><div class="food-meta">{item.get("time", "")} · {int(item.get("protein", 0))}g valku · {int(item.get("carbs", 0))}g süsivesikuid</div></div><div class="food-kcal">{int(item["kcal"])} kcal</div></div>', unsafe_allow_html=True)

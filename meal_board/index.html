@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <script src="https://unpkg.com/streamlit-component-lib@2.0.0/dist/index.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, sans-serif; color: #17231d; background: transparent; }
+    .board { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+    .column { min-height: 120px; padding: 10px; background: #f4f8f5; border: 1px solid #dfe8e1; border-radius: 16px; transition: .15s ease; }
+    .column.over { background: #e5f4eb; border-color: #8fd0a8; }
+    .column-title { margin: 0 0 8px; font-size: 13px; font-weight: 700; }
+    .column-count { color: #668072; font-size: 11px; font-weight: 500; }
+    .card { margin-bottom: 8px; padding: 10px; background: #fff; border: 1px solid #dfe8e1; border-radius: 12px; cursor: grab; box-shadow: 0 2px 8px #1c3a2710; touch-action: none; }
+    .card.dragging { opacity: .45; }
+    .card-name { font-size: 13px; font-weight: 700; line-height: 1.2; }
+    .card-meta { margin-top: 4px; color: #668072; font-size: 11px; line-height: 1.25; }
+    .card-actions { display: flex; gap: 5px; margin-top: 8px; }
+    .action { min-width: 28px; height: 26px; padding: 0 7px; border: 1px solid #dfe8e1; border-radius: 8px; background: #fff; color: #287a56; cursor: pointer; font-weight: 700; }
+    .action.remove { color: #b45d5d; border-color: #f0d9d9; }
+    .empty { color: #8aa094; font-size: 11px; text-align: center; padding: 14px 2px; }
+    @media (max-width: 600px) {
+      .board { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      .column { min-height: 105px; padding: 8px; border-radius: 13px; }
+      .column-title { font-size: 12px; }
+      .card { padding: 9px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="board" class="board"></div>
+  <script>
+    const categories = [
+      { key: "Hommikusöök", label: "Hommikusöök" },
+      { key: "Lõuna", label: "Lõuna" },
+      { key: "Õhtusöök", label: "Õhtusöök" },
+      { key: "Vahepala", label: "Snäkid" },
+    ];
+    let args = { entries: [] };
+    let dragged = null;
+
+    function send(action, entry) {
+      Streamlit.setComponentValue({ action, indices: entry.indices });
+    }
+
+    function render() {
+      const board = document.getElementById("board");
+      board.innerHTML = "";
+      categories.forEach(category => {
+        const column = document.createElement("section");
+        column.className = "column";
+        column.dataset.meal = category.key;
+        column.innerHTML = `<h3 class="column-title">${category.label} <span class="column-count"></span></h3>`;
+        const items = (args.entries || []).filter(entry => entry.meal === category.key);
+        column.querySelector(".column-count").textContent = `(${items.length})`;
+        if (!items.length) {
+          const empty = document.createElement("div");
+          empty.className = "empty";
+          empty.textContent = "Lohista toit siia";
+          column.appendChild(empty);
+        }
+        items.forEach(entry => {
+          const card = document.createElement("article");
+          card.className = "card";
+          card.draggable = true;
+          card.dataset.indices = JSON.stringify(entry.indices);
+          card.innerHTML = `<div class="card-name"></div><div class="card-meta"></div><div class="card-actions"><button class="action add">+</button><button class="action subtract">−</button><button class="action remove">×</button></div>`;
+          card.querySelector(".card-name").textContent = `${entry.count > 1 ? entry.count + "× " : ""}${entry.name}`;
+          card.querySelector(".card-meta").textContent = `${Math.round(entry.kcal)} kcal · ${Math.round(entry.protein)}g valku · ${Math.round(entry.carbs)}g süsivesikuid`;
+          card.addEventListener("dragstart", () => { dragged = entry; card.classList.add("dragging"); });
+          card.addEventListener("dragend", () => { dragged = null; card.classList.remove("dragging"); });
+          card.addEventListener("pointerdown", event => { card.setPointerCapture(event.pointerId); dragged = entry; });
+          card.addEventListener("pointerup", event => {
+            const target = document.elementFromPoint(event.clientX, event.clientY)?.closest(".column");
+            if (target && target.dataset.meal !== entry.meal) send("move", { ...entry, meal: target.dataset.meal });
+            dragged = null;
+          });
+          card.querySelector(".add").onclick = event => { event.stopPropagation(); send("add", entry); };
+          card.querySelector(".subtract").onclick = event => { event.stopPropagation(); send("subtract", entry); };
+          card.querySelector(".remove").onclick = event => { event.stopPropagation(); send("remove", entry); };
+          column.appendChild(card);
+        });
+        column.addEventListener("dragover", event => { event.preventDefault(); column.classList.add("over"); });
+        column.addEventListener("dragleave", () => column.classList.remove("over"));
+        column.addEventListener("drop", event => { event.preventDefault(); column.classList.remove("over"); if (dragged && dragged.meal !== category.key) send("move", { ...dragged, meal: category.key }); });
+        board.appendChild(column);
+      });
+      Streamlit.setFrameHeight(document.body.scrollHeight);
+    }
+
+    Streamlit.events.addEventListener(Streamlit.RENDER_EVENT, event => {
+      args = event.detail.args || { entries: [] };
+      render();
+      Streamlit.setComponentReady();
+    });
+    Streamlit.setComponentReady();
+    Streamlit.setFrameHeight(160);
+  </script>
+</body>
+</html>
