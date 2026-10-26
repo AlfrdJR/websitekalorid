@@ -693,7 +693,7 @@ with tab_add:
         for idx, product in enumerate(filtered[:15]):
             st.markdown(f'**{product["name"]}**  \n<span style="color:#000000;font-size:.8rem">{product["brand"]} · {product["portion"]} · {product["kcal"]} kcal</span>  \n<span style="color:#000000;font-size:.75rem;font-weight:600">Valk {product["protein"]}g · Süsivesikud {product["carbs"]}g · Rasv {product["fat"]}g</span>', unsafe_allow_html=True)
             if product["name"] == st.session_state.get("highlight_added_food"):
-                st.markdown(f'<style>[class*="st-key-product-actions-{idx}"] button[kind="primary"] {{ background:#dff3ff !important; color:#176b91 !important; border-color:#9ed5f0 !important; }}</style>', unsafe_allow_html=True)
+                st.markdown(f'<style>[class*="st-key-product-actions-{idx}"] button[kind="primary"] {{ background:#e5f4eb !important; color:#287a56 !important; border-color:#b9dfc5 !important; }}</style>', unsafe_allow_html=True)
             with st.container(key=f"product-actions-{idx}", horizontal=True, width="stretch", horizontal_alignment="distribute", gap="small", vertical_alignment="center"):
                 if st.button("Lisa", type="primary", key=f"add_{idx}_{product['name']}"):
                     add_entry(product, day=TODAY)
