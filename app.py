@@ -385,6 +385,8 @@ def css():
         [class*="st-key-remove_one_today_"] button::after { content:"-"; color:#287a56; font-size:1rem; }
         [class*="st-key-add_recipe_row_"] button { font-size:0 !important; color:transparent !important; }
         [class*="st-key-add_recipe_row_"] button::after { content:"+ Lisa toode"; color:#287a56; font-size:.82rem; }
+        /* Goal editing is kept in the Overview tab, not duplicated in Today. */
+        [role="tabpanel"]:first-of-type [data-testid="stExpander"] { display:none !important; }
         [class*="food-remove"] button { font-size:0 !important; color:transparent !important; }
         [class*="food-remove"] button::after { content:"X"; color:#b45d5d !important; font-size:1rem !important; }
         [class*="product-actions"] button:not([kind="primary"]), [class*="product-actions"] [data-testid="stBaseButton-secondary"] { font-size:0 !important; color:transparent !important; text-shadow:none !important; }
