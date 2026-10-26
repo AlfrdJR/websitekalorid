@@ -418,6 +418,7 @@ def css():
         .calendar-macro-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.55rem; margin:0; }
         .today-macro-grid { margin-bottom:2.5rem; }
         .calendar-page-macro-grid { margin-bottom:2.5rem; }
+        .calendar-summary-card { margin-top:2.5rem; }
         .calendar-macro-card { min-width:0; padding:.8rem .45rem; text-align:center; background:var(--surface); border:1px solid var(--line); border-radius:18px; }
         .calendar-macro-ring { width:58px; height:58px; margin:.35rem auto .5rem; display:grid; place-items:center; position:relative; }
         .calendar-macro-ring svg { position:absolute; inset:0; width:100%; height:100%; transform:rotate(-90deg); overflow:visible; }
@@ -1058,7 +1059,7 @@ with tab_calendar:
     calendar_water_over_goal = max(0, calendar_water_ml - 3000)
     calendar_water_note = f"{calendar_water_over_goal} ml üle eesmärgi" if calendar_water_over_goal else f"{3000 - calendar_water_ml} ml veel eesmärgini"
     st.markdown(f'<div class="water-card"><div class="water-glass" style="--water-percent:{calendar_water_percent}%"><div class="water-fill"></div></div><div class="water-copy"><h3>Joodik</h3><div class="water-amount">{calendar_water_ml} ml <span>/ 3000 ml</span></div><div class="metric-note">{calendar_water_note}</div></div></div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="goal-card"><div class="goal-copy"><div class="metric-label">{selected_day.strftime("%d. %B %Y").upper()}</div><div class="metric-value">{int(selected_totals["kcal"]):,} kcal</div><div class="metric-note">{len(selected_entries)} toidukirjet · {int(selected_totals["protein"])}g valku</div></div></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="goal-card calendar-summary-card"><div class="goal-copy"><div class="metric-label">{selected_day.strftime("%d. %B %Y").upper()}</div><div class="metric-value">{int(selected_totals["kcal"]):,} kcal</div><div class="metric-note">{len(selected_entries)} toidukirjet · {int(selected_totals["protein"])}g valku</div></div></div>', unsafe_allow_html=True)
     st.markdown("### Selle päeva toit")
     if not selected_entries:
         st.info("Sellel päeval pole veel toite logitud.")
