@@ -660,7 +660,7 @@ def css():
             .hero-title { font-size:1.48rem; line-height:1.1; } .hero-sub { font-size:.78rem; }
             .stTabs [data-baseweb="tab-list"] { overflow-x:auto; flex-wrap:nowrap; gap:1rem; scrollbar-width:none; padding-bottom:.1rem; }
             .stTabs [data-baseweb="tab-list"]::-webkit-scrollbar { display:none; }
-            .stTabs [data-baseweb="tab"] { min-width:max-content; font-size:.82rem; padding-bottom:.65rem; }
+            .stTabs [data-baseweb="tab"] { min-width:max-content; font-size:1.1rem !important; font-weight:800 !important; padding-bottom:.65rem; }
             [data-testid="stHorizontalBlock"] { gap:clamp(.15rem, 1.6vw, .45rem) !important; flex-wrap:wrap !important; max-width:100% !important; }
             [data-testid="stHorizontalBlock"] > [data-testid="column"] { min-width:0 !important; max-width:100% !important; flex:1 1 100% !important; width:100% !important; }
             [class*="st-key-recipe-read-row-"] [data-testid="stHorizontalBlock"],
