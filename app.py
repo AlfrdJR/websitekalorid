@@ -233,10 +233,17 @@ def change_water(amount, day=None):
     save_water_logs()
 
 
-def product_base_grams(product):
-    portion = str(product.get("portion", "100 g"))
-    if "portsjon" in portion.lower():
-        return 100.0
+def product_measure(product):
+    """Return the catalogue amount and unit used for a product's nutrition."""
+    portion = str(product.get("portion", "100 g")).strip().lower()
+    if "portsjon" in portion:
+        return 1.0, "portsjon"
+    if "ml" in portion:
+        unit = "ml"
+    elif "tk" in portion:
+        unit = "tk"
+    else:
+        unit = "g"
     numbers = []
     current = ""
     for character in portion:
@@ -247,19 +254,48 @@ def product_base_grams(product):
             current = ""
     if current:
         numbers.append(float(current))
-    return numbers[-1] if numbers else 100.0
+    return (numbers[-1] if numbers else (1.0 if unit == "portsjon" else 100.0)), unit
 
 
-def product_for_grams(product, grams):
-    """Return a product scaled from its catalogue portion to the entered grams."""
-    base_grams = product_base_grams(product)
-    factor = float(grams) / base_grams if base_grams else 1.0
+def product_base_grams(product):
+    """Compatibility helper for gram-based recipe calculations."""
+    portion = str(product.get("portion", "100 g"))
+    if "portsjon" in portion.lower():
+        return 100.0
+    amount, _ = product_measure(product)
+    return amount
+
+
+def product_quantity_unit(product):
+    return product_measure(product)[1]
+
+
+def format_product_quantity(amount, unit):
+    number = int(amount) if float(amount).is_integer() else round(float(amount), 2)
+    if unit == "portsjon":
+        return f"{number} portsjon" if float(amount) == 1 else f"{number} portsjonit"
+    return f"{number} {unit}"
+
+
+def product_for_quantity(product, amount):
+    """Scale a product from its labelled nutrition basis to the entered amount."""
+    base_amount, unit = product_measure(product)
+    factor = float(amount) / base_amount if base_amount else 1.0
     scaled = {**product}
     for key in ("kcal", "protein", "carbs", "fat"):
         scaled[key] = round(float(product.get(key, 0)) * factor, 2)
-    scaled["portion"] = f"{int(grams)} g"
-    scaled["grams"] = float(grams)
+    scaled["portion"] = format_product_quantity(amount, unit)
+    scaled["amount"] = float(amount)
+    scaled["unit"] = unit
+    # Keep grams for existing grouping and recipe code; for ml/portsions this
+    # is the measured amount, while the visible portion preserves its unit.
+    scaled["grams"] = float(amount)
     return scaled
+
+
+def product_for_grams(product, grams):
+    """Backward-compatible alias for older callers."""
+    return product_for_quantity(product, grams)
 
 
 def calculate_recipe_ingredients(ingredients):
@@ -269,7 +305,8 @@ def calculate_recipe_ingredients(ingredients):
         product = products.get(ingredient.get("name"))
         if not product:
             continue
-        factor = float(ingredient.get("grams", 0)) / product_base_grams(product)
+        ingredient_amount = float(ingredient.get("grams", ingredient.get("amount", 0)))
+        factor = ingredient_amount / product_base_grams(product)
         for key in totals:
             totals[key] += float(product.get(key, 0)) * factor
     return totals
@@ -362,6 +399,15 @@ def entry_grams(entry):
         return float(entry["grams"])
     product = next((product for product in all_products() if product.get("name") == entry.get("name")), None)
     return product_base_grams(product) if product else 0.0
+
+
+def entry_quantity_label(entry):
+    unit = entry.get("unit")
+    if not unit:
+        product = next((product for product in all_products() if product.get("name") == entry.get("name")), None)
+        unit = product_quantity_unit(product) if product else "g"
+    amount = entry.get("grams", entry.get("amount", 0))
+    return format_product_quantity(amount, unit)
 
 
 def grouped_log_entries(entries):
@@ -1020,7 +1066,7 @@ with tab_today:
                         st.markdown('<div class="meal-box-empty">Lisa toit siia</div>', unsafe_allow_html=True)
                     for box_index, item in enumerate(box_items):
                         item_macros = f'<div class="meal-box-macros"><span>Valk {int(item.get("protein", 0))}g</span><span>Süsivesikud {int(item.get("carbs", 0))}g</span><span>Rasv {int(item.get("fat", 0))}g</span></div>'
-                        item_quantity = f'{int(item["grams"])} g' if item.get("grams", 0) else f'{item.get("count", 1)}×'
+                        item_quantity = entry_quantity_label(item) if item.get("grams", 0) else f'{item.get("count", 1)}×'
                         st.markdown(f'<div class="meal-box-item"><div class="meal-box-item-top"><span>{item_quantity} {item["name"]}</span><strong>{int(item.get("kcal", 0))} kcal</strong></div>{item_macros}</div>', unsafe_allow_html=True)
                         with st.container(key=f"meal-controls-{meal_value}-{box_index}-{item['_indices'][0]}", horizontal=True, width="stretch", gap="small"):
                             with st.container(key=f"meal-box-actions-{meal_value}-{box_index}-{item['_indices'][0]}", horizontal=True, width="content", gap="small"):
@@ -1090,9 +1136,11 @@ with tab_add:
         for idx, product in enumerate(visible_products):
             st.markdown(f'**{product["name"]}**  \n<span class="product-card-meta" style="color:#000000;font-size:.8rem">{product["brand"]} · {product["portion"]} · {product["kcal"]} kcal</span>  \n<span class="product-card-macros" style="color:#000000;font-size:.75rem;font-weight:600">Valk {product["protein"]}g · Süsivesikud {product["carbs"]}g · Rasv {product["fat"]}g</span>', unsafe_allow_html=True)
             with st.container(key=f"product-actions-{idx}", horizontal=True, width="stretch", horizontal_alignment="distribute", gap="small", vertical_alignment="center"):
-                weight_key = f"add_weight_{idx}_{product['name']}_{st.session_state.get('add_weight_version', 0)}"
+                product_unit = product_quantity_unit(product)
+                product_unit_label = {"g": "g", "ml": "ml", "tk": "tk", "portsjon": "portsjonit"}[product_unit]
+                weight_key = f"add_weight_{idx}_{product['name']}_{product_unit}_{st.session_state.get('add_weight_version', 0)}"
                 product_weight = st.number_input(
-                    "Kaal (g)",
+                    f"Kogus ({product_unit_label})",
                     min_value=0.0,
                     value=0.0,
                     step=1.0,
@@ -1102,7 +1150,7 @@ with tab_add:
                 )
                 if st.button("Lisa", type="primary", key=f"add_{idx}_{product['name']}"):
                     if product_weight > 0:
-                        add_entry(product_for_grams(product, product_weight), day=TODAY)
+                        add_entry(product_for_quantity(product, product_weight), day=TODAY)
                     st.session_state.add_weight_version = st.session_state.get('add_weight_version', 0) + 1
                     st.rerun()
                 if st.button("×", key=f"delete_product_{idx}_{product['name']}", help="Eemalda see toode otsingust"):
@@ -1128,7 +1176,7 @@ with tab_add:
                 if st.form_submit_button("Salvesta ja lisa tänasesse", type="primary", use_container_width=True) and inline_name.strip():
                     new_product = {"name": inline_name.strip(), "brand": "Minu toit", "kcal": inline_kcal, "protein": inline_protein, "carbs": inline_carbs, "fat": inline_fat, "portion": inline_basis}
                     save_custom_product(new_product)
-                    add_entry(new_product, "Vahepala", TODAY)
+                    add_entry(product_for_quantity(new_product, 1), "Vahepala", TODAY)
                     st.session_state.inline_create_food = ""
                     st.rerun()
     else:
@@ -1188,7 +1236,7 @@ with tab_calendar:
                         st.markdown('<div class="meal-box-empty">Tühi</div>', unsafe_allow_html=True)
                     for box_index, item in enumerate(box_items):
                         item_macros = f'<div class="meal-box-macros"><span>Valk {int(item.get("protein", 0))}g</span><span>Süsivesikud {int(item.get("carbs", 0))}g</span><span>Rasv {int(item.get("fat", 0))}g</span></div>'
-                        item_quantity = f'{int(item["grams"])} g' if item.get("grams", 0) else f'{item.get("count", 1)}×'
+                        item_quantity = entry_quantity_label(item) if item.get("grams", 0) else f'{item.get("count", 1)}×'
                         st.markdown(f'<div class="meal-box-item"><div class="meal-box-item-top"><span>{item_quantity} {item["name"]}</span><strong>{int(item.get("kcal", 0))} kcal</strong></div>{item_macros}</div>', unsafe_allow_html=True)
     logged_days = sorted(st.session_state.daily_logs.keys(), reverse=True)
 
