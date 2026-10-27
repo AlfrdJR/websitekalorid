@@ -658,9 +658,9 @@ def css():
             .eyebrow { font-size:.6rem; letter-spacing:.13em; }
             .hero { border-radius:20px; padding:1rem; margin:.45rem 0 .8rem; }
             .hero-title { font-size:1.48rem; line-height:1.1; } .hero-sub { font-size:.78rem; }
-            .stTabs [data-baseweb="tab-list"] { overflow:hidden; flex-wrap:nowrap; gap:.5rem; scrollbar-width:none; padding-bottom:.1rem; }
+            .stTabs [data-baseweb="tab-list"] { display:grid !important; grid-template-columns:repeat(5,minmax(0,1fr)); width:100% !important; max-width:100% !important; overflow:hidden !important; gap:.15rem !important; scrollbar-width:none; padding-bottom:.1rem; }
             .stTabs [data-baseweb="tab-list"]::-webkit-scrollbar { display:none; }
-            .stTabs [data-baseweb="tab"] { flex:1 1 auto; min-width:0; font-size:.95rem !important; font-weight:800 !important; padding-bottom:.65rem; white-space:nowrap; }
+            .stTabs [data-baseweb="tab"] { display:block !important; width:100% !important; max-width:100% !important; min-width:0 !important; font-size:.78rem !important; font-weight:800 !important; padding:0 .1rem .65rem !important; white-space:nowrap; overflow:hidden; text-overflow:clip; }
             [data-testid="stHorizontalBlock"] { gap:clamp(.15rem, 1.6vw, .45rem) !important; flex-wrap:wrap !important; max-width:100% !important; }
             [data-testid="stHorizontalBlock"] > [data-testid="column"] { min-width:0 !important; max-width:100% !important; flex:1 1 100% !important; width:100% !important; }
             [class*="st-key-recipe-read-row-"] [data-testid="stHorizontalBlock"],
