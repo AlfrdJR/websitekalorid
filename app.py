@@ -236,6 +236,10 @@ def change_water(amount, day=None):
 def product_measure(product):
     """Return the catalogue amount and unit used for a product's nutrition."""
     portion = str(product.get("portion", "100 g")).strip().lower()
+    if "supilusikas" in portion:
+        return 1.0, "supilusikas"
+    if "teelusikas" in portion:
+        return 1.0, "teelusikas"
     if "portsjon" in portion:
         return 1.0, "portsjon"
     if "ml" in portion:
@@ -274,6 +278,10 @@ def format_product_quantity(amount, unit):
     number = int(amount) if float(amount).is_integer() else round(float(amount), 2)
     if unit == "portsjon":
         return f"{number} portsjon" if float(amount) == 1 else f"{number} portsjonit"
+    if unit == "supilusikas":
+        return f"{number} supilusikas" if float(amount) == 1 else f"{number} supilusikat"
+    if unit == "teelusikas":
+        return f"{number} teelusikas" if float(amount) == 1 else f"{number} teelusikat"
     return f"{number} {unit}"
 
 
@@ -1137,7 +1145,7 @@ with tab_add:
             st.markdown(f'**{product["name"]}**  \n<span class="product-card-meta" style="color:#000000;font-size:.8rem">{product["brand"]} · {product["portion"]} · {product["kcal"]} kcal</span>  \n<span class="product-card-macros" style="color:#000000;font-size:.75rem;font-weight:600">Valk {product["protein"]}g · Süsivesikud {product["carbs"]}g · Rasv {product["fat"]}g</span>', unsafe_allow_html=True)
             with st.container(key=f"product-actions-{idx}", horizontal=True, width="stretch", horizontal_alignment="distribute", gap="small", vertical_alignment="center"):
                 product_unit = product_quantity_unit(product)
-                product_unit_label = {"g": "g", "ml": "ml", "tk": "tk", "portsjon": "portsjonit"}[product_unit]
+                product_unit_label = {"g": "g", "ml": "ml", "tk": "tk", "portsjon": "portsjonit", "supilusikas": "supilusikat", "teelusikas": "teelusikat"}[product_unit]
                 weight_key = f"add_weight_{idx}_{product['name']}_{product_unit}_{st.session_state.get('add_weight_version', 0)}"
                 product_weight = st.number_input(
                     f"Kogus ({product_unit_label})",
@@ -1165,7 +1173,7 @@ with tab_add:
             st.markdown("### Lisa uus toit")
             with st.form("inline_create_food_form"):
                 inline_name = st.text_input("Toidu nimi", value=st.session_state.inline_create_food)
-                inline_basis = st.selectbox("Toiteväärtus käib", ["100 g", "100 ml", "1 tk", "1 portsjon"])
+                inline_basis = st.selectbox("Toiteväärtus käib", ["100 g", "100 ml", "1 tk", "1 portsjon", "1 supilusikas", "1 teelusikas"])
                 inline_a, inline_b = st.columns(2)
                 with inline_a:
                     inline_kcal = st.number_input("Kalorid", min_value=0, value=0)
@@ -1183,7 +1191,7 @@ with tab_add:
         manual_form_key = f"manual_food_{st.session_state.get('manual_food_form_version', 0)}"
         with st.form(manual_form_key):
             name = st.text_input("Toidu nimi", placeholder="nt õhtusöök")
-            nutrition_basis = st.selectbox("Toiteväärtus käib", ["100 g", "100 ml", "1 tk", "1 portsjon"], index=0, help="Märgi, mille kohta pakendil või sinu andmetes kalorid ja makrod käivad.")
+            nutrition_basis = st.selectbox("Toiteväärtus käib", ["100 g", "100 ml", "1 tk", "1 portsjon", "1 supilusikas", "1 teelusikas"], index=0, help="Märgi, mille kohta pakendil või sinu andmetes kalorid ja makrod käivad.")
             c1, c2 = st.columns(2)
             with c1:
                 kcal = st.number_input("Kalorid", min_value=0, value=0)
