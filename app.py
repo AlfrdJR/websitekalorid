@@ -1072,9 +1072,13 @@ with tab_today:
                     if st.button("×", key=f"remove_today_{i}", help="Eemalda kogu see toidugrupp"):
                         remove_entry_group(item["_indices"], TODAY)
                         st.rerun()
+if st.session_state.pop("open_food_search_after_manual", False):
+    st.session_state.add_mode = "Otsi toitu"
+    st.session_state.food_search_query = st.session_state.pop("manual_saved_food_name", "")
+
 with tab_add:
     st.markdown("## Lisa toit")
-    add_mode = st.radio("Vali viis", ["Otsi toitu", "Sisesta ise"], horizontal=True, label_visibility="collapsed")
+    add_mode = st.radio("Vali viis", ["Otsi toitu", "Sisesta ise"], horizontal=True, label_visibility="collapsed", key="add_mode")
     if add_mode == "Otsi toitu":
         query = st.text_input("Otsi toodet", placeholder="nt kohuke, rukkileib, skyr…", key="food_search_query")
         filtered = [p for p in all_products() if not query or query.lower() in (p["name"] + " " + p["brand"]).lower()]
@@ -1139,11 +1143,12 @@ with tab_add:
                 carbs = st.number_input("Süsivesikud (g)", min_value=0, value=0)
                 fat = st.number_input("Rasv (g)", min_value=0, value=0)
             save_product = st.checkbox("Salvesta see toit toodete alla järgmiseks korraks", value=True)
-            if st.form_submit_button("Lisa logisse", type="primary", use_container_width=True) and name:
+            if st.form_submit_button("Salvesta toode", type="primary", use_container_width=True) and name.strip():
                 new_product = {"name": name, "brand": "Minu toit", "kcal": kcal, "protein": protein, "carbs": carbs, "fat": fat, "portion": nutrition_basis}
-                if save_product:
-                    save_custom_product(new_product)
-                add_entry(new_product, "Vahepala", TODAY)
+                save_custom_product(new_product)
+                st.session_state.manual_saved_food_name = new_product["name"].strip()
+                st.session_state.highlight_added_food = new_product["name"].strip()
+                st.session_state.open_food_search_after_manual = True
                 st.session_state.manual_food_form_version = st.session_state.get("manual_food_form_version", 0) + 1
                 st.rerun()
 
