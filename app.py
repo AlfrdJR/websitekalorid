@@ -425,7 +425,7 @@ def css():
         div.stButton > button { border-radius:14px; border:1px solid #dce7de; min-height:2.7rem; font-weight:600; }
         div.stButton > button[kind="primary"] { background:#287a56; color:white; border-color:#287a56; }
         div[data-testid="stMetric"] { background:white; border-radius:18px; padding:1rem; border:1px solid #e7ece7; }
-        .stTabs [data-baseweb="tab-list"] { gap:1.25rem; border-bottom:1px solid var(--line); } .stTabs [data-baseweb="tab"] { padding:0 0 .75rem; font-weight:600; }
+        .stTabs [data-baseweb="tab-list"] { gap:1.25rem; border-bottom:1px solid var(--line); } .stTabs [data-baseweb="tab"] { min-height:3rem; padding:.15rem 0 .85rem; font-size:1.05rem; font-weight:600; }
         .stTabs [aria-selected="true"] { color:var(--green); }
         .section-title { display:flex; align-items:end; justify-content:space-between; margin:1.25rem 0 .65rem; }
         .today-section-title { margin-top:.25rem !important; }
