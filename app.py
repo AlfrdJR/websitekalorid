@@ -408,8 +408,8 @@ def css():
         .eyebrow { color:var(--green); text-transform:uppercase; font-size:.7rem; font-weight:700; letter-spacing:.16em; }
         .hero { background:linear-gradient(135deg,#173f2d,#286d4d); color:white; border-radius:26px; padding:1.15rem 1.25rem 1.25rem; margin:.65rem 0 1rem; box-shadow:0 10px 28px #2a765026; }
         .hero-title { font-family:'Space Grotesk'; font-weight:700; font-size:1.85rem; letter-spacing:-.06em; }
-        .brand-card { display:inline-flex; align-items:center; gap:.55rem; padding:.42rem .85rem .42rem .45rem; margin:.15rem 0 1rem; background:linear-gradient(135deg,#e9f8ef,#d7f0e2); border:1px solid #c8e6d3; border-radius:16px; color:#1f704b; font:700 1rem 'Space Grotesk',sans-serif; letter-spacing:-.03em; box-shadow:0 6px 18px #287a561c; }
-        .brand-mark { display:grid; place-items:center; width:1.85rem; height:1.85rem; border-radius:11px; background:linear-gradient(145deg,#287a56,#165338); color:white; font:700 1rem 'Space Grotesk',sans-serif; box-shadow:0 3px 8px #173f2d38; }
+        .brand-card { display:flex; align-items:center; gap:.75rem; width:100%; box-sizing:border-box; padding:.7rem 1.1rem .7rem .7rem; margin:.05rem 0 1.25rem; background:linear-gradient(135deg,#e9f8ef,#d7f0e2); border:1px solid #c8e6d3; border-radius:22px; color:#1f704b; font:700 1.3rem 'Space Grotesk',sans-serif; letter-spacing:-.04em; box-shadow:0 10px 24px #287a561c; }
+        .brand-mark { display:grid; place-items:center; width:2.45rem; height:2.45rem; border-radius:15px; background:linear-gradient(145deg,#287a56,#165338); color:white; font:700 1.25rem 'Space Grotesk',sans-serif; box-shadow:0 4px 10px #173f2d38; }
         .hero-sub { color:#c4e4d1; margin-top:.3rem; font-size:.88rem; }
         .metric-card { background:white; border:1px solid var(--line); border-radius:20px; padding:1rem; min-height:98px; box-shadow:0 3px 12px #1c3a2710; }
         .metric-card.macro-complete { background:#dff3e8; border-color:#8fd0a8; }
