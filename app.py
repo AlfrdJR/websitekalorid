@@ -927,6 +927,7 @@ st.markdown(
     html[data-theme="dark"] [class*="st-key-recipe-builder-row-"] .builder-product,
     html[data-theme="dark"] [class*="st-key-recipe-builder-row-"] [data-testid="stNumberInput"] > div { background:var(--input) !important; }
     [class*="st-key-recipe-builder-row-"] + div [data-testid="stAlert"] { margin-top:.75rem !important; border-radius:16px !important; border:1px solid #cfe2f2 !important; box-shadow:0 4px 14px #2b6da00d !important; }
+    .stTabs [data-baseweb="tab"], .stTabs [data-baseweb="tab"] *, .stTabs [role="tab"], .stTabs [role="tab"] * { font-family:'DM Sans',sans-serif !important; font-weight:900 !important; -webkit-text-stroke:.2px currentColor !important; }
     @media (max-width:600px) {
         [class*="st-key-recipe-builder-row-"] { padding:0 !important; margin:0 !important; }
         [class*="st-key-recipe-builder-row-"] .builder-product,
