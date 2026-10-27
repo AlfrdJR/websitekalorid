@@ -1004,7 +1004,7 @@ with tab_today:
         if st.button("−", key="water-remove", help="Eemalda viimane sisestatud kogus"):
             change_water(-water_input, TODAY)
             st.rerun()
-    st.markdown(f'<div class="section-title today-section-title"><h2>Tänane logi</h2><span class="section-hint">{TODAY.strftime("%d. %b")}</span></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-title today-section-title"><h2>Päeva toidud</h2><span class="section-hint">{TODAY.strftime("%d. %b")}</span></div>', unsafe_allow_html=True)
     if not today_entries:
         st.info("Sinu päev on tühi. Lisa esimene toit allpool.")
     meal_categories = [("Hommikusöök", "Hommik"), ("Lõuna", "Lõuna"), ("Õhtusöök", "Õhtu"), ("Vahepala", "Snäkk")]
