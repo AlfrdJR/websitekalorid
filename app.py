@@ -408,7 +408,7 @@ def css():
         .eyebrow { color:var(--green); text-transform:uppercase; font-size:.7rem; font-weight:700; letter-spacing:.16em; }
         .hero { background:linear-gradient(135deg,#173f2d,#286d4d); color:white; border-radius:26px; padding:1.15rem 1.25rem 1.25rem; margin:.65rem 0 1rem; box-shadow:0 10px 28px #2a765026; }
         .hero-title { font-family:'Space Grotesk'; font-weight:700; font-size:1.85rem; letter-spacing:-.06em; }
-        .brand-card { display:block; width:100%; box-sizing:border-box; padding:0; margin:.05rem 0 1.25rem; background:transparent; border:0; border-radius:0; color:var(--ink); font:700 1.5rem 'Space Grotesk',sans-serif; letter-spacing:-.04em; box-shadow:none; }
+        .brand-card { display:block; width:100%; box-sizing:border-box; padding:0; margin:.05rem 0 1.25rem; background:transparent; border:0; border-radius:0; color:var(--ink); font:700 1.7rem Georgia,'Times New Roman',serif; font-style:italic; letter-spacing:.12em; box-shadow:none; }
         .brand-mark { display:grid; place-items:center; width:2.45rem; height:2.45rem; border-radius:15px; background:linear-gradient(145deg,#287a56,#165338); color:white; font:700 1.25rem 'Space Grotesk',sans-serif; box-shadow:0 4px 10px #173f2d38; }
         .hero-sub { color:#c4e4d1; margin-top:.3rem; font-size:.88rem; }
         .metric-card { background:white; border:1px solid var(--line); border-radius:20px; padding:1rem; min-height:98px; box-shadow:0 3px 12px #1c3a2710; }
