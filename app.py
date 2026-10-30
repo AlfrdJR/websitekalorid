@@ -89,6 +89,12 @@ def supabase_settings():
     return url, key
 
 
+def set_cloud_error(error):
+    message = str(error).strip().replace("\n", " ")[:240]
+    if message:
+        st.session_state["cloud_storage_error"] = message
+
+
 def cloud_load(storage_key):
     url, key = supabase_settings()
     if not url or not key:
@@ -103,7 +109,8 @@ def cloud_load(storage_key):
         response.raise_for_status()
         rows = response.json()
         return ("found", rows[0].get("value")) if rows else ("missing", None)
-    except (requests.RequestException, ValueError, TypeError):
+    except (requests.RequestException, ValueError, TypeError) as error:
+        set_cloud_error(error)
         return "error", None
 
 
@@ -115,7 +122,7 @@ def cloud_save(storage_key, value):
         response = requests.post(
             f"{url}/rest/v1/app_state",
             params={"on_conflict": "key"},
-            json={"key": storage_key, "value": value},
+            json={"key": storage_key, "value": value, "updated_at": datetime.utcnow().isoformat() + "Z"},
             headers={
                 "apikey": key,
                 "Authorization": f"Bearer {key}",
@@ -126,7 +133,8 @@ def cloud_save(storage_key, value):
         )
         response.raise_for_status()
         return True
-    except (requests.RequestException, ValueError, TypeError):
+    except (requests.RequestException, ValueError, TypeError) as error:
+        set_cloud_error(error)
         return False
 
 
@@ -1029,6 +1037,9 @@ st.markdown(
     unsafe_allow_html=True,
 )
 st.markdown('<div class="brand-card">PALA</div>', unsafe_allow_html=True)
+if st.session_state.get("cloud_storage_error"):
+    st.error("Supabase’i salvestamine ebaõnnestus. Kontrolli Streamlit Secretsi ja app_state tabelit.")
+    st.caption(st.session_state["cloud_storage_error"])
 tab_today, tab_add, tab_calendar, tab_recipes, tab_insights = st.tabs(["Täna", "Lisa toit", "Kalender", "Retseptid", "Ülevaade"])
 
 if st.session_state.pop("focus_recipes_after_save", False):
