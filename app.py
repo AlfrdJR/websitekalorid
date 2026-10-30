@@ -139,10 +139,15 @@ def cloud_save(storage_key, value):
 
 
 def load_json_state(storage_key, path, default):
+    state_cache = st.session_state.setdefault("cloud_state_cache", {})
+    if storage_key in state_cache:
+        return state_cache[storage_key]
     status, value = cloud_load(storage_key)
     if status == "found":
+        state_cache[storage_key] = value
         return value
     if not path.exists():
+        state_cache[storage_key] = default
         return default
     try:
         with path.open("r", encoding="utf-8") as file:
@@ -150,8 +155,10 @@ def load_json_state(storage_key, path, default):
         # Seed a newly-created Supabase project from the existing local data.
         if status == "missing":
             cloud_save(storage_key, local_value)
+        state_cache[storage_key] = local_value
         return local_value
     except (OSError, json.JSONDecodeError):
+        state_cache[storage_key] = default
         return default
 
 
@@ -159,6 +166,7 @@ def save_json_state(storage_key, path, value):
     with path.open("w", encoding="utf-8") as file:
         json.dump(value, file, ensure_ascii=False, indent=2)
     cloud_save(storage_key, value)
+    st.session_state.setdefault("cloud_state_cache", {})[storage_key] = value
 
 
 def load_custom_products():
