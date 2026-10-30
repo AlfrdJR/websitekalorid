@@ -4,6 +4,7 @@ import uuid
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
+import requests
 import streamlit as st
 import streamlit.components.v1 as components
 
@@ -75,15 +76,86 @@ WATER_LOGS_FILE = Path(__file__).with_name("water_logs.json")
 DEFAULT_GOALS = {"kcal": 2200, "protein": 140, "carbs": 250, "fat": 70}
 
 
-def load_custom_products():
-    if not CUSTOM_PRODUCTS_FILE.exists():
-        return []
+def supabase_settings():
+    """Read cloud storage settings without ever putting secrets in the source."""
     try:
-        with CUSTOM_PRODUCTS_FILE.open("r", encoding="utf-8") as file:
-            data = json.load(file)
-        return data if isinstance(data, list) else []
+        url = str(st.secrets.get("SUPABASE_URL", "")).strip().rstrip("/")
+        # Prefer the server-only key. The publishable key is kept as a fallback
+        # for projects that deliberately configure their own RLS policies.
+        key = str(st.secrets.get("SUPABASE_SERVICE_ROLE_KEY", "")).strip()
+        key = key or str(st.secrets.get("SUPABASE_KEY", "")).strip()
+    except Exception:
+        return "", ""
+    return url, key
+
+
+def cloud_load(storage_key):
+    url, key = supabase_settings()
+    if not url or not key:
+        return "disabled", None
+    try:
+        response = requests.get(
+            f"{url}/rest/v1/app_state",
+            params={"key": f"eq.{storage_key}", "select": "value"},
+            headers={"apikey": key, "Authorization": f"Bearer {key}"},
+            timeout=8,
+        )
+        response.raise_for_status()
+        rows = response.json()
+        return ("found", rows[0].get("value")) if rows else ("missing", None)
+    except (requests.RequestException, ValueError, TypeError):
+        return "error", None
+
+
+def cloud_save(storage_key, value):
+    url, key = supabase_settings()
+    if not url or not key:
+        return False
+    try:
+        response = requests.post(
+            f"{url}/rest/v1/app_state",
+            params={"on_conflict": "key"},
+            json={"key": storage_key, "value": value},
+            headers={
+                "apikey": key,
+                "Authorization": f"Bearer {key}",
+                "Content-Type": "application/json",
+                "Prefer": "resolution=merge-duplicates,return=minimal",
+            },
+            timeout=8,
+        )
+        response.raise_for_status()
+        return True
+    except (requests.RequestException, ValueError, TypeError):
+        return False
+
+
+def load_json_state(storage_key, path, default):
+    status, value = cloud_load(storage_key)
+    if status == "found":
+        return value
+    if not path.exists():
+        return default
+    try:
+        with path.open("r", encoding="utf-8") as file:
+            local_value = json.load(file)
+        # Seed a newly-created Supabase project from the existing local data.
+        if status == "missing":
+            cloud_save(storage_key, local_value)
+        return local_value
     except (OSError, json.JSONDecodeError):
-        return []
+        return default
+
+
+def save_json_state(storage_key, path, value):
+    with path.open("w", encoding="utf-8") as file:
+        json.dump(value, file, ensure_ascii=False, indent=2)
+    cloud_save(storage_key, value)
+
+
+def load_custom_products():
+    data = load_json_state("custom_products", CUSTOM_PRODUCTS_FILE, [])
+    return data if isinstance(data, list) else []
 
 
 def save_custom_product(product):
@@ -92,37 +164,26 @@ def save_custom_product(product):
     custom_products.insert(0, product)
     hidden_products = load_hidden_products()
     hidden_products.discard(product["name"].lower())
-    with HIDDEN_PRODUCTS_FILE.open("w", encoding="utf-8") as file:
-        json.dump(sorted(hidden_products), file, ensure_ascii=False, indent=2)
-    with CUSTOM_PRODUCTS_FILE.open("w", encoding="utf-8") as file:
-        json.dump(custom_products, file, ensure_ascii=False, indent=2)
+    save_json_state("hidden_products", HIDDEN_PRODUCTS_FILE, sorted(hidden_products))
+    save_json_state("custom_products", CUSTOM_PRODUCTS_FILE, custom_products)
 
 
 def delete_custom_product(name):
     custom_products = [p for p in load_custom_products() if p.get("name", "").lower() != name.lower()]
-    with CUSTOM_PRODUCTS_FILE.open("w", encoding="utf-8") as file:
-        json.dump(custom_products, file, ensure_ascii=False, indent=2)
+    save_json_state("custom_products", CUSTOM_PRODUCTS_FILE, custom_products)
 
 
 def load_hidden_products():
-    if not HIDDEN_PRODUCTS_FILE.exists():
-        return set()
-    try:
-        with HIDDEN_PRODUCTS_FILE.open("r", encoding="utf-8") as file:
-            data = json.load(file)
-        return {str(name).lower() for name in data} if isinstance(data, list) else set()
-    except (OSError, json.JSONDecodeError):
-        return set()
+    data = load_json_state("hidden_products", HIDDEN_PRODUCTS_FILE, [])
+    return {str(name).lower() for name in data} if isinstance(data, list) else set()
 
 
 def hide_product(name):
     custom_products = [p for p in load_custom_products() if p.get("name", "").lower() != name.lower()]
-    with CUSTOM_PRODUCTS_FILE.open("w", encoding="utf-8") as file:
-        json.dump(custom_products, file, ensure_ascii=False, indent=2)
+    save_json_state("custom_products", CUSTOM_PRODUCTS_FILE, custom_products)
     hidden_products = load_hidden_products()
     hidden_products.add(name.lower())
-    with HIDDEN_PRODUCTS_FILE.open("w", encoding="utf-8") as file:
-        json.dump(sorted(hidden_products), file, ensure_ascii=False, indent=2)
+    save_json_state("hidden_products", HIDDEN_PRODUCTS_FILE, sorted(hidden_products))
 
 
 def all_products():
@@ -139,14 +200,8 @@ def all_products():
 
 
 def load_custom_recipes():
-    if not CUSTOM_RECIPES_FILE.exists():
-        return []
-    try:
-        with CUSTOM_RECIPES_FILE.open("r", encoding="utf-8") as file:
-            data = json.load(file)
-        return data if isinstance(data, list) else []
-    except (OSError, json.JSONDecodeError):
-        return []
+    data = load_json_state("custom_recipes", CUSTOM_RECIPES_FILE, [])
+    return data if isinstance(data, list) else []
 
 
 def save_custom_recipe(recipe, replace_name=None):
@@ -159,14 +214,12 @@ def save_custom_recipe(recipe, replace_name=None):
         if r.get("name", "").strip().casefold() not in names_to_replace
     ]
     recipes.insert(0, recipe)
-    with CUSTOM_RECIPES_FILE.open("w", encoding="utf-8") as file:
-        json.dump(recipes, file, ensure_ascii=False, indent=2)
+    save_json_state("custom_recipes", CUSTOM_RECIPES_FILE, recipes)
 
 
 def delete_custom_recipe(name):
     recipes = [recipe for recipe in load_custom_recipes() if recipe.get("name", "").lower() != name.lower()]
-    with CUSTOM_RECIPES_FILE.open("w", encoding="utf-8") as file:
-        json.dump(recipes, file, ensure_ascii=False, indent=2)
+    save_json_state("custom_recipes", CUSTOM_RECIPES_FILE, recipes)
 
 
 def all_recipes():
@@ -176,51 +229,33 @@ def all_recipes():
 
 
 def load_daily_logs():
-    if not DAILY_LOGS_FILE.exists():
-        return {}
-    try:
-        with DAILY_LOGS_FILE.open("r", encoding="utf-8") as file:
-            data = json.load(file)
-        return data if isinstance(data, dict) else {}
-    except (OSError, json.JSONDecodeError):
-        return {}
+    data = load_json_state("daily_logs", DAILY_LOGS_FILE, {})
+    return data if isinstance(data, dict) else {}
 
 
 def save_daily_logs():
-    with DAILY_LOGS_FILE.open("w", encoding="utf-8") as file:
-        json.dump(st.session_state.daily_logs, file, ensure_ascii=False, indent=2)
+    save_json_state("daily_logs", DAILY_LOGS_FILE, st.session_state.daily_logs)
 
 
 def load_goals():
-    if not GOALS_FILE.exists():
-        return DEFAULT_GOALS.copy()
+    data = load_json_state("goals", GOALS_FILE, DEFAULT_GOALS.copy())
     try:
-        with GOALS_FILE.open("r", encoding="utf-8") as file:
-            data = json.load(file)
         return {key: max(1, int(data.get(key, DEFAULT_GOALS[key]))) for key in DEFAULT_GOALS}
-    except (OSError, json.JSONDecodeError, TypeError, ValueError):
+    except (TypeError, ValueError, AttributeError):
         return DEFAULT_GOALS.copy()
 
 
 def save_goals(goals):
-    with GOALS_FILE.open("w", encoding="utf-8") as file:
-        json.dump(goals, file, ensure_ascii=False, indent=2)
+    save_json_state("goals", GOALS_FILE, goals)
 
 
 def load_water_logs():
-    if not WATER_LOGS_FILE.exists():
-        return {}
-    try:
-        with WATER_LOGS_FILE.open("r", encoding="utf-8") as file:
-            data = json.load(file)
-        return data if isinstance(data, dict) else {}
-    except (OSError, json.JSONDecodeError):
-        return {}
+    data = load_json_state("water_logs", WATER_LOGS_FILE, {})
+    return data if isinstance(data, dict) else {}
 
 
 def save_water_logs():
-    with WATER_LOGS_FILE.open("w", encoding="utf-8") as file:
-        json.dump(st.session_state.water_logs, file, ensure_ascii=False, indent=2)
+    save_json_state("water_logs", WATER_LOGS_FILE, st.session_state.water_logs)
 
 
 def water_total(day=None):
